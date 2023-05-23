@@ -28,14 +28,14 @@ class Handler extends ExceptionHandler
         });
     }
 
-    public function render($request, Throwable $e)
-    {
-        if ($request->header('X-Inertia')) {
-            if ($e instanceof \Illuminate\Validation\ValidationException) {
-                return redirect()->back()->withInput()->withErrors($e->errors());
-            }
-            return redirect()->back()->withErrors(['error' => $e->getMessage()])->with('errorId', uniqid());
-        }
-        return parent::render($request, $e);
-    }
+//    public function render($request, Throwable $e)
+//    {
+//        if ($request->header('X-Inertia')) {
+//            if ($e instanceof \Illuminate\Validation\ValidationException) {
+//                return redirect()->back()->withInput()->withErrors($e->errors());
+//            }
+//            return redirect()->back()->withErrors(['error' => $e->getMessage()])->with('errorId', uniqid());
+//        }
+//        return parent::render($request, $e);
+//    }
 }

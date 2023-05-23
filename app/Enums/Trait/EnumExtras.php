@@ -2,8 +2,6 @@
 
 namespace App\Enums\Trait;
 
-use Illuminate\Support\Str;
-
 trait EnumExtras
 {
     public static function getValues(): array
@@ -19,10 +17,5 @@ trait EnumExtras
     public static function getKeysAndValues(): array
     {
         return self::cases();
-    }
-
-    public static function getValuesToUpperCase(): array
-    {
-        return array_map(fn ($value) => Str::ucfirst($value->value), self::getValues());
     }
 }

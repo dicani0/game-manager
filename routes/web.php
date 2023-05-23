@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Character\CharacterController;
 use App\Http\Controllers\Guild\GuildController;
+use App\Models\Character\Character;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -38,26 +39,11 @@ Route::get('/market', function () {
 });
 Route::prefix('characters')->middleware('auth')->group(function () {
 
-    Route::get('/', function () {
-        return Inertia::render('Character/Character', [
-            'characters' => request()->user()->characters,
-        ]);
-    });
-
-    Route::get('/create', function () {
-        return Inertia::render('Character/Create', [
-            'vocations' => VocationEnum::getValues(),
-        ]);
-    });
-    Route::post('/', [CharacterController::class, 'store']);
-
-    Route::get('/edit/{character}', function () {
-        return Inertia::render('Character/Edit', [
-            'character' => \App\Models\Character\Character::find(request()->route('character')),
-            'vocations' => VocationEnum::getValues(),
-        ]);
-    });
-
+    Route::get('/', [CharacterController::class, 'index']);
+    Route::get('/create', [CharacterController::class, 'create']);
+    Route::post('/', [CharacterController::class, 'store'])->middleware('auth');
+    Route::get('/edit/{character}', [CharacterController::class, 'edit']);
+    Route::put('/{character}', [CharacterController::class, 'update']);
     Route::delete('/{character}', [CharacterController::class, 'delete']);
 });
 
