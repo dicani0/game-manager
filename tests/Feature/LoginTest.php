@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Actions\Auth\LoginUser;
-use App\Data\LoginUserDto;
+use App\Data\Auth\LoginUserDto;
 use App\Exceptions\Auth\InvalidCredentialsException;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;

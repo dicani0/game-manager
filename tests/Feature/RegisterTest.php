@@ -1,7 +1,7 @@
 <?php
 
 
-use App\Data\RegisterUserDto;
+use App\Data\Auth\RegisterUserDto;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
 use App\Processes\Auth\RegisterProcess;

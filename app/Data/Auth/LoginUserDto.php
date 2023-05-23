@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Data;
+namespace App\Data\Auth;
 
 use Spatie\LaravelData\Data;
 
-class RegisterUserDto extends Data
+class LoginUserDto extends Data
 {
-    public string $name;
     public string $email;
     public string $password;
 }

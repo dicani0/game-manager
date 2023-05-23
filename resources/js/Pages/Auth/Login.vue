@@ -50,8 +50,12 @@ export default {
         login() {
             this.form.post('/auth/login', {
                 onSuccess: (message) => {
-                    console.log(message)
                     useToast().success(message.props.flash.success)
+                },
+                onError: (errors) => {
+                    Object.values(errors).forEach((error) => {
+                        useToast().error(error);
+                    });
                 },
             });
         }

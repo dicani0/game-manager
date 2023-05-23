@@ -2,8 +2,7 @@
 
 namespace App\Actions\Auth;
 
-use App\Data\RegisterUserDto;
-use App\Exceptions\Auth\InvalidCredentialsException;
+use App\Data\Auth\RegisterUserDto;
 use App\Models\User;
 use Closure;
 
