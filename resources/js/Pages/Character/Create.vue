@@ -31,6 +31,7 @@
 
 import {useForm} from "@inertiajs/vue3";
 import {useToast} from "vue-toastification";
+import {onMounted} from "vue";
 
 // Assuming vocations are passed as props
 const props = defineProps({
@@ -43,6 +44,10 @@ const form = useForm({
     level: 1,
 });
 
+onMounted(() => {
+    console.log(props.vocations);
+});
+
 const create = () => {
     form.post('/characters', {
         onError: (errors) => {
@@ -51,7 +56,8 @@ const create = () => {
             });
         },
         onSuccess: (response) => {
-            useToast().success(response.props.flash.success)
+            console.log(response);
+            useToast().success(response.props.success)
         },
     });
 }

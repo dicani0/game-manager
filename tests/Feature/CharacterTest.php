@@ -9,12 +9,7 @@ use Tests\TestCase;
 
 class CharacterTest extends TestCase
 {
-//    use WithoutMiddleware;
     use RefreshDatabase;
-
-    /**
-     * A basic test example.
-     */
 
     public User $user;
 
@@ -49,5 +44,81 @@ class CharacterTest extends TestCase
             'vocation' => 'knight',
         ]);
         $response->assertRedirect('/auth/login');
+    }
+
+    public function test_edit_character(): void
+    {
+        $character = $this->user->characters()->create([
+            'name' => 'test',
+            'vocation' => 'knight',
+        ]);
+
+        $response = $this->withoutMiddleware(VerifyCsrfToken::class)->actingAs($this->user)->get('/characters/edit/' . $character->id);
+
+        $response->assertInertia(fn (AssertableInertia $page) => $page
+            ->component('Character/Edit')
+            ->where('character.name', 'test')
+            ->where('character.vocation', 'knight')
+        );
+    }
+
+    public function test_cannot_edit_not_owned_character(): void
+    {
+        $character = $this->user->characters()->create([
+            'name' => 'test',
+            'vocation' => 'knight',
+        ]);
+
+        $user2 = User::factory()->create();
+
+        $response = $this->withoutMiddleware(VerifyCsrfToken::class)->actingAs($user2)->get('/characters/edit/' . $character->id);
+        $response->assertRedirect();
+    }
+
+    public function test_update_character(): void
+    {
+        $character = $this->user->characters()->create([
+            'name' => 'test',
+            'vocation' => 'knight',
+        ]);
+
+        $response = $this->withoutMiddleware(VerifyCsrfToken::class)->actingAs($this->user)->put('/characters/' . $character->id, [
+            'name' => 'test2',
+            'vocation' => 'druid',
+        ]);
+
+        $response->assertRedirect('/characters');
+    }
+
+    public function test_cannot_update_not_owned_character(): void
+    {
+        $character = $this->user->characters()->create([
+            'name' => 'test',
+            'vocation' => 'knight',
+        ]);
+
+        $user2 = User::factory()->create();
+
+        $response = $this->withoutMiddleware(VerifyCsrfToken::class)->actingAs($user2)->put('/characters/' . $character->id, [
+            'name' => 'test2',
+            'vocation' => 'druid',
+        ]);
+        $response->assertRedirect();
+    }
+
+    public function test_delete_character(): void
+    {
+        $character = $this->user->characters()->create([
+            'name' => 'test',
+            'vocation' => 'knight',
+        ]);
+
+        $response = $this->withoutMiddleware(VerifyCsrfToken::class)->actingAs($this->user)->delete('/characters/' . $character->id);
+
+        $response->assertRedirect('/characters');
+
+        $this->assertDatabaseMissing('characters', [
+            'id' => $character->getKey(),
+        ]);
     }
 }

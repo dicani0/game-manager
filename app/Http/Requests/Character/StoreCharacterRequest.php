@@ -6,7 +6,7 @@ use App\Enums\VocationEnum;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
-class CharacterRequest extends FormRequest
+class StoreCharacterRequest extends FormRequest
 {
     public function rules()
     {

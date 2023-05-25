@@ -4,7 +4,7 @@
             <div class="text-xl font-medium text-white">Create Character</div>
             <p class="text-gray-500">Fill in the details for your new character.</p>
 
-            <form @submit.prevent="create">
+            <form @submit.prevent="update">
                 <div class="mb-4">
                     <label class="block text-gray-500 text-sm font-bold mb-2" for="name">Character Name</label>
                     <input v-model="form.name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-500 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" required>

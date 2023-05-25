@@ -8,7 +8,7 @@ use App\Actions\Character\UpdateCharacter;
 use App\Data\Character\CharacterDto;
 use App\Enums\VocationEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Character\CharacterRequest;
+use App\Http\Requests\Character\StoreCharacterRequest;
 use App\Http\Requests\Character\EditCharacterRequest;
 use App\Http\Requests\Character\UpdateCharacterRequest;
 use App\Models\Character\Character;
@@ -28,7 +28,9 @@ class CharacterController extends Controller
 
     public function create(): Response
     {
-        return Inertia::render('Character/Create');
+        return Inertia::render('Character/Create', [
+            'vocations' => VocationEnum::getValues(),
+        ]);
     }
 
     public function edit(EditCharacterRequest $request, Character $character): Response
@@ -45,11 +47,12 @@ class CharacterController extends Controller
         return redirect('/characters')->with('success', 'Character updated successfully!');
     }
 
-    public function store(CharacterRequest $request, CreateCharacter $action)
+    public function store(StoreCharacterRequest $request, CreateCharacter $action)
     {
         $action->handle(CharacterDto::from($request->validated()), $request->user());
         return Inertia::render('Character/Character', [
             'characters' => $request->user()->characters,
+            'success' => 'Character created successfully!',
         ])->with('success', 'Character created successfully!');
     }
 

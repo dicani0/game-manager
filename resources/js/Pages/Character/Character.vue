@@ -16,13 +16,13 @@
                 <p v-else>No guild</p>
                 <div class="flex gap-2">
                     <button
-                        class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center"
+                        class="mt-4 bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded flex items-center"
                         @click="editCharacter(character.id)">
                         <vue-feather type="x-circle" class="mr-2"></vue-feather>
                         Edit
                     </button>
                     <button
-                        class="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded flex items-center"
+                        class="mt-4 bg-gray-500 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded flex items-center"
                         @click="deleteCharacter(character.id)">
                         <vue-feather type="x-circle" class="mr-2"></vue-feather>
                         Delete
