@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Character\Character;
 use App\Models\Guild\Guild;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -46,13 +47,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function guild()
+    public function guild(): BelongsTo
     {
         return $this->belongsTo(Guild::class);
     }
 
-    public function characters()
+    public function characters(): HasMany
     {
         return $this->hasMany(Character::class);
+    }
+
+    public function items(): HasMany
+    {
+        return $this->hasMany(UserItem::class, 'user_id', 'id');
     }
 }
