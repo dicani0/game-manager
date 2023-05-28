@@ -13,5 +13,13 @@ class UserItem extends Model
         'user_id',
         'item_name',
         'amount',
+        'available_amount',
+        'used_amount',
+        'sold_amount',
     ];
+
+    public function getAvailableAmountAttribute()
+    {
+        return $this->amount - $this->used_amount - $this->sold_amount;
+    }
 }

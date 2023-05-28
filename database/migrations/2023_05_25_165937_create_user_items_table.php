@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->string('item_name');
-            $table->unsignedInteger('amount');
+            $table->unsignedInteger('amount')->default(0);
+            $table->unsignedInteger('used_amount')->default(0);
+            $table->unsignedInteger('sold_amount')->default(0);
             $table->timestamps();
         });
     }

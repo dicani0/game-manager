@@ -3,6 +3,7 @@
 
 use App\Http\Middleware\VerifyCsrfToken;
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
@@ -88,10 +89,18 @@ class CharacterTest extends TestCase
         ]);
 
         $response->assertRedirect('/characters');
+
+        $this->assertDatabaseHas('characters', [
+            'id' => $character->getKey(),
+            'name' => 'test2',
+            'vocation' => 'druid',
+        ]);
     }
 
     public function test_cannot_update_not_owned_character(): void
     {
+        $this->withoutExceptionHandling();
+        $this->expectException(AuthorizationException::class);
         $character = $this->user->characters()->create([
             'name' => 'test',
             'vocation' => 'knight',
@@ -99,11 +108,10 @@ class CharacterTest extends TestCase
 
         $user2 = User::factory()->create();
 
-        $response = $this->withoutMiddleware(VerifyCsrfToken::class)->actingAs($user2)->put('/characters/' . $character->id, [
+        $this->withoutMiddleware(VerifyCsrfToken::class)->actingAs($user2)->put('/characters/' . $character->id, [
             'name' => 'test2',
             'vocation' => 'druid',
         ]);
-        $response->assertRedirect();
     }
 
     public function test_delete_character(): void

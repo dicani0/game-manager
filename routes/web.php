@@ -50,7 +50,9 @@ Route::prefix('characters')->middleware('auth')->group(function () {
 
 Route::prefix('items')->middleware('auth')->group(function () {
    Route::get('/', [ItemController::class, 'index']);
-    Route::post('/', [ItemController::class, 'sync']);
+    Route::post('/import', [ItemController::class, 'sync']);
+    Route::put('/{item}', [ItemController::class, 'update']);
+    Route::delete('/{item}', [ItemController::class, 'delete']);
 });
 
 Route::prefix('auth')->group(function () {
