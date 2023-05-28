@@ -3,7 +3,7 @@
         <div class="flex justify-between items-center mt-6">
             <h1 class="text-3xl font-semibold text-white">Your Characters</h1>
             <Link href="/characters/create"
-                  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                  class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
                 Create Character
             </Link>
         </div>

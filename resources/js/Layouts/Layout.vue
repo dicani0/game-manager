@@ -1,6 +1,6 @@
 <template>
     <Head title="Game Helper"/>
-    <div class="h-screen bg-gray-900 text-gray-200 overflow-hidden">
+    <div class="min-h-screen bg-gray-900 text-gray-200">
         <Nav/>
         <slot></slot>
     </div>

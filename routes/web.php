@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Character\CharacterController;
 use App\Http\Controllers\Guild\GuildController;
+use App\Http\Controllers\Items\ItemController;
 use App\Models\Character\Character;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -45,6 +46,13 @@ Route::prefix('characters')->middleware('auth')->group(function () {
     Route::get('/edit/{character}', [CharacterController::class, 'edit']);
     Route::put('/{character}', [CharacterController::class, 'update']);
     Route::delete('/{character}', [CharacterController::class, 'delete']);
+});
+
+Route::prefix('items')->middleware('auth')->group(function () {
+   Route::get('/', [ItemController::class, 'index']);
+    Route::post('/import', [ItemController::class, 'sync']);
+    Route::put('/{item}', [ItemController::class, 'update']);
+    Route::delete('/{item}', [ItemController::class, 'delete']);
 });
 
 Route::prefix('auth')->group(function () {

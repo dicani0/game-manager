@@ -8,7 +8,7 @@ use App\Processes\Process;
 
 class RegisterProcess extends Process
 {
-    protected array $actions = [
+    protected array $tasks = [
         RegisterUser::class,
         AssignUserRole::class,
     ];
