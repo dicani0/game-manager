@@ -14,6 +14,16 @@
                         </Link>
                     </li>
                     <li v-if="user">
+                        <Link href="/market" :class="{ 'text-teal-300': $page.component === 'Market/Market' }" class="flex items-center text-lg font-semibold hover:text-orange-300 transition-all duration-200">
+                            <vue-feather type="dollar-sign" class="mr-2"></vue-feather> Market
+                        </Link>
+                    </li>
+                    <li v-if="user">
+                        <Link href="/guild" :class="{ 'text-teal-300': $page.component === 'Guild/Guild' }" class="flex items-center text-lg font-semibold hover:text-orange-300 transition-all duration-200">
+                            <vue-feather type="aperture" class="mr-2"></vue-feather> Guilds
+                        </Link>
+                    </li>
+                    <li v-if="user">
                         <Link href="/characters" :class="{ 'text-teal-300': $page.component === 'Character/Character' }" class="flex items-center text-lg font-semibold hover:text-orange-300 transition-all duration-200">
                             <vue-feather type="columns" class="mr-2"></vue-feather> Characters
                         </Link>
