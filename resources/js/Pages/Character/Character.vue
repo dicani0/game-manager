@@ -1,5 +1,5 @@
 <template>
-    <div class="max-w-7xl py-4 mx-auto sm:px-6 lg:px-8 bg-gray-800 min-h-screen text-white">
+    <div class="max-w-7xl py-4 mx-auto sm:px-6 lg:px-8 bg-gray-800 text-white">
         <div class="flex justify-between items-center mt-6">
             <h1 class="text-3xl font-semibold text-white">Your Characters</h1>
             <Link href="/characters/create"

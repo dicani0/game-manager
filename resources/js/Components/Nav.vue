@@ -33,6 +33,11 @@
                             <vue-feather type="box" class="mr-2"></vue-feather> Items
                         </Link>
                     </li>
+                    <li>
+                        <Link href="/cosmetics" :class="{ 'text-teal-300': $page.component === 'Cosmetics/Cosmetic' }" class="flex items-center text-lg font-semibold hover:text-orange-300 transition-all duration-200">
+                            <vue-feather type="list" class="mr-2"></vue-feather> Cosmetics List
+                        </Link>
+                    </li>
                     <li v-if="!user">
                         <Link href="/auth/login" :class="{ 'text-teal-300': $page.component === 'Auth/Login' }" class="flex items-center text-lg font-semibold hover:text-orange-300 transition-all duration-200">
                             <vue-feather type="log-in" class="mr-2"></vue-feather> Login
