@@ -6,8 +6,8 @@ use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Character\CharacterController;
 use App\Http\Controllers\Cosmetics\CosmeticController;
+use App\Http\Controllers\Cosmetics\UserCosmeticController;
 use App\Http\Controllers\Guild\GuildController;
-use App\Http\Controllers\Items\ItemController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -47,10 +47,10 @@ Route::prefix('characters')->middleware('auth')->group(function () {
 });
 
 Route::prefix('items')->middleware('auth')->group(function () {
-    Route::get('/', [ItemController::class, 'index']);
-    Route::post('/import', [ItemController::class, 'sync']);
-    Route::put('/{item}', [ItemController::class, 'update']);
-    Route::delete('/{item}', [ItemController::class, 'delete']);
+    Route::get('/', [UserCosmeticController::class, 'index']);
+    Route::post('/import', [UserCosmeticController::class, 'sync']);
+    Route::put('/{item}', [UserCosmeticController::class, 'update']);
+    Route::delete('/{item}', [UserCosmeticController::class, 'delete']);
 });
 
 Route::prefix('cosmetics')->group(function () {

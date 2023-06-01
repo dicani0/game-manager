@@ -21,7 +21,7 @@ class ImportCosmeticsList extends Command
             }
 
             Cosmetic::updateOrCreate([
-                'name' => trim($line),
+                'name' => str_replace('Token', '', trim($line)),
                 'attributes' => null,
                 'usable_amount' => 1,
             ]);

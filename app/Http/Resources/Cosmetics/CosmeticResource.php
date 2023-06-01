@@ -3,7 +3,7 @@
 namespace App\Http\Resources\Cosmetics;
 
 use App\Models\Cosmetics\Cosmetic;
-use App\Models\UserItem;
+use App\Models\Cosmetics\UserCosmetic;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -22,10 +22,8 @@ class CosmeticResource extends JsonResource
             'attributes' => $this->getResource()->attributes,
             'usable_amount' => $this->getResource()->usable_amount,
             $this->mergeWhen(!is_null($request->user()), [
-                'obtained' => $request->user()?->items->contains(function (UserItem $item) {
-                    return $item->item_name === $this->getResource()->name;
-                }),
-                'obtained_amount' => $request->user()?->items->firstWhere('item_name', $this->getResource()->name)?->amount,
+                'obtained' => $request->user()?->cosmetics->contains($this->getResource()),
+                'obtained_amount' => $request->user()?->cosmetics->where('id', $this->getResource()->getKey())->first()?->pivot->amount
             ]),
         ];
     }

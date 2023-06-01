@@ -14,9 +14,7 @@ use Tests\TestCase;
 
 class RegisterTest extends TestCase
 {
-    use WithoutMiddleware;
     use RefreshDatabase;
-    use DatabaseMigrations;
 
     /**
      * A basic test example.
