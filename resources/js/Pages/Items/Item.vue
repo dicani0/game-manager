@@ -119,7 +119,7 @@ const importItems = () => {
     importForm.post('/items/import', {
         onSuccess: (message) => {
             openImportModal.value = false;
-            useToast().success(message.props.success);
+            useToast().success(message.props.flash.success);
         },
         onError: (errors) => {
             Object.values(errors).forEach((error) => {

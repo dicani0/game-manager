@@ -1,14 +1,13 @@
 <?php
 
-use App\Enums\VocationEnum;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Character\CharacterController;
+use App\Http\Controllers\Cosmetics\CosmeticController;
 use App\Http\Controllers\Guild\GuildController;
 use App\Http\Controllers\Items\ItemController;
-use App\Models\Character\Character;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -39,7 +38,6 @@ Route::get('/market', function () {
     return Inertia::render('Market/Market');
 });
 Route::prefix('characters')->middleware('auth')->group(function () {
-
     Route::get('/', [CharacterController::class, 'index']);
     Route::get('/create', [CharacterController::class, 'create']);
     Route::post('/', [CharacterController::class, 'store'])->middleware('auth');
@@ -49,10 +47,14 @@ Route::prefix('characters')->middleware('auth')->group(function () {
 });
 
 Route::prefix('items')->middleware('auth')->group(function () {
-   Route::get('/', [ItemController::class, 'index']);
+    Route::get('/', [ItemController::class, 'index']);
     Route::post('/import', [ItemController::class, 'sync']);
     Route::put('/{item}', [ItemController::class, 'update']);
     Route::delete('/{item}', [ItemController::class, 'delete']);
+});
+
+Route::prefix('cosmetics')->group(function () {
+    Route::get('/', [CosmeticController::class, 'index']);
 });
 
 Route::prefix('auth')->group(function () {
