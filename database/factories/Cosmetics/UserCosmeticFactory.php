@@ -1,13 +1,13 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Cosmetics;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\UserItem>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Cosmetics\UserCosmetic>
  */
-class UserItemFactory extends Factory
+class UserCosmeticFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +17,6 @@ class UserItemFactory extends Factory
     public function definition(): array
     {
         return [
-            'item_name' => fake()->name(),
             'amount' => fake()->numberBetween(1, 100),
             'used_amount' => fake()->numberBetween(1, 100),
             'sold_amount' => fake()->numberBetween(1, 100),

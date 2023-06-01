@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Items;
+namespace App\Http\Controllers\Cosmetics;
 
 use App\Actions\Items\DeleteItem;
 use App\Actions\Items\UpdateItem;
@@ -10,18 +10,18 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Items\DeleteItemRequest;
 use App\Http\Requests\Items\SyncItemsRequest;
 use App\Http\Requests\Items\UpdateItemRequest;
-use App\Http\Resources\Items\ItemResource;
-use App\Models\UserItem;
+use App\Http\Resources\Cosmetics\UserCosmeticResource;
+use App\Models\Cosmetics\UserCosmetic;
 use App\Processes\Items\ImportItemsProcess;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class ItemController extends Controller
+class UserCosmeticController extends Controller
 {
     public function index(Request $request)
     {
         return Inertia::render('Items/Item', [
-            'items' => ItemResource::collection($request->user()->items),
+            'items' => UserCosmeticResource::collection($request->user()->cosmetics),
         ]);
     }
 
@@ -35,14 +35,14 @@ class ItemController extends Controller
         return redirect('/items')->with('success', 'Items have been synced.');
     }
 
-    public function update(UpdateItemRequest $request, UserItem $item, UpdateItem $action)
+    public function update(UpdateItemRequest $request, UserCosmetic $item, UpdateItem $action)
     {
         $action->handle($item, UpdateItemData::from($request->validated()));
 
         return redirect('/items')->with('success', 'Item has been updated.');
     }
 
-    public function delete(DeleteItemRequest $request, UserItem $item, DeleteItem $action)
+    public function delete(DeleteItemRequest $request, UserCosmetic $item, DeleteItem $action)
     {
         $action->handle($item);
 

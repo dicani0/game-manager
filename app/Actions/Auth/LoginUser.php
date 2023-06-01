@@ -15,6 +15,7 @@ final class LoginUser
         if (!auth()->attempt($dto->toArray())) {
             throw new InvalidCredentialsException();
         }
-            request()->session()->regenerate();
+
+        request()->session()->regenerate();
     }
 }

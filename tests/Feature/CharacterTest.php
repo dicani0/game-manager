@@ -25,7 +25,7 @@ class CharacterTest extends TestCase
 
     public function test_create_character(): void
     {
-        $response = $this->withoutMiddleware(VerifyCsrfToken::class)->actingAs($this->user)->post('/characters', [
+        $response = $this->actingAs($this->user)->post('/characters', [
             'name' => 'test',
             'vocation' => 'knight',
         ]);
@@ -40,7 +40,7 @@ class CharacterTest extends TestCase
 
     public function test_create_character_unauthorized(): void
     {
-        $response = $this->withoutMiddleware(VerifyCsrfToken::class)->post('/characters', [
+        $response = $this->post('/characters', [
             'name' => 'test',
             'vocation' => 'knight',
         ]);
@@ -54,7 +54,7 @@ class CharacterTest extends TestCase
             'vocation' => 'knight',
         ]);
 
-        $response = $this->withoutMiddleware(VerifyCsrfToken::class)->actingAs($this->user)->get('/characters/edit/' . $character->id);
+        $response = $this->actingAs($this->user)->get('/characters/edit/' . $character->id);
 
         $response->assertInertia(fn (AssertableInertia $page) => $page
             ->component('Character/Edit')
@@ -72,7 +72,7 @@ class CharacterTest extends TestCase
 
         $user2 = User::factory()->create();
 
-        $response = $this->withoutMiddleware(VerifyCsrfToken::class)->actingAs($user2)->get('/characters/edit/' . $character->id);
+        $response = $this->actingAs($user2)->get('/characters/edit/' . $character->id);
         $response->assertRedirect();
     }
 
@@ -83,7 +83,7 @@ class CharacterTest extends TestCase
             'vocation' => 'knight',
         ]);
 
-        $response = $this->withoutMiddleware(VerifyCsrfToken::class)->actingAs($this->user)->put('/characters/' . $character->id, [
+        $response = $this->actingAs($this->user)->put('/characters/' . $character->id, [
             'name' => 'test2',
             'vocation' => 'druid',
         ]);
@@ -108,7 +108,7 @@ class CharacterTest extends TestCase
 
         $user2 = User::factory()->create();
 
-        $this->withoutMiddleware(VerifyCsrfToken::class)->actingAs($user2)->put('/characters/' . $character->id, [
+        $this->actingAs($user2)->put('/characters/' . $character->id, [
             'name' => 'test2',
             'vocation' => 'druid',
         ]);
@@ -121,7 +121,7 @@ class CharacterTest extends TestCase
             'vocation' => 'knight',
         ]);
 
-        $response = $this->withoutMiddleware(VerifyCsrfToken::class)->actingAs($this->user)->delete('/characters/' . $character->id);
+        $response = $this->actingAs($this->user)->delete('/characters/' . $character->id);
 
         $response->assertRedirect('/characters');
 

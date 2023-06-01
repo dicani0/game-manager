@@ -3,12 +3,13 @@
 namespace Tests\Feature;
 
 use App\Http\Middleware\VerifyCsrfToken;
+use App\Models\Cosmetics\Cosmetic;
+use App\Models\Cosmetics\UserCosmetic;
 use App\Models\User;
-use App\Models\UserItem;
 use Illuminate\Auth\Access\AuthorizationException;
 use Tests\TestCase;
 
-class ItemsTest extends TestCase
+class UserCosmeticTest extends TestCase
 {
     public User $user;
 
@@ -24,31 +25,32 @@ class ItemsTest extends TestCase
 	            2x Death Knight Outfit	-
 	            2x Red Sword Aura	-';
 
-        $response = $this->actingAs($this->user)->withoutMiddleware(VerifyCsrfToken::class)->post('/items/import', [
+        $response = $this->actingAs($this->user)->post('/items/import', [
             'content' => $content,
         ]);
         $response->assertRedirect();
 
-        $this->assertDatabaseCount('user_items', 3);
+        $this->assertDatabaseCount('user_cosmetic', 3);
     }
 
     public function test_update_item_amount(): void
     {
-        $item = UserItem::factory()->create([
+        $cosmetic = Cosmetic::factory()->create();
+        $item = UserCosmetic::factory()->create([
             'user_id' => $this->user->id,
-            'amount' => 10,
+            'cosmetic_id' => $cosmetic->getKey(),
             'used_amount' => 0,
             'sold_amount' => 0,
         ]);
 
-        $response = $this->actingAs($this->user)->withoutMiddleware(VerifyCsrfToken::class)->put('/items/' . $item->getKey(), [
+        $response = $this->actingAs($this->user)->put('/items/' . $item->getKey(), [
             'amount' => 15,
         ]);
 
         $response->assertSessionHasErrors('sold_amount');
         $response->assertSessionHasErrors('used_amount');
 
-        $response = $this->actingAs($this->user)->withoutMiddleware(VerifyCsrfToken::class)->put('/items/' . $item->getKey(), [
+        $response = $this->actingAs($this->user)->put('/items/' . $item->getKey(), [
             'amount' => 15,
             'sold_amount' => 10,
             'used_amount' => 10,
@@ -56,7 +58,7 @@ class ItemsTest extends TestCase
 
         $response->assertSessionHasErrors('amount');
 
-        $response = $this->actingAs($this->user)->withoutMiddleware(VerifyCsrfToken::class)->put('/items/' . $item->getKey(), [
+        $response = $this->actingAs($this->user)->put('/items/' . $item->getKey(), [
             'amount' => 15,
             'sold_amount' => 5,
             'used_amount' => 5,
@@ -64,7 +66,7 @@ class ItemsTest extends TestCase
 
         $response->assertRedirect();
 
-        $this->assertDatabaseHas('user_items', [
+        $this->assertDatabaseHas('user_cosmetic', [
             'id' => $item->getKey(),
             'amount' => 15,
             'sold_amount' => 5,
@@ -79,14 +81,16 @@ class ItemsTest extends TestCase
 
         $testUser = User::factory()->create();
 
-        $item = UserItem::factory()->create([
+        $cosmetic = Cosmetic::factory()->create();
+        $item = UserCosmetic::factory()->create([
             'user_id' => $this->user->getKey(),
-            'amount' => 10,
+            'cosmetic_id' => $cosmetic->getKey(),
+            'amount' => 3,
             'used_amount' => 0,
             'sold_amount' => 0,
         ]);
 
-        $this->actingAs($testUser)->withoutMiddleware(VerifyCsrfToken::class)->put('/items/' . $item->getKey(), [
+        $this->actingAs($testUser)->put('/items/' . $item->getKey(), [
             'amount' => 15,
             'sold_amount' => 5,
             'used_amount' => 5,
@@ -95,14 +99,16 @@ class ItemsTest extends TestCase
 
     public function test_delete_item(): void
     {
-        $item = UserItem::factory()->create([
+        $cosmetic = Cosmetic::factory()->create();
+        $item = UserCosmetic::factory()->create([
             'user_id' => $this->user->getKey(),
+            'cosmetic_id' => $cosmetic->getKey(),
         ]);
 
-        $response = $this->actingAs($this->user)->withoutMiddleware(VerifyCsrfToken::class)->delete('/items/' . $item->getKey());
+        $response = $this->actingAs($this->user)->delete('/items/' . $item->getKey());
         $response->assertRedirect();
 
-        $this->assertDatabaseMissing('user_items', [
+        $this->assertDatabaseMissing('user_cosmetic', [
             'id' => $item->getKey(),
         ]);
     }
@@ -114,10 +120,12 @@ class ItemsTest extends TestCase
 
         $testUser = User::factory()->create();
 
-        $item = UserItem::factory()->create([
+        $cosmetic = Cosmetic::factory()->create();
+        $item = UserCosmetic::factory()->create([
+            'cosmetic_id' => $cosmetic->getKey(),
             'user_id' => $this->user->getKey(),
         ]);
 
-        $this->actingAs($testUser)->withoutMiddleware(VerifyCsrfToken::class)->delete('/items/' . $item->getKey());
+        $this->actingAs($testUser)->delete('/items/' . $item->getKey());
     }
 }

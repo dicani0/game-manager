@@ -2,12 +2,12 @@
 
 namespace App\Http\Requests\Items;
 
-use App\Models\UserItem;
+use App\Models\Cosmetics\UserCosmetic;
 use Illuminate\Foundation\Http\FormRequest;
 
 abstract  class ItemRequest extends FormRequest
 {
-    public function getUserItem(): UserItem
+    public function getUserItem(): UserCosmetic
     {
         return $this->route('item');
     }

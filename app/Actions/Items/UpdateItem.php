@@ -3,11 +3,11 @@
 namespace App\Actions\Items;
 
 use App\Data\Items\UpdateItemData;
-use App\Models\UserItem;
+use App\Models\Cosmetics\UserCosmetic;
 
 class UpdateItem
 {
-    public function handle(UserItem $item, UpdateItemData $dto): void
+    public function handle(UserCosmetic $item, UpdateItemData $dto): void
     {
         $item->update($dto->toArray());
     }
