@@ -4,7 +4,7 @@ namespace App\Data\Items;
 
 use Spatie\LaravelData\Data;
 
-class UpdateItemData extends Data
+class UpdateItemDto extends Data
 {
     public int $amount;
     public int $sold_amount;

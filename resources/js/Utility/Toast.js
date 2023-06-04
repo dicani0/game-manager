@@ -5,6 +5,7 @@ const Toast = Swal.mixin({
     position: "center",
     background: "#222",
     color: "#fff",
+    width: "400px",
     showCancelButton: true,
 });
 

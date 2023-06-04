@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Cosmetics;
 use App\Actions\Items\DeleteItem;
 use App\Actions\Items\UpdateItem;
 use App\Data\Items\ImportItemsDto;
-use App\Data\Items\UpdateItemData;
+use App\Data\Items\UpdateItemDto;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Items\DeleteItemRequest;
 use App\Http\Requests\Items\SyncItemsRequest;
@@ -37,7 +37,7 @@ class UserCosmeticController extends Controller
 
     public function update(UpdateItemRequest $request, UserCosmetic $item, UpdateItem $action)
     {
-        $action->handle($item, UpdateItemData::from($request->validated()));
+        $action->handle($item, UpdateItemDto::from($request->validated()));
 
         return redirect('/items')->with('success', 'Item has been updated.');
     }

@@ -8,6 +8,7 @@ use App\Http\Controllers\Character\CharacterController;
 use App\Http\Controllers\Cosmetics\CosmeticController;
 use App\Http\Controllers\Cosmetics\UserCosmeticController;
 use App\Http\Controllers\Guild\GuildController;
+use App\Http\Controllers\Market\MarketController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -34,9 +35,11 @@ Route::prefix('guild')->group(function () {
     Route::get('/', [GuildController::class, 'dashboard']);
 });
 
-Route::get('/market', function () {
-    return Inertia::render('Market/Market');
+Route::prefix('market')->group(function () {
+    Route::get('/', [MarketController::class, 'index']);
+    Route::post('/', [MarketController::class, 'store']);
 });
+
 Route::prefix('characters')->middleware('auth')->group(function () {
     Route::get('/', [CharacterController::class, 'index']);
     Route::get('/create', [CharacterController::class, 'create']);

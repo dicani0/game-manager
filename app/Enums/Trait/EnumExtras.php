@@ -6,7 +6,13 @@ trait EnumExtras
 {
     public static function getValues(): array
     {
-        return array_values(self::cases());
+        $values = [];
+
+        foreach (self::cases() as $enum) {
+            $values[] = $enum->value;
+        }
+
+        return $values;
     }
 
     public static function getKeys(): array
