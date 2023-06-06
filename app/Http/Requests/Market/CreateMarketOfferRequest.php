@@ -22,7 +22,15 @@ class CreateMarketOfferRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'items' => ['required', 'array'],
+            'items.*.cosmetic_id' => ['required', 'exists:cosmetics,id', function ($attribute, $value, $fail) {
+                $cosmetic = $this->user()->cosmetics()->where('cosmetic_id', $value)->first();
+                if ($cosmetic->pivot->available_amount < $this->input('items.*.amount')[0]) {
+                    $fail('You do not have enough cosmetics to create this offer with item ' . $cosmetic->name);
+                }
+            }],
+            'items.*.amount' => ['required', 'integer', 'min:1'],
+            'promoted' => ['nullable', 'boolean'],
         ];
     }
 }

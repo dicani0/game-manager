@@ -20,9 +20,11 @@
                         </p>
                         <p class="text-gray-400">Sold amount: {{ item.sold_amount }}</p>
                         <p class="text-gray-400">Used amount: {{ item.used_amount }}</p>
+                        <p class="text-gray-400">Reserved amount: {{ item.reserved_amount }}</p>
                     </div>
                     <div class="flex gap-2">
                         <button @click="addItemToSale(item)"
+                                :disabled="item.available_amount <= 0"
                                 class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-1 px-2 rounded"
                                 :class="{ '!bg-gray-500 !hover:bg-gray-500 cursor-not-allowed': item.available_amount <= 0}">
                             Sell
@@ -41,6 +43,14 @@
         </div>
         <div class="w-1/6 bg-gray-800 p-4 rounded shadow-lg border">
             <h3 class="text-lg font-bold text-gray-200 mb-4">Create sale offer</h3>
+            <Transition>
+                <div v-if="selectedItemsForSale.length > 0" class="flex items-center mb-4">
+                    <input type="checkbox" id="promote" class="form-checkbox bg-blue-700 h-5 w-5 text-blue-600"
+                           v-model="promote">
+                    <label for="promote" class="ml-2 text-gray-300">Promote this offer</label>
+                </div>
+            </Transition>
+
             <div class="flex">
                 <button
                     @click="createMarketOffer"
@@ -134,7 +144,7 @@ import {useToast} from "vue-toastification";
 import {router, useForm} from "@inertiajs/vue3";
 import Toast from "@/Utility/Toast.js";
 
-defineProps(['items']);
+const props = defineProps(['items']);
 
 const importForm = useForm({
     content: '',
@@ -150,6 +160,7 @@ let selectedItem = null;
 let openImportModal = ref(false);
 let openEditModal = ref(false);
 let selectedItemsForSale = ref([]);
+let promote = ref(false);
 
 const importItems = () => {
     importForm.post('/items/import', {
@@ -217,7 +228,7 @@ const addItemToSale = (item) => {
 };
 
 const deleteItemFromSale = (item) => {
-    selectedItemsForSale.value = selectedItemsForSale.value.filter(i => i.item.id !== item.id);
+    selectedItemsForSale.value = selectedItemsForSale.value.filter(i => i.id !== item.id);
 };
 
 const clearSaleItems = async (requiredConfirm = true) => {
@@ -273,3 +284,15 @@ const createMarketOffer = async () => {
 };
 
 </script>
+
+<style scoped>
+.v-enter-active,
+.v-leave-active {
+    transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+    opacity: 0;
+}
+</style>

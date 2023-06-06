@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property int $amount
  * @property int $used_amount
  * @property int $sold_amount
+ * @property int $reserved_amount
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Database\Factories\Cosmetics\UserCosmeticFactory factory($count = null, $state = [])
@@ -25,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @method static \Illuminate\Database\Eloquent\Builder|UserCosmetic whereCosmeticId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCosmetic whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCosmetic whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserCosmetic whereReservedAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCosmetic whereSoldAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCosmetic whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserCosmetic whereUsedAmount($value)
@@ -44,10 +46,11 @@ class UserCosmetic extends Pivot
         'available_amount',
         'used_amount',
         'sold_amount',
+        'reserved_amount',
     ];
 
     public function getAvailableAmountAttribute(): int
     {
-        return $this->amount - $this->used_amount - $this->sold_amount;
+        return $this->amount - $this->used_amount - $this->sold_amount - $this->reserved_amount;
     }
 }

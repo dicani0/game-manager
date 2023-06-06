@@ -55,6 +55,20 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
+ * @property int $available_promotes
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Character> $characters
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Cosmetic> $cosmetics
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Permission> $permissions
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Role> $roles
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereAvailablePromotes($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Character> $characters
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Cosmetic> $cosmetics
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Permission> $permissions
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Role> $roles
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @mixin \Eloquent
  */
 class User extends Authenticatable
@@ -104,6 +118,6 @@ class User extends Authenticatable
 
     public function cosmetics(): BelongsToMany
     {
-        return $this->belongsToMany(Cosmetic::class, 'user_cosmetic')->using(UserCosmetic::class)->withPivot(['amount', 'used_amount', 'sold_amount']);
+        return $this->belongsToMany(Cosmetic::class, 'user_cosmetic')->using(UserCosmetic::class)->withPivot(['amount', 'used_amount', 'sold_amount', 'reserved_amount']);
     }
 }

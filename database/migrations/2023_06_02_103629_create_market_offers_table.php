@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\MarketOfferStatusEnum;
 use App\Enums\OfferTypeEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -18,6 +19,7 @@ return new class extends Migration
             $table->enum('type', OfferTypeEnum::getValues());
             $table->dateTime('expires_at')->default(now()->addWeeks(2));
             $table->boolean('promoted')->default(false);
+            $table->enum('status', MarketOfferStatusEnum::getValues())->default(MarketOfferStatusEnum::ACTIVE->value);
             $table->timestamps();
         });
     }

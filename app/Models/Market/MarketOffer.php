@@ -31,6 +31,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|MarketOffer whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MarketOffer whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MarketOffer whereUserId($value)
+ * @property string $status
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Market\MarketOfferItem> $items
+ * @method static \Illuminate\Database\Eloquent\Builder|MarketOffer whereStatus($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Market\MarketOfferItem> $items
  * @mixin \Eloquent
  */
 class MarketOffer extends Model

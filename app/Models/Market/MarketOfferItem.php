@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|MarketOfferItem whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MarketOfferItem whereMarketOfferId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MarketOfferItem whereUpdatedAt($value)
+ * @property-read Cosmetic $cosmetic
  * @mixin \Eloquent
  */
 class MarketOfferItem extends Model
