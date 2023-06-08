@@ -22,6 +22,7 @@ class UserCosmeticResource extends JsonResource
             'sold_amount' => $this->getResource()->pivot->sold_amount,
             'used_amount' => $this->getResource()->pivot->used_amount,
             'available_amount' => $this->getResource()->pivot->available_amount,
+            'reserved_amount' => $this->getResource()->pivot->reserved_amount,
         ];
     }
 

@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Cosmetic whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Cosmetic whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Cosmetic whereUsableAmount($value)
+ * @method static \Database\Factories\Cosmetics\CosmeticFactory factory($count = null, $state = [])
  * @mixin \Eloquent
  */
 class Cosmetic extends Model

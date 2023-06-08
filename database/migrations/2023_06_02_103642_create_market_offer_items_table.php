@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_cosmetic', function (Blueprint $table) {
+        Schema::create('market_offer_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('market_offer_id')->constrained();
             $table->foreignId('cosmetic_id')->constrained();
-            $table->unsignedInteger('amount')->default(0);
-            $table->unsignedInteger('used_amount')->default(0);
-            $table->unsignedInteger('sold_amount')->default(0);
-            $table->unsignedInteger('reserved_amount')->default(0);
+            $table->integer('amount')->default(1);
             $table->timestamps();
         });
     }
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_items');
+        Schema::dropIfExists('market_offer_items');
     }
 };

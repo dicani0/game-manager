@@ -1,7 +1,6 @@
 <?php
 
 
-use App\Http\Middleware\VerifyCsrfToken;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -55,7 +54,6 @@ class CharacterTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->user)->get('/characters/edit/' . $character->id);
-        dd($response);
         $response->assertInertia(fn (AssertableInertia $page) => $page
             ->component('Character/Edit')
             ->where('character.name', 'test')

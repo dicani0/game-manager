@@ -28,10 +28,11 @@ createInertiaApp({
             .use(ZiggyVue, Ziggy)
             .use(VueSweetalert2)
             .use(Toast, {
-                transition: "Vue-Toastification__fade",
+                transition: "Vue-Toastification__slideBlurred",
                 maxToasts: 20,
                 newestOnTop: true,
                 timeout: 2500,
+                icon: true,
             })
             .component(VueFeather.name, VueFeather)
             .mount(el);
