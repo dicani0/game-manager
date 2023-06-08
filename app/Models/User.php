@@ -6,6 +6,7 @@ use App\Models\Character\Character;
 use App\Models\Cosmetics\Cosmetic;
 use App\Models\Cosmetics\UserCosmetic;
 use App\Models\Guild\Guild;
+use App\Models\Market\MarketOffer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -107,5 +108,10 @@ class User extends Authenticatable
     public function cosmetics(): BelongsToMany
     {
         return $this->belongsToMany(Cosmetic::class, 'user_cosmetic')->using(UserCosmetic::class)->withPivot(['id', 'amount', 'used_amount', 'sold_amount', 'reserved_amount']);
+    }
+
+    public function marketOffers(): HasMany
+    {
+        return $this->hasMany(MarketOffer::class);
     }
 }
