@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Market;
 
+use App\Rules\Market\CosmeticAmountRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateMarketOfferRequest extends FormRequest
@@ -23,14 +24,14 @@ class CreateMarketOfferRequest extends FormRequest
     {
         return [
             'items' => ['required', 'array'],
-            'items.*.cosmetic_id' => ['required', 'exists:cosmetics,id', function ($attribute, $value, $fail) {
-                $cosmetic = $this->user()->cosmetics()->where('cosmetic_id', $value)->first();
-                if ($cosmetic->pivot->available_amount < $this->input('items.*.amount')[0]) {
-                    $fail('You do not have enough cosmetics to create this offer with item ' . $cosmetic->name);
+            'items.*.cosmetic_id' => ['required', 'exists:cosmetics,id'],
+            'items.*.amount' => ['required', 'integer', 'min:1'],
+            'items.*' => [new CosmeticAmountRule],
+            'promoted' => ['nullable', 'boolean', function ($attribute, $value, $fail) {
+                if ($value && $this->user()->available_promotes < 1) {
+                    $fail('You do not have enough promotes to create a promoted offer');
                 }
             }],
-            'items.*.amount' => ['required', 'integer', 'min:1'],
-            'promoted' => ['nullable', 'boolean'],
         ];
     }
 }

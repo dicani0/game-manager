@@ -27,6 +27,7 @@ class MarketController extends Controller
     public function store(CreateMarketOfferRequest $request, CreateMarketOfferProcess $process): RedirectResponse
     {
         $dto = CreateMarketOfferDto::from($request);
+
         $dto->user = $request->user();
 
         $process->run($dto);

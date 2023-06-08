@@ -16,6 +16,9 @@ class CreateMarketOfferDto extends Data
         public ?User          $user,
         public ?MarketOffer   $offer,
         public bool          $promoted = false,
+        public ?int $at_price = null,
+        public ?int $lat_price = null,
+        public ?string $description = null,
     )
     {
     }

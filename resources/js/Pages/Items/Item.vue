@@ -44,10 +44,36 @@
         <div class="w-1/6 bg-gray-800 p-4 rounded shadow-lg border">
             <h3 class="text-lg font-bold text-gray-200 mb-4">Create sale offer</h3>
             <Transition>
-                <div v-if="selectedItemsForSale.length > 0" class="flex items-center mb-4">
-                    <input type="checkbox" id="promote" class="form-checkbox bg-blue-700 h-5 w-5 text-blue-600"
-                           v-model="promote">
-                    <label for="promote" class="ml-2 text-gray-300">Promote this offer</label>
+                <div v-if="selectedItemsForSale.length > 0">
+                    <div class="flex items-center mb-4">
+                        <div class="tooltip-container">
+                            <input :disabled="usePage().props.auth.user.available_promotes < 1" type="checkbox" id="promote" class="form-checkbox bg-blue-700 h-5 w-5 text-blue-600" v-model="promote">
+                            <label for="promote" class="ml-2 text-gray-300">Promote this offer(Available promotes: {{ usePage().props.auth.user.available_promotes }}).</label>
+                            <div class="tooltip-text">
+                                Warning: You won't get your promotion back if you cancel this offer.
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="mb-2">
+                        <label class="block text-gray-300 text-sm font-bold mb-2" for="content">Price in LATs</label>
+                        <input
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            v-model.number="latPrice"/>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-300 text-sm font-bold mb-2" for="content">Price in ATs</label>
+                        <input
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            v-model.number="atPrice"/>
+                    </div>
+                    <div>
+                        <label class="block text-gray-300 text-sm font-bold mb-2" for="content">Description</label>
+                        <textarea
+                            rows="5"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            v-model="description"></textarea>
+                    </div>
                 </div>
             </Transition>
 
@@ -141,7 +167,7 @@
 import {ref} from 'vue';
 import Modal from "@/Components/Modal.vue";
 import {useToast} from "vue-toastification";
-import {router, useForm} from "@inertiajs/vue3";
+import {router, useForm, usePage} from "@inertiajs/vue3";
 import Toast from "@/Utility/Toast.js";
 
 const props = defineProps(['items']);
@@ -161,6 +187,9 @@ let openImportModal = ref(false);
 let openEditModal = ref(false);
 let selectedItemsForSale = ref([]);
 let promote = ref(false);
+let latPrice = ref(0);
+let atPrice = ref(0);
+let description = ref('');
 
 const importItems = () => {
     importForm.post('/items/import', {
@@ -268,7 +297,11 @@ const createMarketOffer = async () => {
     router.post('/market',
         {
             items: items,
+            promoted: promote.value,
             type: 'sell',
+            description: description.value,
+            at_price: atPrice.value,
+            lat_price: latPrice.value,
         },
         {
             onSuccess: (message) => {
@@ -294,5 +327,31 @@ const createMarketOffer = async () => {
 .v-enter-from,
 .v-leave-to {
     opacity: 0;
+}
+
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip-container .tooltip-text {
+    visibility: hidden;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+    bottom: 100%; /* Position the tooltip above the text */
+    left: 50%;
+    margin-left: -60px; /* Use half of the width to center the tooltip */
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+.tooltip-container:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
 }
 </style>

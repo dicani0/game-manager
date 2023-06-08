@@ -15,6 +15,9 @@ class CreateMarketOffer
             'promoted' => $dto->promoted,
             'type' => OfferTypeEnum::SELL->value,
             'expires_at' => now()->addDays(14)->startOfDay(),
+            'at_price' => $dto->at_price,
+            'lat_price' => $dto->lat_price,
+            'description' => $dto->description,
         ]);
     }
 }
