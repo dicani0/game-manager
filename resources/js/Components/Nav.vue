@@ -13,10 +13,31 @@
                             <vue-feather type="info" class="mr-2"></vue-feather> About
                         </Link>
                     </li>
-                    <li v-if="user">
-                        <Link href="/market" :class="{ 'text-teal-300': $page.component === 'Market/Market' }" class="flex items-center text-lg font-semibold hover:text-orange-300 transition-all duration-200">
+                    <li class="relative group">
+                        <Link
+                            :class="{ 'text-teal-300': $page.component.startsWith('Market/') }"
+                            class="flex items-center text-lg font-semibold hover:text-orange-300 cursor-pointer transition-all duration-200"
+                            href="/market"
+                        >
                             <vue-feather type="dollar-sign" class="mr-2"></vue-feather> Market
                         </Link>
+
+                        <ul v-if="user"
+                            class="absolute left-0 mt-2 w-48 bg-gray-800 text-white rounded-lg shadow-lg py-2 transition-transform duration-200 transform scale-0 group-hover:scale-100 origin-top z-50"
+                        >
+                            <li>
+                                <Link href="/market" class="block px-4 py-2 hover:bg-gray-200 hover:text-black">Offers</Link>
+                            </li>
+                            <li>
+                                <Link href="/market/my" class="block px-4 py-2 hover:bg-gray-200 hover:text-black">My Offers</Link>
+                            </li>
+                            <li>
+                                <Link href="/market/requests" class="block px-4 py-2 hover:bg-gray-200 hover:text-black">Requests</Link>
+                            </li>
+                            <li>
+                                <Link href="/market/history" class="block px-4 py-2 hover:bg-gray-200 hover:text-black">History</Link>
+                            </li>
+                        </ul>
                     </li>
                     <li v-if="user">
                         <Link href="/guild" :class="{ 'text-teal-300': $page.component === 'Guild/Guild' }" class="flex items-center text-lg font-semibold hover:text-orange-300 transition-all duration-200">
@@ -58,19 +79,19 @@
 
                         <!-- Dropdown Menu -->
                         <ul
-                            class="absolute left-0 mt-2 w-32 bg-gray-100 rounded-lg shadow-lg py-2 transition-transform duration-200 transform scale-0 group-hover:scale-100 origin-top z-50"
+                            class="absolute left-0 mt-2 w-32 bg-gray-800 text-white rounded-lg shadow-lg py-2 transition-transform duration-200 transform scale-0 group-hover:scale-100 origin-top z-50"
                         >
                             <li>
-                                <Link href="/auth/profile" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Profile</Link>
+                                <Link href="/auth/profile" class="block px-4 py-2 hover:bg-gray-200 hover:text-black">Profile</Link>
                             </li>
                             <li>
-                                <Link href="/characters" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Characters</Link>
+                                <Link href="/characters" class="block px-4 py-2 hover:bg-gray-200 hover:text-black">Characters</Link>
                             </li>
                             <li>
-                                <Link href="/settings" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Settings</Link>
+                                <Link href="/settings" class="block px-4 py-2 hover:bg-gray-200 hover:text-black">Settings</Link>
                             </li>
                             <li>
-                                <Link href="/auth/logout" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Logout</Link>
+                                <Link href="/auth/logout" class="block px-4 py-2 hover:bg-gray-200 hover:text-black">Logout</Link>
                             </li>
                         </ul>
                     </li>

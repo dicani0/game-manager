@@ -12,14 +12,15 @@
             <li v-for="cosmetic in filteredCosmetics" :key="cosmetic.id" class="p-4 bg-gray-800 rounded shadow-md text-gray-200">
                 <p :class="{'text-green-800': cosmetic.obtained, 'text-red-600': !cosmetic.obtained}" class="text-sm font-medium">{{ cosmetic.name }}</p>
                 <p class="text-xs">Usable amount: {{ cosmetic.usable_amount }}</p>
-                <p :class="{'text-green-800': cosmetic.usable_amount <= cosmetic.obtained_amount}" class="text-xs">Your amount: {{ cosmetic.obtained_amount ?? 0 }}</p>
+                <p v-if="user" :class="{'text-green-800': cosmetic.usable_amount <= cosmetic.obtained_amount}" class="text-xs">Your amount: {{ cosmetic.obtained_amount ?? 0 }}</p>
             </li>
         </ul>
     </div>
 </template>
 
 <script setup>
-import {ref, computed, toRefs} from 'vue';
+import {computed, ref, toRefs} from 'vue';
+import {usePage} from "@inertiajs/vue3";
 
 const props = defineProps({
     cosmetics: {
@@ -31,6 +32,8 @@ const props = defineProps({
 const { cosmetics } = toRefs(props);
 
 let search = ref('');
+
+const user = usePage().props.auth.user;
 
 let filteredCosmetics = computed(() => {
     return cosmetics.value.filter(cosmetic => cosmetic.name.toLowerCase().includes(search.value.toLowerCase()));

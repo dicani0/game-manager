@@ -50,4 +50,14 @@ class MarketOffer extends Model
     {
         return $this->hasMany(MarketOfferItem::class);
     }
+
+    public function scopeMaxLatPrice($query, $value)
+    {
+        return $query->where('lat_price', '<=', $value);
+    }
+
+    public function scopeMaxAtPrice($query, $value)
+    {
+        return $query->where('at_price', '<=', $value);
+    }
 }

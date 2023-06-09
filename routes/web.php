@@ -37,8 +37,11 @@ Route::prefix('guild')->group(function () {
 
 Route::prefix('market')->group(function () {
     Route::get('/', [MarketController::class, 'index']);
-    Route::post('/', [MarketController::class, 'store']);
-    Route::delete('/{offer}', [MarketController::class, 'cancel']);
+    Route::middleware('auth')->group(function () {
+        Route::get('/my', [MarketController::class, 'userOffers']);
+        Route::post('/', [MarketController::class, 'store']);
+        Route::delete('/{offer}', [MarketController::class, 'cancel']);
+    });
 });
 
 Route::prefix('characters')->middleware('auth')->group(function () {

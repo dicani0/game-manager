@@ -14,12 +14,12 @@
                     </select>
                 </div>
                 <div>
-                    <label for="priceFilter" class="block text-sm font-medium text-gray-400">LAT Price:</label>
+                    <label for="priceFilter" class="block text-sm font-medium text-gray-400">Max LAT Price:</label>
                     <input type="number" id="priceFilter" v-model="filters.lat_price" @keyup.enter="applyFilters"
                            class="mt-1 block w-full py-2 px-3 border border-gray-700 bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-white">
                 </div>
                 <div>
-                    <label for="priceFilter" class="block text-sm font-medium text-gray-400">AT Price:</label>
+                    <label for="priceFilter" class="block text-sm font-medium text-gray-400">Max AT Price:</label>
                     <input type="number" id="priceFilter" v-model="filters.at_price" @keyup.enter="applyFilters"
                            class="mt-1 block w-full py-2 px-3 border border-gray-700 bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-white">
                 </div>
@@ -136,6 +136,7 @@ const applyFilters = () => {
 
     router.get('/market', params, {
         preserveState: true,
+        preserveScroll: true,
         replace: true,
     })
 }
