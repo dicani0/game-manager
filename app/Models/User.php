@@ -58,6 +58,14 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereAvailablePromotes($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Character> $characters
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Cosmetic> $cosmetics
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, MarketOffer> $marketOffers
+ * @property-read int|null $market_offers_count
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Permission> $permissions
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Role> $roles
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @mixin \Eloquent
  */
 class User extends Authenticatable

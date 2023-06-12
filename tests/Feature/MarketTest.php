@@ -7,6 +7,7 @@ use App\Models\Cosmetics\Cosmetic;
 use App\Models\Cosmetics\UserCosmetic;
 use App\Models\Market\MarketOffer;
 use App\Models\User;
+use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
 class MarketTest extends TestCase
@@ -142,5 +143,35 @@ class MarketTest extends TestCase
             'sold_amount' => 0,
             'reserved_amount' => 0,
         ]);
+    }
+
+    public function testGerMarketOffers()
+    {
+        $offer = MarketOffer::factory()->create([
+            'user_id' => $this->user->getKey(),
+        ]);
+
+        $user2 = User::factory()->create();
+
+        $offer2 = MarketOffer::factory()->create([
+            'user_id' => $user2->getKey(),
+        ]);
+
+        $this->actingAs($this->user)->get('/market/my')
+            ->assertInertia(fn(AssertableInertia $page) => $page
+                ->component('Market/MyOffers')
+                ->has('offers.data', 1, fn(AssertableInertia $page) => $page
+                    ->where('id', $offer->getKey())
+                    ->etc()
+                ));
+
+        $this->actingAs($this->user)->get('/market')
+            ->assertInertia(fn(AssertableInertia $page) => $page
+                ->component('Market/Market')
+                ->has('offers.data', 1, fn(AssertableInertia $page) => $page
+                    ->where('id', $offer2->getKey())
+                    ->etc()
+                ));
+
     }
 }
