@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('lat_price')->nullable();
             $table->enum('status', MarketOfferRequestStatusEnum::getValues());
             $table->enum('type', OfferTypeEnum::getValues());
+            $table->text('message')->nullable();
             $table->timestamps();
         });
     }
