@@ -57,6 +57,7 @@
                 </div>
                 <div class="flex justify-between mt-6">
                     <button
+                        @click="openModalWithOffer(offer)"
                         v-if="usePage().props.auth?.user"
                         :disabled="isUserOffer(offer)"
                         class="w-full sm:w-auto px-4 py-2 bg-sky-600 rounded hover:bg-sky-700 transition-all duration-150"
@@ -85,23 +86,126 @@
             </button>
         </div>
     </div>
+
+    <Modal :open="modalOpen" @close="closeModal">
+        <div v-if="selectedOffer">
+            <h3 class="text-xl font-bold">Offer Details:</h3>
+            <p>AT Price: {{ selectedOffer.at_price }}</p>
+            <p>LAT Price: {{ selectedOffer.lat_price }}</p>
+
+            <form class="flex flex-col space-y-4" @submit.prevent="submitTradeRequest">
+                <div>
+                    <label for="latPrice" class="block text-sm font-medium text-gray-400">Your LAT Price:</label>
+                    <input id="latPrice" v-model="tradeRequest.lat_price" type="number" required
+                           class="mt-1 block w-full py-2 px-3 border border-gray-700 bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-white">
+                </div>
+
+                <div>
+                    <label for="atPrice" class="block text-sm font-medium text-gray-400">Your AT Price:</label>
+                    <input id="atPrice" v-model="tradeRequest.at_price" type="number" required
+                           class="mt-1 block w-full py-2 px-3 border border-gray-700 bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-white">
+                </div>
+
+                <div>
+                    <label for="message" class="block text-sm font-medium text-gray-400">Message:</label>
+                    <textarea id="message" v-model="tradeRequest.message" rows="3"
+                              class="mt-1 block w-full py-2 px-3 border border-gray-700 bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-white"></textarea>
+                </div>
+
+                <p class="block text-sm font-medium text-gray-400">Items:</p>
+                <div v-for="item in selectedOffer.items" :key="item.id" class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input type="checkbox" :id="'item-' + item.id" v-model="tradeRequest.items" :value="item.id">
+                        <label :for="'item-' + item.id" class="ml-2">{{ item.cosmetic.name }}</label>
+                    </div>
+                    <input type="number" v-model="tradeRequest.itemAmounts[item.id]" class="w-20 bg-indigo-500" :min="1" :max="item.amount">
+                </div>
+
+                <button type="submit"
+                        class="w-full px-4 py-2 bg-indigo-700 rounded-md hover:bg-indigo-600 transition-all duration-150 text-white font-semibold">
+                    Submit Trade Request
+                </button>
+            </form>
+
+        </div>
+    </Modal>
 </template>
 
 <script setup>
 import {router, usePage} from "@inertiajs/vue3";
 import moment from "moment";
-import {onMounted, ref} from "vue";
+import {computed, ref} from "vue";
+import Modal from "@/Components/Modal.vue";
+import {useToast} from "vue-toastification";
 
 let page = ref(1);
 let filters = ref({seller: '', at_price: '', lat_price: '', item: ''});
 
+const modalOpen = ref(false);
+const selectedOffer = ref(null);
+
+const tradeRequest = ref({
+    lat_price: '',
+    at_price: '',
+    message: '',
+    items: [],
+    itemAmounts: {},
+})
+
+const formattedItems = computed(() => {
+    return tradeRequest.value.items.map(item => {
+        return {
+            id: item,
+            amount: tradeRequest.value.itemAmounts[item]
+        };
+    });
+});
+
+const submitTradeRequest = () => {
+    const requestData = {
+        lat_price: tradeRequest.value.lat_price,
+        at_price: tradeRequest.value.at_price,
+        message: tradeRequest.value.message,
+        items: formattedItems.value,
+    };
+
+    router.post('market/' + selectedOffer.value.id + '/buy', requestData, {
+        preserveScroll: true,
+        onSuccess: (message) => {
+            console.log(message);
+            useToast().success('Trade request sent!');
+            closeModal();
+        },
+        onError: (errors) => {
+            console.log(errors);
+            useToast().error(errors.error);
+        }
+    });
+}
+
+const openModalWithOffer = (offer) => {
+    selectedOffer.value = offer;
+
+    tradeRequest.value.items = offer.items.map(item => item.id);
+    tradeRequest.value.itemAmounts = offer.items.reduce((amounts, item) => {
+        amounts[item.id] = item.amount;
+        return amounts;
+    }, {});
+    tradeRequest.value.lat_price = offer.lat_price;
+    tradeRequest.value.at_price = offer.at_price;
+
+    modalOpen.value = true;
+}
+
+
+const closeModal = () => {
+    modalOpen.value = false;
+    selectedOffer.value = null;
+}
+
 const props = defineProps({
     offers: Object,
     sellers: Object,
-})
-
-onMounted(() => {
-
 })
 
 const nextPage = () => {

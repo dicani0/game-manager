@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\Market\MarketOffer;
 use App\Models\Market\OfferRequest;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -16,7 +17,7 @@ class MarketOfferRequest extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(public OfferRequest $offerRequest)
+    public function __construct(public OfferRequest $offerRequest, public MarketOffer $offer)
     {
         //
     }
