@@ -4,7 +4,7 @@
 
         <div class="flex flex-col gap-4">
             <div v-for="offer in offers.data" :key="offer.id"
-                 class="rounded-lg p-4 border-2 border bg-clip-border shadow-lg w-full"
+                 class="relative rounded-lg p-4 border-2 border bg-clip-border shadow-lg w-full"
                  :class="{'border-pulse border-4 bg-cyan-900': offer.promoted}">
                 <div class="flex flex-col mt-2">
                     <p class="font-semibold">AT price: {{ offer.at_price }}</p>
@@ -26,6 +26,31 @@
                         Cancel Offer
                     </button>
                 </div>
+
+
+                <button @click="toggleTradeRequests(offer.id)"
+                        class="flex items-center justify-center w-8 h-8 bg-black rounded-full border transition-all duration-150 absolute bottom-0 mb-[-20px] left-2/4 ml-[-16px]">
+                    <vue-feather
+                        :type="shownTradeRequests.includes(offer.id) ? 'chevrons-up' : 'chevrons-down'"></vue-feather>
+                </button>
+
+                <Transition>
+                    <div v-show="shownTradeRequests.includes(offer.id)">
+                        <div v-for="offer in offer.offers" :key="offer.id"
+                             class="bg-transparent border p-4 rounded-lg my-2">
+                            <h2 class="text-xl font-bold">Request by {{ offer.creator.name }}</h2>
+                            <div class="flex flex-col md:flex-row justify-between mt-2">
+                                <div class="flex flex-col">
+                                    <p class="font-semibold">AT price: {{ offer.at_price }}</p>
+                                    <p class="font-semibold">LAT price: {{ offer.lat_price }}</p>
+                                </div>
+                                <p>Status: <span class="font-semibold text-green-500">{{ offer.status }}</span></p>
+                            </div>
+                            <p class="mt-2">{{ offer.message }}</p>
+                        </div>
+                    </div>
+                </Transition>
+
             </div>
         </div>
         <div class="flex justify-between my-4">
@@ -61,6 +86,8 @@ onMounted(() => {
     console.log(props.offers)
 })
 
+let shownTradeRequests = ref([]);
+
 const nextPage = () => {
     if (props.offers.next_page_url) {
         router.get(props.offers.next_page_url)
@@ -90,9 +117,29 @@ const cancelOffer = (offer) => {
     })
 }
 
+const toggleTradeRequests = (offerId) => {
+    const index = shownTradeRequests.value.indexOf(offerId);
+    if (index === -1) {
+        shownTradeRequests.value.push(offerId);
+    } else {
+        shownTradeRequests.value.splice(index, 1);
+    }
+};
+
+
 </script>
 
 <style scoped>
+.v-enter-active,
+.v-leave-active {
+    transition: all .3s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+    transform: translateY(-20px);
+}
+
 .border-pulse {
     border-color: #0f4c75;
     animation: pulse 2s infinite;
