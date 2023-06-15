@@ -3,51 +3,56 @@
         <h1 class="text-3xl font-bold mb-6">Your offers</h1>
 
         <div class="flex flex-col gap-4">
+
             <div v-for="offer in offers.data" :key="offer.id"
                  class="relative rounded-lg p-4 border-2 border bg-clip-border shadow-lg w-full"
                  :class="{'border-pulse border-4 bg-cyan-900': offer.promoted}">
-                <div class="flex flex-col mt-2">
-                    <p class="font-semibold">AT price: {{ offer.at_price }}</p>
-                    <p class="font-semibold">LAT price: {{ offer.lat_price }}</p>
-                </div>
-                <p class="mt-4 text-gray-300">{{ offer.description }}</p>
-                <div class="grid grid-cols-2 gap-2 mt-4">
-                    <div v-for="item in offer.items" class="py-2 px-2 bg-gray-800 rounded text-center">
-                        <p class="text-gray-300 italic">{{ item.amount }}x {{ item.cosmetic.name }}</p>
-                    </div>
-                </div>
-                <div class="mr-auto mt-2">
-                    <p class="text-sm text-gray-400">Created at: {{ parseDate(offer.created_at) }}</p>
-                    <p class="text-sm text-gray-400">Expires at: {{ parseDate(offer.expires_at) }}</p>
-                </div>
-                <div class="flex justify-between mt-6">
-                    <button @click="cancelOffer(offer)"
-                            class="w-full sm:w-auto mt-2 sm:mt-0 sm:ml-2 px-4 py-2 bg-amber-900 rounded hover:bg-amber-800 transition-all duration-150">
-                        Cancel Offer
-                    </button>
-                </div>
-
-
-                <button @click="toggleTradeRequests(offer.id)"
-                        class="flex items-center justify-center w-8 h-8 bg-black rounded-full border transition-all duration-150 absolute bottom-0 mb-[-20px] left-2/4 ml-[-16px]">
-                    <vue-feather
-                        :type="shownTradeRequests.includes(offer.id) ? 'chevrons-up' : 'chevrons-down'"></vue-feather>
-                </button>
-
                 <Transition>
-                    <div v-show="shownTradeRequests.includes(offer.id)">
-                        <div v-for="offer in offer.offers" :key="offer.id"
-                             class="bg-transparent border p-4 rounded-lg my-2">
-                            <h2 class="text-xl font-bold">Request by {{ offer.creator.name }}</h2>
-                            <div class="flex flex-col md:flex-row justify-between mt-2">
-                                <div class="flex flex-col">
-                                    <p class="font-semibold">AT price: {{ offer.at_price }}</p>
-                                    <p class="font-semibold">LAT price: {{ offer.lat_price }}</p>
-                                </div>
-                                <p>Status: <span class="font-semibold text-green-500">{{ offer.status }}</span></p>
-                            </div>
-                            <p class="mt-2">{{ offer.message }}</p>
+                    <div>
+                        <div class="flex flex-col mt-2">
+                            <p class="font-semibold">AT price: {{ offer.at_price }}</p>
+                            <p class="font-semibold">LAT price: {{ offer.lat_price }}</p>
                         </div>
+                        <p class="mt-4 text-gray-300">{{ offer.description }}</p>
+                        <div class="grid grid-cols-2 gap-2 mt-4">
+                            <div v-for="item in offer.items" class="py-2 px-2 bg-gray-800 rounded text-center">
+                                <p class="text-gray-300 italic">{{ item.amount }}x {{ item.cosmetic.name }}</p>
+                            </div>
+                        </div>
+                        <div class="mr-auto mt-2">
+                            <p class="text-sm text-gray-400">Created at: {{ parseDate(offer.created_at) }}</p>
+                            <p class="text-sm text-gray-400">Expires at: {{ parseDate(offer.expires_at) }}</p>
+                        </div>
+                        <div class="flex justify-between mt-6">
+                            <button @click="cancelOffer(offer)"
+                                    class="w-full sm:w-auto mt-2 sm:mt-0 sm:ml-2 px-4 py-2 bg-amber-900 rounded hover:bg-amber-800 transition-all duration-150">
+                                Cancel Offer
+                            </button>
+                        </div>
+
+
+                        <button @click="toggleTradeRequests(offer.id)"
+                                class="flex items-center justify-center w-8 h-8 bg-black rounded-full border transition-all duration-150 absolute bottom-0 mb-[-20px] left-2/4 ml-[-16px]">
+                            <vue-feather
+                                :type="shownTradeRequests.includes(offer.id) ? 'chevrons-up' : 'chevrons-down'"></vue-feather>
+                        </button>
+
+                        <Transition>
+                            <div v-show="shownTradeRequests.includes(offer.id)">
+                                <div v-for="offer in offer.offers" :key="offer.id"
+                                     class="bg-transparent border p-4 rounded-lg my-2">
+                                    <h2 class="text-xl font-bold">Request by {{ offer.creator.name }}</h2>
+                                    <div class="flex flex-col md:flex-row justify-between mt-2">
+                                        <div class="flex flex-col">
+                                            <p class="font-semibold">AT price: {{ offer.at_price }}</p>
+                                            <p class="font-semibold">LAT price: {{ offer.lat_price }}</p>
+                                        </div>
+                                        <p>Status: <span class="font-semibold text-green-500">{{ offer.status }}</span></p>
+                                    </div>
+                                    <p class="mt-2">{{ offer.message }}</p>
+                                </div>
+                            </div>
+                        </Transition>
                     </div>
                 </Transition>
 
@@ -137,7 +142,9 @@ const toggleTradeRequests = (offerId) => {
 
 .v-enter-from,
 .v-leave-to {
-    transform: translateY(-20px);
+    height: 100%;
+    opacity: 0;
+    transform: translateX(10px);
 }
 
 .border-pulse {

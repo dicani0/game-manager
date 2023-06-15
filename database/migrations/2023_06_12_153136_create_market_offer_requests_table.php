@@ -24,6 +24,14 @@ return new class extends Migration
             $table->text('message')->nullable();
             $table->timestamps();
         });
+
+        Schema::create('offer_request_item', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('offer_request_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('cosmetic_id')->constrained()->cascadeOnDelete();
+            $table->integer('amount')->default(1);
+            $table->timestamps();
+        });
     }
 
     /**
@@ -32,5 +40,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('offer_requests');
+        Schema::dropIfExists('offer_request_item');
     }
 };
