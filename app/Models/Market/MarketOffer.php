@@ -45,6 +45,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @method static \Illuminate\Database\Eloquent\Builder|MarketOffer whereAtPrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MarketOffer whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MarketOffer whereLatPrice($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Market\MarketOfferItem> $items
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Market\OfferRequest> $offers
  * @mixin \Eloquent
  */
 class MarketOffer extends Model

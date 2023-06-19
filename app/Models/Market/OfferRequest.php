@@ -17,6 +17,31 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @method static \Illuminate\Database\Eloquent\Builder|OfferRequest newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OfferRequest newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|OfferRequest query()
+ * @property int $id
+ * @property string $offerable_type
+ * @property int $offerable_id
+ * @property int $user_id
+ * @property int|null $at_price
+ * @property int|null $lat_price
+ * @property string $status
+ * @property string $type
+ * @property string|null $message
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Cosmetic> $cosmetics
+ * @property-read int|null $cosmetics_count
+ * @property-read User $creator
+ * @method static \Illuminate\Database\Eloquent\Builder|OfferRequest whereAtPrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OfferRequest whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OfferRequest whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OfferRequest whereLatPrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OfferRequest whereMessage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OfferRequest whereOfferableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OfferRequest whereOfferableType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OfferRequest whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OfferRequest whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OfferRequest whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OfferRequest whereUserId($value)
  * @mixin \Eloquent
  */
 class OfferRequest extends Model

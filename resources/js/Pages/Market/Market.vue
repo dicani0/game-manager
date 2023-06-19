@@ -172,12 +172,10 @@ const submitTradeRequest = () => {
     router.post('market/' + selectedOffer.value.id + '/buy', requestData, {
         preserveScroll: true,
         onSuccess: (message) => {
-            console.log(message);
             useToast().success('Trade request sent!');
             closeModal();
         },
         onError: (errors) => {
-            console.log(errors);
             useToast().error(errors.error);
         }
     });

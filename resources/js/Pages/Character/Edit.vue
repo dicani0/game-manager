@@ -35,9 +35,6 @@ import {Link} from "@inertiajs/vue3";
 import {useForm} from "@inertiajs/vue3";
 import {useToast} from "vue-toastification";
 import {onMounted} from "vue";
-onMounted(() => {
-    console.log(props);
-})
 // Assuming vocations are passed as props
 const props = defineProps({
     character: Object,

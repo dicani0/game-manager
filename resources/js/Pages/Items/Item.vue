@@ -41,7 +41,7 @@
             </ul>
 
         </div>
-        <div class="w-1/6 bg-gray-800 p-4 rounded shadow-lg border">
+        <div class="w-1/6 bg-gray-800 p-4 rounded shadow-lg border max-h-[85vh] overflow-y-auto">
             <h3 class="text-lg font-bold text-gray-200 mb-4">Create sale offer</h3>
             <Transition>
                 <div v-if="selectedItemsForSale.length > 0">

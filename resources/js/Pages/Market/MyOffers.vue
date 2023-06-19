@@ -31,25 +31,35 @@
                         </div>
 
 
-                        <button @click="toggleTradeRequests(offer.id)"
-                                class="flex items-center justify-center w-8 h-8 bg-black rounded-full border transition-all duration-150 absolute bottom-0 mb-[-20px] left-2/4 ml-[-16px]">
+                        <button v-if="offer.offers.length > 0" @click="toggleTradeRequests(offer.id)"
+                                class="flex items-center justify-center w-8 h-8 bg-sky-900 rounded-full border transition-all duration-150 absolute bottom-0 mb-[-20px] left-2/4 ml-[-16px]">
                             <vue-feather
                                 :type="shownTradeRequests.includes(offer.id) ? 'chevrons-up' : 'chevrons-down'"></vue-feather>
                         </button>
 
                         <Transition>
                             <div v-show="shownTradeRequests.includes(offer.id)">
-                                <div v-for="offer in offer.offers" :key="offer.id"
+                                <div v-for="request in offer.offers" :key="request.id"
                                      class="bg-transparent border p-4 rounded-lg my-2">
-                                    <h2 class="text-xl font-bold">Request by {{ offer.creator.name }}</h2>
+                                    <h2 class="text-xl font-bold">Request by {{ request.creator.name }}</h2>
                                     <div class="flex flex-col md:flex-row justify-between mt-2">
                                         <div class="flex flex-col">
-                                            <p class="font-semibold">AT price: {{ offer.at_price }}</p>
-                                            <p class="font-semibold">LAT price: {{ offer.lat_price }}</p>
+                                            <p class="font-semibold">AT price: {{ request.at_price }}</p>
+                                            <p class="font-semibold">LAT price: {{ request.lat_price }}</p>
                                         </div>
-                                        <p>Status: <span class="font-semibold text-green-500">{{ offer.status }}</span></p>
+                                        <p>Status: <span class="font-semibold text-green-500">{{ request.status }}</span></p>
                                     </div>
-                                    <p class="mt-2">{{ offer.message }}</p>
+                                    <p class="mt-2">{{ request.message }}</p>
+                                    <div class="mt-4 flex justify-between">
+                                        <button @click="acceptRequest(request)"
+                                                class="w-full sm:w-auto mt-2 sm:mt-0 sm:ml-2 px-4 py-2 bg-green-900 rounded hover:bg-green-800 transition-all duration-150">
+                                            Accept Request
+                                        </button>
+                                        <button @click="declineRequest(request)"
+                                                class="w-full sm:w-auto mt-2 sm:mt-0 sm:ml-2 px-4 py-2 bg-red-900 rounded hover:bg-red-800 transition-all duration-150">
+                                            Decline Request
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </Transition>
@@ -85,10 +95,6 @@ let page = ref(1);
 
 const props = defineProps({
     offers: Object,
-})
-
-onMounted(() => {
-    console.log(props.offers)
 })
 
 let shownTradeRequests = ref([]);
