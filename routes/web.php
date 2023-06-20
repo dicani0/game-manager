@@ -9,6 +9,7 @@ use App\Http\Controllers\Cosmetics\CosmeticController;
 use App\Http\Controllers\Cosmetics\UserCosmeticController;
 use App\Http\Controllers\Guild\GuildController;
 use App\Http\Controllers\Market\MarketController;
+use App\Http\Controllers\Market\MarketOfferRequestController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -45,8 +46,8 @@ Route::prefix('market')->group(function () {
         Route::post('/', [MarketController::class, 'store']);
         Route::delete('/{offer}', [MarketController::class, 'cancel']);
 
-        Route::post('/{offer}/{request}/accept', [MarketController::class, 'accept']);
-        Route::post('/{offer}/{request}/accept', [MarketController::class, 'decline']);
+        Route::post('/{offer}/{offerRequest}/accept', [MarketOfferRequestController::class, 'accept']);
+        Route::post('/{offer}/{offerRequest}/reject', [MarketOfferRequestController::class, 'reject']);
     });
 });
 

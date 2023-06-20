@@ -2,7 +2,7 @@
 
 namespace App\Tasks\Market;
 
-use App\Actions\Market\AttachItemsToMarketOfferRequest;
+use App\Actions\Market\OfferRequests\AttachItemsToMarketOfferRequest;
 use App\Data\Market\CreateMarketOfferRequestDto;
 
 class AttachItemsToMarketOfferRequestTask

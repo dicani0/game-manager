@@ -2,8 +2,7 @@
 
 namespace App\Tasks\Market;
 
-use App\Actions\Market\CreateMarketOfferRequest;
-use App\Actions\Market\NotifyUserAboutOfferRequest;
+use App\Actions\Market\OfferRequests\NotifyUserAboutOfferRequest;
 use App\Data\Market\CreateMarketOfferRequestDto;
 
 class NotifyUserAboutOfferRequestTask

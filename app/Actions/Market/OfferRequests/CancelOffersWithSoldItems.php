@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\Market;
+namespace App\Actions\Market\OfferRequests;
 
 use App\Enums\MarketOfferStatusEnum;
 use App\Models\Market\MarketOffer;

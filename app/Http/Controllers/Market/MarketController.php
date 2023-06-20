@@ -62,6 +62,9 @@ class MarketController extends Controller
         return redirect()->back()->with('success', 'Offer canceled!');
     }
 
+    /**
+     * @throws \Throwable
+     */
     public function createBuyOffer(CreateBuyOfferRequest $request, MarketOffer $offer, CreateBuyOfferRequestProcess $process): RedirectResponse
     {
         $dto = CreateMarketOfferRequestDto::from(array_merge($request->validated(), [

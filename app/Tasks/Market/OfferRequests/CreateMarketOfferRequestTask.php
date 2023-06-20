@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Tasks\Market;
+namespace App\Tasks\Market\OfferRequests;
 
-use App\Actions\Market\CreateMarketOfferRequest;
-use App\Data\Market\CreateMarketOfferDto;
+use App\Actions\Market\OfferRequests\CreateMarketOfferRequest;
 use App\Data\Market\CreateMarketOfferRequestDto;
 
-class CreateMarketOfferRequestTask
+readonly class CreateMarketOfferRequestTask
 {
     public function __construct(
         protected CreateMarketOfferRequest $action
@@ -14,9 +13,13 @@ class CreateMarketOfferRequestTask
     {
     }
 
+    /**
+     * @throws \Exception
+     */
     public function handle(CreateMarketOfferRequestDto $dto, \Closure $next): CreateMarketOfferRequestDto
     {
         $this->action->handle($dto);
+
         return $next($dto);
     }
 }

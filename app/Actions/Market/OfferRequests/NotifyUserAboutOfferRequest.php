@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Actions\Market;
+namespace App\Actions\Market\OfferRequests;
 
 use App\Data\Market\CreateMarketOfferRequestDto;
-use App\Enums\OfferTypeEnum;
 use App\Mail\MarketOfferRequest;
 use Illuminate\Support\Facades\Mail;
 

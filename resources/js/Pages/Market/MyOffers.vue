@@ -50,12 +50,15 @@
                                         <p>Status: <span class="font-semibold text-green-500">{{ request.status }}</span></p>
                                     </div>
                                     <p class="mt-2">{{ request.message }}</p>
+                                    <ul>
+                                        <li v-for="item in request.cosmetics">{{ item.name }}</li>
+                                    </ul>
                                     <div class="mt-4 flex justify-between">
-                                        <button @click="acceptRequest(request)"
+                                        <button @click="acceptRequest(offer, request)"
                                                 class="w-full sm:w-auto mt-2 sm:mt-0 sm:ml-2 px-4 py-2 bg-green-900 rounded hover:bg-green-800 transition-all duration-150">
                                             Accept Request
                                         </button>
-                                        <button @click="declineRequest(request)"
+                                        <button @click="rejectRequest(offer, request)"
                                                 class="w-full sm:w-auto mt-2 sm:mt-0 sm:ml-2 px-4 py-2 bg-red-900 rounded hover:bg-red-800 transition-all duration-150">
                                             Decline Request
                                         </button>
@@ -88,8 +91,9 @@
 <script setup>
 import {router} from "@inertiajs/vue3";
 import moment from "moment";
-import {onMounted, ref} from "vue";
+import {ref} from "vue";
 import Toast from "@/Utility/Toast.js";
+import {useToast} from "vue-toastification";
 
 let page = ref(1);
 
@@ -115,15 +119,27 @@ const parseDate = (date) => {
     return moment(date).format('DD-MM-YYYY HH:mm')
 }
 
-const cancelOffer = (offer) => {
+const cancelOffer = async (offer) => {
+    const result = await Toast.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+    });
+
+    if (!result.isConfirmed) {
+        return;
+    }
+
     router.delete('/market/' + offer.id, {
         preserveScroll: true,
         preserveState: true,
         onSuccess: () => {
-            Toast.fire({
-                icon: 'success',
-                title: 'Offer canceled successfully'
-            })
+            useToast().success('Offer cancelled');
+        },
+        onError: (error) => {
+            console.log(error);
+            useToast().error('Something went wrong');
         }
     })
 }
@@ -136,6 +152,54 @@ const toggleTradeRequests = (offerId) => {
         shownTradeRequests.value.splice(index, 1);
     }
 };
+
+const acceptRequest = async (offer, request) => {
+    const result = await Toast.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+    });
+
+    if (!result.isConfirmed) {
+        return;
+    }
+
+    router.post('/market/' + offer.id + '/' + request.id + '/accept', null, {
+        preserveScroll: true,
+        preserveState: true,
+        onSuccess: () => {
+            useToast().success('Request accepted successfully')
+        },
+        onError: () => {
+            useToast().error('Something went wrong')
+        }
+    })
+}
+
+const rejectRequest = async (offer, request) => {
+    const result = await Toast.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+    });
+
+    if (!result.isConfirmed) {
+        return;
+    }
+
+    router.post('/market/' + offer.id + '/' + request.id + '/reject', {
+        preserveScroll: true,
+        preserveState: true,
+        onSuccess: () => {
+            Toast.fire({
+                icon: 'success',
+                title: 'Request rejected successfully'
+            })
+        }
+    })
+}
 
 
 </script>

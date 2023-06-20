@@ -2,10 +2,13 @@
 
 namespace Tests\Feature;
 
+use App\Enums\MarketOfferRequestStatusEnum;
 use App\Enums\MarketOfferStatusEnum;
+use App\Enums\OfferTypeEnum;
 use App\Models\Cosmetics\Cosmetic;
 use App\Models\Cosmetics\UserCosmetic;
 use App\Models\Market\MarketOffer;
+use App\Models\Market\OfferRequest;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
@@ -145,7 +148,7 @@ class MarketTest extends TestCase
         ]);
     }
 
-    public function testGerMarketOffers()
+    public function test_user_market_offers()
     {
         $offer = MarketOffer::factory()->create([
             'user_id' => $this->user->getKey(),
@@ -173,5 +176,74 @@ class MarketTest extends TestCase
                     ->etc()
                 ));
 
+    }
+
+    public function test_accept_trade_request()
+    {
+        $buyer = User::factory()->create();
+
+        $cosmetic1 = Cosmetic::factory()->create(['name' => 'abc']);
+        $cosmetic2 = Cosmetic::factory()->create(['name' => 'def']);
+        $cosmetic3 = Cosmetic::factory()->create(['name' => 'ghi']);
+
+        $this->user->cosmetics()->detach();
+
+        $this->user->cosmetics()->attach([
+            $cosmetic1->getKey() => [
+                'amount' => 5,
+                'reserved_amount' => 5,
+            ],
+            $cosmetic2->getKey() => [
+                'amount' => 5,
+                'reserved_amount' => 3,
+            ],
+            $cosmetic3->getKey() => [
+                'amount' => 5,
+                'reserved_amount' => 1,
+            ],
+        ]);
+
+        $offer = MarketOffer::factory()->create([
+            'user_id' => $this->user->getKey(),
+        ]);
+
+        $offer->items()->createMany([
+            [
+                'cosmetic_id' => $cosmetic1->getKey(),
+                'amount' => 5,
+            ],
+            [
+                'cosmetic_id' => $cosmetic2->getKey(),
+                'amount' => 3,
+            ],
+            [
+                'cosmetic_id' => $cosmetic3->getKey(),
+                'amount' => 1,
+            ],
+        ]);
+
+        $offerRequest = OfferRequest::create([
+            'user_id' => $buyer->getKey(),
+            'offerable_id' => $offer->getKey(),
+            'offerable_type' => MarketOffer::class,
+            'type' => OfferTypeEnum::BUY->value,
+            'status' => MarketOfferRequestStatusEnum::PENDING->value,
+        ]);
+
+        $offerRequest->cosmetics()->attach([
+            $cosmetic1->getKey() => [
+                'amount' => 3,
+            ],
+            $cosmetic2->getKey() => [
+                'amount' => 3,
+            ],
+            $cosmetic3->getKey() => [
+                'amount' => 1,
+            ],
+        ]);
+
+        $res = $this->actingAs($this->user)->post("/market/{$offer->getKey()}/{$offerRequest->getKey()}/accept");
+//        dd($res->json());
+        dd($this->user->refresh()->cosmetics->toArray());
     }
 }
