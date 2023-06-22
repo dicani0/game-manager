@@ -56,7 +56,7 @@ class MarketController extends Controller
             user: $request->user(),
             offer: $offer,
         );
-
+    
         $process->run($dto);
 
         return redirect()->back()->with('success', 'Offer canceled!');

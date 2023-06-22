@@ -10,11 +10,17 @@ use App\Models\Cosmetics\UserCosmetic;
 use App\Models\Market\MarketOffer;
 use App\Models\Market\OfferRequest;
 use App\Models\User;
+use Illuminate\Support\Collection;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
 class MarketTest extends TestCase
 {
+    private User $user;
+    private Cosmetic $cosmetic1;
+    private Cosmetic $cosmetic2;
+    private Cosmetic $cosmetic3;
+    private Collection $cosmetics;
 
     protected function setUp(): void
     {
@@ -242,8 +248,112 @@ class MarketTest extends TestCase
             ],
         ]);
 
-        $res = $this->actingAs($this->user)->post("/market/{$offer->getKey()}/{$offerRequest->getKey()}/accept");
-//        dd($res->json());
-        dd($this->user->refresh()->cosmetics->toArray());
+        $offeRequest2 = OfferRequest::create([
+            'user_id' => $buyer->getKey(),
+            'offerable_id' => $offer->getKey(),
+            'offerable_type' => MarketOffer::class,
+            'type' => OfferTypeEnum::BUY->value,
+            'status' => MarketOfferRequestStatusEnum::PENDING->value,
+            'at_price' => 100,
+            'lat_price' => 100,
+        ]);
+
+        $offeRequest2->cosmetics()->attach([
+            $cosmetic1->getKey() => [
+                'amount' => 2,
+            ],
+            $cosmetic2->getKey() => [
+                'amount' => 2,
+            ],
+            $cosmetic3->getKey() => [
+                'amount' => 1,
+            ],
+        ]);
+
+        $this->actingAs($this->user)->post("/market/{$offer->getKey()}/{$offerRequest->getKey()}/accept");
+
+        $this->assertDatabaseHas('market_offers', [
+            'id' => $offer->getKey(),
+            'user_id' => $this->user->getKey(),
+            'status' => MarketOfferStatusEnum::ACTIVE->value,
+        ]);
+
+        $this->assertDatabaseHas('offer_requests', [
+            'id' => $offerRequest->getKey(),
+            'user_id' => $buyer->getKey(),
+            'status' => MarketOfferRequestStatusEnum::ACCEPTED->value,
+        ]);
+
+        $this->assertDatabaseHas('offer_requests', [
+            'id' => $offeRequest2->getKey(),
+            'user_id' => $buyer->getKey(),
+            'status' => MarketOfferRequestStatusEnum::REJECTED->value,
+        ]);
+
+        $this->assertDatabaseHas('user_cosmetic', [
+            'user_id' => $this->user->getKey(),
+            'cosmetic_id' => $cosmetic1->getKey(),
+            'amount' => 5,
+            'used_amount' => 0,
+            'sold_amount' => 3,
+            'reserved_amount' => 2,
+        ]);
+
+        $this->assertDatabaseHas('user_cosmetic', [
+            'user_id' => $this->user->getKey(),
+            'cosmetic_id' => $cosmetic2->getKey(),
+            'amount' => 5,
+            'used_amount' => 0,
+            'sold_amount' => 3,
+            'reserved_amount' => 0,
+        ]);
+
+        $this->assertDatabaseHas('user_cosmetic', [
+            'user_id' => $this->user->getKey(),
+            'cosmetic_id' => $cosmetic3->getKey(),
+            'amount' => 5,
+            'used_amount' => 0,
+            'sold_amount' => 1,
+            'reserved_amount' => 0,
+        ]);
+
+        $offerRequest3 = OfferRequest::create([
+            'user_id' => $buyer->getKey(),
+            'offerable_id' => $offer->getKey(),
+            'offerable_type' => MarketOffer::class,
+            'type' => OfferTypeEnum::BUY->value,
+            'status' => MarketOfferRequestStatusEnum::PENDING->value,
+            'at_price' => 100,
+            'lat_price' => 100,
+        ]);
+
+        $offerRequest3->cosmetics()->attach([
+            $cosmetic1->getKey() => [
+                'amount' => 2,
+            ],
+        ]);
+
+        $this->actingAs($this->user)->post("/market/{$offer->getKey()}/{$offerRequest3->getKey()}/accept");
+
+        $this->assertDatabaseHas('offer_requests', [
+            'id' => $offerRequest3->getKey(),
+            'user_id' => $buyer->getKey(),
+            'status' => MarketOfferRequestStatusEnum::ACCEPTED->value,
+        ]);
+
+        $this->assertDatabaseHas('user_cosmetic', [
+            'user_id' => $this->user->getKey(),
+            'cosmetic_id' => $cosmetic1->getKey(),
+            'amount' => 5,
+            'used_amount' => 0,
+            'sold_amount' => 5,
+            'reserved_amount' => 0,
+        ]);
+
+        $this->assertDatabaseHas('market_offers', [
+            'id' => $offer->getKey(),
+            'user_id' => $this->user->getKey(),
+            'status' => MarketOfferStatusEnum::FINISHED->value,
+        ]);
     }
 }
