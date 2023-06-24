@@ -248,7 +248,7 @@ class MarketTest extends TestCase
             ],
         ]);
 
-        $offeRequest2 = OfferRequest::create([
+        $offerRequest2 = OfferRequest::create([
             'user_id' => $buyer->getKey(),
             'offerable_id' => $offer->getKey(),
             'offerable_type' => MarketOffer::class,
@@ -258,7 +258,29 @@ class MarketTest extends TestCase
             'lat_price' => 100,
         ]);
 
-        $offeRequest2->cosmetics()->attach([
+        $offerRequest2->cosmetics()->attach([
+            $cosmetic1->getKey() => [
+                'amount' => 3,
+            ],
+            $cosmetic2->getKey() => [
+                'amount' => 2,
+            ],
+            $cosmetic3->getKey() => [
+                'amount' => 1,
+            ],
+        ]);
+
+        $offerRequest3 = OfferRequest::create([
+            'user_id' => $buyer->getKey(),
+            'offerable_id' => $offer->getKey(),
+            'offerable_type' => MarketOffer::class,
+            'type' => OfferTypeEnum::BUY->value,
+            'status' => MarketOfferRequestStatusEnum::PENDING->value,
+            'at_price' => 100,
+            'lat_price' => 100,
+        ]);
+
+        $offerRequest3->cosmetics()->attach([
             $cosmetic1->getKey() => [
                 'amount' => 2,
             ],
@@ -285,9 +307,15 @@ class MarketTest extends TestCase
         ]);
 
         $this->assertDatabaseHas('offer_requests', [
-            'id' => $offeRequest2->getKey(),
+            'id' => $offerRequest2->getKey(),
             'user_id' => $buyer->getKey(),
             'status' => MarketOfferRequestStatusEnum::REJECTED->value,
+        ]);
+
+        $this->assertDatabaseHas('offer_requests', [
+            'id' => $offerRequest3->getKey(),
+            'user_id' => $buyer->getKey(),
+            'status' => MarketOfferRequestStatusEnum::PENDING->value,
         ]);
 
         $this->assertDatabaseHas('user_cosmetic', [
@@ -317,7 +345,7 @@ class MarketTest extends TestCase
             'reserved_amount' => 0,
         ]);
 
-        $offerRequest3 = OfferRequest::create([
+        $offerRequest4 = OfferRequest::create([
             'user_id' => $buyer->getKey(),
             'offerable_id' => $offer->getKey(),
             'offerable_type' => MarketOffer::class,
@@ -327,16 +355,17 @@ class MarketTest extends TestCase
             'lat_price' => 100,
         ]);
 
-        $offerRequest3->cosmetics()->attach([
+        $offerRequest4->cosmetics()->attach([
             $cosmetic1->getKey() => [
                 'amount' => 2,
             ],
         ]);
-
-        $this->actingAs($this->user)->post("/market/{$offer->getKey()}/{$offerRequest3->getKey()}/accept");
+        
+        
+        $this->actingAs($this->user)->post("/market/{$offer->getKey()}/{$offerRequest4->getKey()}/accept");
 
         $this->assertDatabaseHas('offer_requests', [
-            'id' => $offerRequest3->getKey(),
+            'id' => $offerRequest4->getKey(),
             'user_id' => $buyer->getKey(),
             'status' => MarketOfferRequestStatusEnum::ACCEPTED->value,
         ]);
