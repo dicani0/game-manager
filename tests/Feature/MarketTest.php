@@ -11,11 +11,8 @@ use App\Models\Market\MarketOffer;
 use App\Models\Market\OfferRequest;
 use App\Models\User;
 use Illuminate\Support\Collection;
-use Illuminate\Validation\UnauthorizedException;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
-
-use function PHPUnit\Framework\assertEquals;
 
 class MarketTest extends TestCase
 {
@@ -266,7 +263,6 @@ class MarketTest extends TestCase
             ->actingAs($buyer2)
             ->post("/market/{$offer->getKey()}/{$offerRequest->getKey()}/accept")
             ->assertRedirect();
-
 
         $this->assertEquals(session('errors')->getBag('default')->first(), 'This action is unauthorized.');
 
