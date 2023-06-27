@@ -6,6 +6,7 @@ use App\Processes\Process;
 use App\Tasks\Market\OfferRequests\AcceptTradeOfferRequestTask;
 use App\Tasks\Market\OfferRequests\CancelOffersWithUnavailableItemsTask;
 use App\Tasks\Market\OfferRequests\CloseMarketOfferIfHasNoItemsTask;
+use App\Tasks\Market\OfferRequests\TransferSoldItemsTask;
 use App\Tasks\Market\OfferRequests\UpdateOfferCreatorItemsAfterAcceptingTradeTask;
 use App\Tasks\Market\OfferRequests\UpdateOfferItemsAmountAfterAcceptedTradeTask;
 
@@ -15,6 +16,7 @@ class AcceptTradeRequestProcess extends Process
         AcceptTradeOfferRequestTask::class,
         UpdateOfferItemsAmountAfterAcceptedTradeTask::class,
         UpdateOfferCreatorItemsAfterAcceptingTradeTask::class,
+        TransferSoldItemsTask::class,
         CancelOffersWithUnavailableItemsTask::class,
         CloseMarketOfferIfHasNoItemsTask::class,
     ];

@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property int $used_amount
  * @property int $sold_amount
  * @property int $reserved_amount
+ * @property int $bought_amount
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Database\Factories\Cosmetics\UserCosmeticFactory factory($count = null, $state = [])
@@ -47,10 +48,11 @@ class UserCosmetic extends Pivot
         'used_amount',
         'sold_amount',
         'reserved_amount',
+        'bought_amount',
     ];
 
     public function getAvailableAmountAttribute(): int
     {
-        return $this->amount - $this->used_amount - $this->sold_amount - $this->reserved_amount;
+        return $this->amount + $this->bought_amount - $this->used_amount - $this->sold_amount - $this->reserved_amount;
     }
 }

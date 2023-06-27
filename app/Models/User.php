@@ -122,7 +122,10 @@ class User extends Authenticatable
 
     public function cosmetics(): BelongsToMany
     {
-        return $this->belongsToMany(Cosmetic::class, 'user_cosmetic')->using(UserCosmetic::class)->withPivot(['id', 'amount', 'used_amount', 'sold_amount', 'reserved_amount']);
+        return $this
+            ->belongsToMany(Cosmetic::class, 'user_cosmetic')
+            ->using(UserCosmetic::class)
+            ->withPivot(['id', 'amount', 'used_amount', 'sold_amount', 'reserved_amount', 'bought_amount']);
     }
 
     public function marketOffers(): HasMany

@@ -3,6 +3,7 @@
 namespace App\Models\Market;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -68,12 +69,12 @@ class MarketOffer extends Model
         return $this->morphMany(OfferRequest::class, 'offerable');
     }
 
-    public function scopeMaxLatPrice($query, $value)
+    public function scopeMaxLatPrice(Builder $query, int $value)
     {
         return $query->where('lat_price', '<=', $value);
     }
 
-    public function scopeMaxAtPrice($query, $value)
+    public function scopeMaxAtPrice(Builder $query, int $value)
     {
         return $query->where('at_price', '<=', $value);
     }
