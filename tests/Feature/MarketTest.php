@@ -270,6 +270,10 @@ class MarketTest extends TestCase
 
         $this->assertEquals(session('errors')->getBag('default')->first(), 'This action is unauthorized.');
 
+        $this->assertDatabaseHas('offer_requests', [
+            'id' => $offerRequest->getKey(),
+            'status' => MarketOfferRequestStatusEnum::PENDING->value,
+        ]);
     }
 
     public function test_accept_trade_request_ok()
@@ -489,6 +493,157 @@ class MarketTest extends TestCase
             'id' => $offer->getKey(),
             'user_id' => $this->user->getKey(),
             'status' => MarketOfferStatusEnum::FINISHED->value,
+        ]);
+    }
+
+    public function test_reject_trade_request_unauthorized()
+    {
+        $buyer = User::factory()->create();
+
+        $cosmetic1 = Cosmetic::factory()->create(['name' => 'abc']);
+        $cosmetic2 = Cosmetic::factory()->create(['name' => 'def']);
+        $cosmetic3 = Cosmetic::factory()->create(['name' => 'ghi']);
+
+        $this->user->cosmetics()->detach();
+
+        $this->user->cosmetics()->attach([
+            $cosmetic1->getKey() => [
+                'amount' => 5,
+                'reserved_amount' => 5,
+            ],
+            $cosmetic2->getKey() => [
+                'amount' => 5,
+                'reserved_amount' => 3,
+            ],
+            $cosmetic3->getKey() => [
+                'amount' => 5,
+                'reserved_amount' => 1,
+            ],
+        ]);
+
+        $offer = MarketOffer::factory()->create([
+            'user_id' => $this->user->getKey(),
+        ]);
+
+        $offer->items()->createMany([
+            [
+                'cosmetic_id' => $cosmetic1->getKey(),
+                'amount' => 5,
+            ],
+            [
+                'cosmetic_id' => $cosmetic2->getKey(),
+                'amount' => 3,
+            ],
+            [
+                'cosmetic_id' => $cosmetic3->getKey(),
+                'amount' => 1,
+            ],
+        ]);
+
+        $offerRequest = OfferRequest::create([
+            'user_id' => $buyer->getKey(),
+            'offerable_id' => $offer->getKey(),
+            'offerable_type' => MarketOffer::class,
+            'type' => OfferTypeEnum::BUY->value,
+            'status' => MarketOfferRequestStatusEnum::PENDING->value,
+        ]);
+
+        $offerRequest->cosmetics()->attach([
+            $cosmetic1->getKey() => [
+                'amount' => 3,
+            ],
+            $cosmetic2->getKey() => [
+                'amount' => 3,
+            ],
+            $cosmetic3->getKey() => [
+                'amount' => 1,
+            ],
+        ]);
+
+        $this
+            ->actingAs($buyer)
+            ->post("/market/{$offer->getKey()}/{$offerRequest->getKey()}/reject")
+            ->assertRedirect();
+
+
+        $this->assertEquals(session('errors')->getBag('default')->first(), 'This action is unauthorized.');
+
+        $this->assertDatabaseHas('offer_requests', [
+            'id' => $offerRequest->getKey(),
+            'status' => MarketOfferRequestStatusEnum::PENDING->value,
+        ]);
+    }
+
+    public function test_reject_trade_request_ok()
+    {
+        $buyer = User::factory()->create();
+
+        $cosmetic1 = Cosmetic::factory()->create(['name' => 'abc']);
+        $cosmetic2 = Cosmetic::factory()->create(['name' => 'def']);
+        $cosmetic3 = Cosmetic::factory()->create(['name' => 'ghi']);
+
+        $this->user->cosmetics()->detach();
+
+        $this->user->cosmetics()->attach([
+            $cosmetic1->getKey() => [
+                'amount' => 5,
+                'reserved_amount' => 5,
+            ],
+            $cosmetic2->getKey() => [
+                'amount' => 5,
+                'reserved_amount' => 3,
+            ],
+            $cosmetic3->getKey() => [
+                'amount' => 5,
+                'reserved_amount' => 1,
+            ],
+        ]);
+
+        $offer = MarketOffer::factory()->create([
+            'user_id' => $this->user->getKey(),
+        ]);
+
+        $offer->items()->createMany([
+            [
+                'cosmetic_id' => $cosmetic1->getKey(),
+                'amount' => 5,
+            ],
+            [
+                'cosmetic_id' => $cosmetic2->getKey(),
+                'amount' => 3,
+            ],
+            [
+                'cosmetic_id' => $cosmetic3->getKey(),
+                'amount' => 1,
+            ],
+        ]);
+
+        $offerRequest = OfferRequest::create([
+            'user_id' => $buyer->getKey(),
+            'offerable_id' => $offer->getKey(),
+            'offerable_type' => MarketOffer::class,
+            'type' => OfferTypeEnum::BUY->value,
+            'status' => MarketOfferRequestStatusEnum::PENDING->value,
+        ]);
+
+        $offerRequest->cosmetics()->attach([
+            $cosmetic1->getKey() => [
+                'amount' => 3,
+            ],
+            $cosmetic2->getKey() => [
+                'amount' => 3,
+            ],
+            $cosmetic3->getKey() => [
+                'amount' => 1,
+            ],
+        ]);
+
+        $this->actingAs($this->user)->post("/market/{$offer->getKey()}/{$offerRequest->getKey()}/reject");
+
+        $this->assertDatabaseHas('offer_requests', [
+            'id' => $offerRequest->getKey(),
+            'user_id' => $buyer->getKey(),
+            'status' => MarketOfferRequestStatusEnum::REJECTED->value,
         ]);
     }
 }
