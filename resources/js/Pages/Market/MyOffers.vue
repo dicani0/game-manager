@@ -16,7 +16,7 @@
                         <p class="mt-4 text-gray-300">{{ offer.description }}</p>
                         <div class="grid grid-cols-2 gap-2 mt-4">
                             <div v-for="item in offer.items" class="py-2 px-2 bg-gray-800 rounded text-center">
-                                <p class="text-gray-300 italic">{{ item.amount }}x {{ item.cosmetic.name }}</p>
+                                <p class="text-gray-300 italic">{{ item.amount }}x {{ item.item.name }}</p>
                             </div>
                         </div>
                         <div class="mr-auto mt-2">
@@ -51,7 +51,7 @@
                                     </div>
                                     <p class="mt-2">{{ request.message }}</p>
                                     <ul>
-                                        <li v-for="item in request.cosmetics">{{ item.name }}</li>
+                                        <li v-for="item in request.items">{{ item.name }}</li>
                                     </ul>
                                     <div class="mt-4 flex justify-between">
                                         <button @click="acceptRequest(offer, request)"

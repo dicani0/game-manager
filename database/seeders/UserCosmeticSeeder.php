@@ -14,11 +14,11 @@ class UserCosmeticSeeder extends Seeder
     public function run(): void
     {
         $user = User::query()->where('email', 'admin@example.com')->first();
-        $cosmetics = Item::all()->random(30);
-        $cosmetics = $cosmetics->mapWithKeys(function ($cosmetic) {
-            return [$cosmetic->getKey() => ['amount' => random_int(1, 10)]];
+        $items = Item::all()->random(30);
+        $items = $items->mapWithKeys(function (Item $item) {
+            return [$item->getKey() => ['amount' => random_int(1, 10)]];
         });
 
-        $user->cosmetics()->attach($cosmetics);
+        $user->items()->attach($items);
     }
 }

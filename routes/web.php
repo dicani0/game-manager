@@ -5,7 +5,9 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Character\CharacterController;
+use App\Http\Controllers\Items\ItemController;
 use App\Http\Controllers\Guild\GuildController;
+use App\Http\Controllers\Items\UserItemController;
 use App\Http\Controllers\Market\MarketController;
 use App\Http\Controllers\Market\MarketOfferRequestController;
 use Illuminate\Support\Facades\Route;
@@ -64,7 +66,7 @@ Route::prefix('items')->middleware('auth')->group(function () {
     Route::put('/{item}', [UserItemController::class, 'update']);
     Route::delete('/{item}', [UserItemController::class, 'delete']);
 
-    Route::get('/', [CosmeticController::class, 'index']);
+    Route::get('/', [ItemController::class, 'index']);
 });
 
 Route::prefix('auth')->group(function () {

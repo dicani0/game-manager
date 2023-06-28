@@ -9,7 +9,7 @@
                    v-model="search">
         </div>
         <ul class="grid grid-cols-6 gap-1">
-            <li v-for="items in filteredItems" :key="item.id" class="p-4 bg-gray-800 rounded shadow-md text-gray-200">
+            <li v-for="item in filteredItems" :key="item.id" class="p-4 bg-gray-800 rounded shadow-md text-gray-200">
                 <p :class="{'text-green-800': item.obtained, 'text-red-600': !item.obtained}" class="text-sm font-medium">{{ item.name }}</p>
                 <p class="text-xs">Usable amount: {{ item.usable_amount }}</p>
                 <p v-if="user" :class="{'text-green-800': item.usable_amount <= item.obtained_amount}" class="text-xs">Your amount: {{ item.obtained_amount ?? 0 }}</p>
@@ -19,8 +19,9 @@
 </template>
 
 <script setup>
-import {computed, ref, toRefs} from 'vue';
-import {usePage} from "@inertiajs/vue3";
+import { usePage } from "@inertiajs/vue3";
+import { onMounted } from "vue";
+import { computed, ref, toRefs } from 'vue';
 
 const props = defineProps({
     items: {
@@ -35,9 +36,7 @@ let search = ref('');
 
 const user = usePage().props.auth.user;
 
-let filtereditems = computed(() => {
+let filteredItems = computed(() => {
     return items.value.filter(item => item.name.toLowerCase().includes(search.value.toLowerCase()));
 });
 </script>
-
-

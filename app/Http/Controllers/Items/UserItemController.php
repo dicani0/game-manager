@@ -16,12 +16,12 @@ use App\Processes\Items\ImportItemsProcess;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class UserCosmeticController extends Controller
+class UserItemController extends Controller
 {
     public function index(Request $request)
     {
         return Inertia::render('Items/UserItems', [
-            'items' => UserItemResource::collection($request->user()->cosmetics),
+            'items' => UserItemResource::collection($request->user()->items),
         ]);
     }
 

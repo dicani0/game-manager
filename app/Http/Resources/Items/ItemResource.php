@@ -21,8 +21,8 @@ class ItemResource extends JsonResource
             'attributes' => $this->getResource()->attributes,
             'usable_amount' => $this->getResource()->usable_amount,
             $this->mergeWhen(!is_null($request->user()), [
-                'obtained' => $request->user()?->cosmetics->contains($this->getResource()),
-                'obtained_amount' => $request->user()?->cosmetics->where('id', $this->getResource()->getKey())->first()?->pivot->amount
+                'obtained' => $request->user()?->items->contains($this->getResource()),
+                'obtained_amount' => $request->user()?->items->where('id', $this->getResource()->getKey())->first()?->pivot->amount
             ]),
         ];
     }

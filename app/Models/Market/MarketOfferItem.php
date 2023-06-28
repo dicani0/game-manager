@@ -42,7 +42,7 @@ class MarketOfferItem extends Model
         return $this->belongsTo(MarketOffer::class);
     }
 
-    public function cosmetic(): BelongsTo
+    public function item(): BelongsTo
     {
         return $this->belongsTo(Item::class);
     }
