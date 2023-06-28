@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedInteger('used_amount')->default(0);
             $table->unsignedInteger('sold_amount')->default(0);
             $table->unsignedInteger('reserved_amount')->default(0);
+            $table->unsignedInteger('bought_amount')->default(0);
             $table->timestamps();
         });
     }

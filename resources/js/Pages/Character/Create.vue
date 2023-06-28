@@ -43,11 +43,6 @@ const form = useForm({
     vocation: '',
     level: 1,
 });
-
-onMounted(() => {
-    console.log(props.vocations);
-});
-
 const create = () => {
     form.post('/characters', {
         onError: (errors) => {
@@ -56,7 +51,6 @@ const create = () => {
             });
         },
         onSuccess: (response) => {
-            console.log(response);
             useToast().success(response.props.success)
         },
     });

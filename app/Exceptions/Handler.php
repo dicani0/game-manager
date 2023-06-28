@@ -32,11 +32,14 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $e)
     {
+
         if ($request->header('X-Inertia')) {
             if ($e instanceof ValidationException) {
                 return redirect()->back()->withInput()->withErrors($e->errors());
             }
-            return redirect()->back()->withErrors(['error' => $e->getMessage()])->with('errorId', uniqid());
+            if ($e instanceof \Exception) {
+                return redirect()->back()->withErrors(['error' => $e->getMessage()])->with('errorId', uniqid());
+            }
         }
 
         if ($e instanceof AuthorizationException) {

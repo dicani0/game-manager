@@ -4,23 +4,38 @@ namespace App\Http\Controllers\Market;
 
 use App\Data\Market\CancelMarketOfferDto;
 use App\Data\Market\CreateMarketOfferDto;
-use App\Enums\MarketOfferStatusEnum;
+use App\Data\Market\CreateMarketOfferRequestDto;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Market\CancelMarketOfferRequest;
+use App\Http\Requests\Market\CreateBuyOfferRequest;
 use App\Http\Requests\Market\CreateMarketOfferRequest;
+use App\Http\Requests\Market\UserOfferIndexRequest;
 use App\Models\Market\MarketOffer;
+use App\Models\User;
 use App\Processes\Market\CancelMarketOfferProcess;
+use App\Processes\Market\CreateBuyOfferRequestProcess;
 use App\Processes\Market\CreateMarketOfferProcess;
+use App\Queries\Market\MarketOffersWithoutUserQuery;
+use App\Queries\Market\UserMarketOffersQuery;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class MarketController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request, MarketOffersWithoutUserQuery $query): Response
     {
         return Inertia::render('Market/Market', [
-            'offers' => MarketOffer::with(['items.cosmetic', 'user'])->whereStatus(MarketOfferStatusEnum::ACTIVE->value)->orderBy('promoted', 'desc')->orderBy('created_at', 'desc')->get(),
+            'offers' => $query->handle()->paginate(),
+            'sellers' => User::query()->whereNot('id', $request->user()?->getKey())->has('marketOffers')->get(),
+        ]);
+    }
+
+    public function userOffers(UserOfferIndexRequest $request, UserMarketOffersQuery $query): Response
+    {
+        return Inertia::render('Market/MyOffers', [
+            'offers' => $query->handle()->paginate(),
         ]);
     }
 
@@ -41,9 +56,24 @@ class MarketController extends Controller
             user: $request->user(),
             offer: $offer,
         );
-
+    
         $process->run($dto);
 
         return redirect()->back()->with('success', 'Offer canceled!');
+    }
+
+    /**
+     * @throws \Throwable
+     */
+    public function createBuyOffer(CreateBuyOfferRequest $request, MarketOffer $offer, CreateBuyOfferRequestProcess $process): RedirectResponse
+    {
+        $dto = CreateMarketOfferRequestDto::from(array_merge($request->validated(), [
+            'creator' => $request->user(),
+            'offer' => $offer,
+        ]));
+
+        $process->run($dto);
+
+        return redirect()->back()->with('success', 'Trade offer sent!');
     }
 }

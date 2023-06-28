@@ -41,7 +41,7 @@
             </ul>
 
         </div>
-        <div class="w-1/6 bg-gray-800 p-4 rounded shadow-lg border">
+        <div class="w-1/6 bg-gray-800 p-4 rounded shadow-lg border max-h-[85vh] overflow-y-auto">
             <h3 class="text-lg font-bold text-gray-200 mb-4">Create sale offer</h3>
             <Transition>
                 <div v-if="selectedItemsForSale.length > 0">
@@ -108,9 +108,9 @@
             </ul>
         </div>
 
-        <Modal :open="openEditModal" @close="openEditModal = false" class="transition-all">
-            <form @submit.prevent="updateAmount">
-                <div class="mb-4 p-4">
+        <Modal :open="openEditModal" @close="openEditModal = false" :width="'w-1/6'" class="transition-all">
+            <form class="flex flex-col items-center w-full text-center p-4" @submit.prevent="updateAmount">
+                <div class="mb-4 w-full">
                     <h2 class="text-xl mb-4">{{ selectedItem?.item_name }}</h2>
                     <label class="block text-gray-300 text-sm font-bold mb-2" for="content">All amount</label>
                     <input
@@ -134,7 +134,7 @@
                         required
                         id="used_amount">
                 </div>
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-1/2"
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-2/6"
                         type="submit">Update
                 </button>
 
