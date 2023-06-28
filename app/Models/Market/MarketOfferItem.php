@@ -2,7 +2,7 @@
 
 namespace App\Models\Market;
 
-use App\Models\Cosmetics\Cosmetic;
+use App\Models\Items\Item;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,8 +14,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $market_offer_id
  * @property int $cosmetic_id
  * @property int $amount
- * @property string|null $created_at
- * @property string|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read Item $cosmetic
  * @property-read \App\Models\Market\MarketOffer|null $offer
  * @method static \Illuminate\Database\Eloquent\Builder|MarketOfferItem newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|MarketOfferItem newQuery()
@@ -26,7 +27,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|MarketOfferItem whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MarketOfferItem whereMarketOfferId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MarketOfferItem whereUpdatedAt($value)
- * @property-read Cosmetic $cosmetic
  * @mixin \Eloquent
  */
 class MarketOfferItem extends Model
@@ -44,6 +44,6 @@ class MarketOfferItem extends Model
 
     public function cosmetic(): BelongsTo
     {
-        return $this->belongsTo(Cosmetic::class);
+        return $this->belongsTo(Item::class);
     }
 }

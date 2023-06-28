@@ -2,16 +2,16 @@
 
 namespace App\Tasks\Market\OfferRequests;
 
-use App\Actions\Market\OfferRequests\AcceptTradeOfferRequest;
-use App\Models\Market\OfferRequest;
+use App\Actions\Market\TradeOffers\AcceptTradeOffer;
+use App\Models\Market\TradeOffer;
 
 readonly class AcceptTradeOfferRequestTask
 {
     public function __construct(
-        private AcceptTradeOfferRequest $action,
+        private AcceptTradeOffer $action,
     ) {
     }
-    public function handle(OfferRequest $request, \Closure $next): OfferRequest
+    public function handle(TradeOffer $request, \Closure $next): TradeOffer
     {
         $this->action->handle($request);
 

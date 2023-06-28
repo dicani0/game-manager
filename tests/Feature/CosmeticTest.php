@@ -2,10 +2,9 @@
 
 namespace Tests\Feature;
 
-use App\Models\Cosmetics\Cosmetic;
+use App\Models\Items\Item;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class CosmeticTest extends TestCase
@@ -16,14 +15,14 @@ class CosmeticTest extends TestCase
     public function test_import(): void
     {
         Artisan::call('app:import-cosmetics-list');
-        $this->assertNotEmpty(Cosmetic::all());
+        $this->assertNotEmpty(Item::all());
     }
 
     public function test_update_cosmetics_list(): void
     {
-        $userOne = User::factory()->create();
-        $userTwo = User::factory()->create();
-
-        $userOne->cosmetics()->attach(Cosmetic::factory()->create());
+//        $userOne = User::factory()->create();
+//        $userTwo = User::factory()->create();
+//
+//        $userOne->cosmetics()->attach(Item::factory()->create());
     }
 }

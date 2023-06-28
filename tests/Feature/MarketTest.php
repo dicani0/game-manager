@@ -5,10 +5,10 @@ namespace Tests\Feature;
 use App\Enums\MarketOfferRequestStatusEnum;
 use App\Enums\MarketOfferStatusEnum;
 use App\Enums\OfferTypeEnum;
-use App\Models\Cosmetics\Cosmetic;
-use App\Models\Cosmetics\UserCosmetic;
+use App\Models\Items\Item;
+use App\Models\Items\UserItem;
 use App\Models\Market\MarketOffer;
-use App\Models\Market\OfferRequest;
+use App\Models\Market\TradeOffer;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Inertia\Testing\AssertableInertia;
@@ -17,36 +17,36 @@ use Tests\TestCase;
 class MarketTest extends TestCase
 {
     private User $user;
-    private Cosmetic $cosmetic1;
-    private Cosmetic $cosmetic2;
-    private Cosmetic $cosmetic3;
-    private Collection $cosmetics;
+    private Item $item1;
+    private Item $item2;
+    private Item $item3;
+    private Collection $items;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->user = User::factory()->create();
 
-        $this->cosmetic1 = Cosmetic::factory()->create();
-        $this->cosmetic2 = Cosmetic::factory()->create();
-        $this->cosmetic3 = Cosmetic::factory()->create();
+        $this->item1 = Item::factory()->create();
+        $this->item2 = Item::factory()->create();
+        $this->item3 = Item::factory()->create();
 
-        $this->cosmetics = collect([
+        $this->items = collect([
             [
-                'cosmetic_id' => $this->cosmetic1->getKey(),
+                'item_id' => $this->item1->getKey(),
                 'amount' => 1,
             ],
             [
-                'cosmetic_id' => $this->cosmetic2->getKey(),
+                'item_id' => $this->item2->getKey(),
                 'amount' => 1,
             ],
             [
-                'cosmetic_id' => $this->cosmetic3->getKey(),
+                'item_id' => $this->item3->getKey(),
                 'amount' => 1,
             ],
         ]);
 
-        $this->user->cosmetics()->attach($this->cosmetics);
+        $this->user->items()->attach($this->items);
     }
 
     /**
@@ -57,15 +57,15 @@ class MarketTest extends TestCase
         $this->actingAs($this->user)->post('/market', [
             'items' => [
                 [
-                    'cosmetic_id' => $this->cosmetic1->getKey(),
+                    'item_id' => $this->item1->getKey(),
                     'amount' => 1,
                 ],
                 [
-                    'cosmetic_id' => $this->cosmetic2->getKey(),
+                    'item_id' => $this->item2->getKey(),
                     'amount' => 1,
                 ],
                 [
-                    'cosmetic_id' => $this->cosmetic3->getKey(),
+                    'item_id' => $this->item3->getKey(),
                     'amount' => 1,
                 ],
             ],
@@ -77,41 +77,41 @@ class MarketTest extends TestCase
         ]);
 
         $this->assertDatabaseHas('market_offer_items', [
-            'cosmetic_id' => $this->cosmetic1->getKey(),
+            'item_id' => $this->item1->getKey(),
             'amount' => 1,
         ]);
 
         $this->assertDatabaseHas('market_offer_items', [
-            'cosmetic_id' => $this->cosmetic2->getKey(),
+            'item_id' => $this->item2->getKey(),
             'amount' => 1,
         ]);
 
         $this->assertDatabaseHas('market_offer_items', [
-            'cosmetic_id' => $this->cosmetic3->getKey(),
+            'item_id' => $this->item3->getKey(),
             'amount' => 1,
         ]);
 
-        $this->assertDatabaseHas('user_cosmetic', [
+        $this->assertDatabaseHas('user_item', [
             'user_id' => $this->user->getKey(),
-            'cosmetic_id' => $this->cosmetic1->getKey(),
+            'item_id' => $this->item1->getKey(),
             'amount' => 1,
             'used_amount' => 0,
             'sold_amount' => 0,
             'reserved_amount' => 1,
         ]);
 
-        $this->assertDatabaseHas('user_cosmetic', [
+        $this->assertDatabaseHas('user_item', [
             'user_id' => $this->user->getKey(),
-            'cosmetic_id' => $this->cosmetic2->getKey(),
+            'item_id' => $this->item2->getKey(),
             'amount' => 1,
             'used_amount' => 0,
             'sold_amount' => 0,
             'reserved_amount' => 1,
         ]);
 
-        $this->assertDatabaseHas('user_cosmetic', [
+        $this->assertDatabaseHas('user_item', [
             'user_id' => $this->user->getKey(),
-            'cosmetic_id' => $this->cosmetic3->getKey(),
+            'item_id' => $this->item3->getKey(),
             'amount' => 1,
             'used_amount' => 0,
             'sold_amount' => 0,
@@ -125,14 +125,14 @@ class MarketTest extends TestCase
             'user_id' => $this->user->getKey(),
         ]);
 
-        UserCosmetic::query()->update([
+        UserItem::query()->update([
             'reserved_amount' => 1,
         ]);
 
-        $offer->items()->createMany($this->cosmetics->map(function ($cosmetic) {
+        $offer->items()->createMany($this->items->map(function ($item) {
             return [
-                'cosmetic_id' => $cosmetic['cosmetic_id'],
-                'amount' => $cosmetic['amount'],
+                'item_id' => $item['item_id'],
+                'amount' => $item['amount'],
             ];
         }));
 
@@ -144,9 +144,9 @@ class MarketTest extends TestCase
             'status' => MarketOfferStatusEnum::CANCELED->value,
         ]);
 
-        $this->assertDatabaseHas('user_cosmetic', [
+        $this->assertDatabaseHas('user_item', [
             'user_id' => $this->user->getKey(),
-            'cosmetic_id' => $this->cosmetic1->getKey(),
+            'item_id' => $this->item1->getKey(),
             'amount' => 1,
             'used_amount' => 0,
             'sold_amount' => 0,
@@ -199,22 +199,22 @@ class MarketTest extends TestCase
         $buyer = User::factory()->create();
         $buyer2 = User::factory()->create();
 
-        $cosmetic1 = Cosmetic::factory()->create(['name' => 'abc']);
-        $cosmetic2 = Cosmetic::factory()->create(['name' => 'def']);
-        $cosmetic3 = Cosmetic::factory()->create(['name' => 'ghi']);
+        $item1 = Item::factory()->create(['name' => 'abc']);
+        $item2 = Item::factory()->create(['name' => 'def']);
+        $item3 = Item::factory()->create(['name' => 'ghi']);
 
-        $this->user->cosmetics()->detach();
+        $this->user->items()->detach();
 
-        $this->user->cosmetics()->attach([
-            $cosmetic1->getKey() => [
+        $this->user->items()->attach([
+            $item1->getKey() => [
                 'amount' => 5,
                 'reserved_amount' => 5,
             ],
-            $cosmetic2->getKey() => [
+            $item2->getKey() => [
                 'amount' => 5,
                 'reserved_amount' => 3,
             ],
-            $cosmetic3->getKey() => [
+            $item3->getKey() => [
                 'amount' => 5,
                 'reserved_amount' => 1,
             ],
@@ -226,20 +226,20 @@ class MarketTest extends TestCase
 
         $offer->items()->createMany([
             [
-                'cosmetic_id' => $cosmetic1->getKey(),
+                'item_id' => $item1->getKey(),
                 'amount' => 5,
             ],
             [
-                'cosmetic_id' => $cosmetic2->getKey(),
+                'item_id' => $item2->getKey(),
                 'amount' => 3,
             ],
             [
-                'cosmetic_id' => $cosmetic3->getKey(),
+                'item_id' => $item3->getKey(),
                 'amount' => 1,
             ],
         ]);
 
-        $offerRequest = OfferRequest::create([
+        $tradeOffer = TradeOffer::create([
             'user_id' => $buyer->getKey(),
             'offerable_id' => $offer->getKey(),
             'offerable_type' => MarketOffer::class,
@@ -247,27 +247,27 @@ class MarketTest extends TestCase
             'status' => MarketOfferRequestStatusEnum::PENDING->value,
         ]);
 
-        $offerRequest->cosmetics()->attach([
-            $cosmetic1->getKey() => [
+        $tradeOffer->items()->attach([
+            $item1->getKey() => [
                 'amount' => 3,
             ],
-            $cosmetic2->getKey() => [
+            $item2->getKey() => [
                 'amount' => 3,
             ],
-            $cosmetic3->getKey() => [
+            $item3->getKey() => [
                 'amount' => 1,
             ],
         ]);
 
         $this
             ->actingAs($buyer2)
-            ->post("/market/{$offer->getKey()}/{$offerRequest->getKey()}/accept")
+            ->post("/market/{$offer->getKey()}/{$tradeOffer->getKey()}/accept")
             ->assertRedirect();
 
         $this->assertEquals(session('errors')->getBag('default')->first(), 'This action is unauthorized.');
 
-        $this->assertDatabaseHas('offer_requests', [
-            'id' => $offerRequest->getKey(),
+        $this->assertDatabaseHas('trade_offers', [
+            'id' => $tradeOffer->getKey(),
             'status' => MarketOfferRequestStatusEnum::PENDING->value,
         ]);
     }
@@ -277,22 +277,22 @@ class MarketTest extends TestCase
         $buyer = User::factory()->create();
         $buyer2 = User::factory()->create();
 
-        $cosmetic1 = Cosmetic::factory()->create(['name' => 'abc']);
-        $cosmetic2 = Cosmetic::factory()->create(['name' => 'def']);
-        $cosmetic3 = Cosmetic::factory()->create(['name' => 'ghi']);
+        $item1 = Item::factory()->create(['name' => 'abc']);
+        $item2 = Item::factory()->create(['name' => 'def']);
+        $item3 = Item::factory()->create(['name' => 'ghi']);
 
-        $this->user->cosmetics()->detach();
+        $this->user->items()->detach();
 
-        $this->user->cosmetics()->attach([
-            $cosmetic1->getKey() => [
+        $this->user->items()->attach([
+            $item1->getKey() => [
                 'amount' => 5,
                 'reserved_amount' => 5,
             ],
-            $cosmetic2->getKey() => [
+            $item2->getKey() => [
                 'amount' => 5,
                 'reserved_amount' => 3,
             ],
-            $cosmetic3->getKey() => [
+            $item3->getKey() => [
                 'amount' => 5,
                 'reserved_amount' => 1,
             ],
@@ -304,20 +304,20 @@ class MarketTest extends TestCase
 
         $offer->items()->createMany([
             [
-                'cosmetic_id' => $cosmetic1->getKey(),
+                'item_id' => $item1->getKey(),
                 'amount' => 5,
             ],
             [
-                'cosmetic_id' => $cosmetic2->getKey(),
+                'item_id' => $item2->getKey(),
                 'amount' => 3,
             ],
             [
-                'cosmetic_id' => $cosmetic3->getKey(),
+                'item_id' => $item3->getKey(),
                 'amount' => 1,
             ],
         ]);
 
-        $offerRequest = OfferRequest::create([
+        $tradeOffer = TradeOffer::create([
             'user_id' => $buyer->getKey(),
             'offerable_id' => $offer->getKey(),
             'offerable_type' => MarketOffer::class,
@@ -325,19 +325,19 @@ class MarketTest extends TestCase
             'status' => MarketOfferRequestStatusEnum::PENDING->value,
         ]);
 
-        $offerRequest->cosmetics()->attach([
-            $cosmetic1->getKey() => [
+        $tradeOffer->items()->attach([
+            $item1->getKey() => [
                 'amount' => 3,
             ],
-            $cosmetic2->getKey() => [
+            $item2->getKey() => [
                 'amount' => 3,
             ],
-            $cosmetic3->getKey() => [
+            $item3->getKey() => [
                 'amount' => 1,
             ],
         ]);
 
-        $offerRequest2 = OfferRequest::create([
+        $tradeOffer2 = TradeOffer::create([
             'user_id' => $buyer2->getKey(),
             'offerable_id' => $offer->getKey(),
             'offerable_type' => MarketOffer::class,
@@ -347,19 +347,19 @@ class MarketTest extends TestCase
             'lat_price' => 100,
         ]);
 
-        $offerRequest2->cosmetics()->attach([
-            $cosmetic1->getKey() => [
+        $tradeOffer2->items()->attach([
+            $item1->getKey() => [
                 'amount' => 3,
             ],
-            $cosmetic2->getKey() => [
+            $item2->getKey() => [
                 'amount' => 2,
             ],
-            $cosmetic3->getKey() => [
+            $item3->getKey() => [
                 'amount' => 1,
             ],
         ]);
 
-        $offerRequest3 = OfferRequest::create([
+        $tradeOffer3 = TradeOffer::create([
             'user_id' => $buyer2->getKey(),
             'offerable_id' => $offer->getKey(),
             'offerable_type' => MarketOffer::class,
@@ -369,35 +369,35 @@ class MarketTest extends TestCase
             'lat_price' => 100,
         ]);
 
-        $offerRequest3->cosmetics()->attach([
-            $cosmetic1->getKey() => [
+        $tradeOffer3->items()->attach([
+            $item1->getKey() => [
                 'amount' => 2,
             ],
-            $cosmetic2->getKey() => [
+            $item2->getKey() => [
                 'amount' => 2,
             ],
-            $cosmetic3->getKey() => [
+            $item3->getKey() => [
                 'amount' => 1,
             ],
         ]);
 
-        $this->actingAs($this->user)->post("/market/{$offer->getKey()}/{$offerRequest->getKey()}/accept");
+        $res = $this->actingAs($this->user)->post("/market/{$offer->getKey()}/{$tradeOffer->getKey()}/accept");
 
-        $this->assertDatabaseHas('user_cosmetic', [
+        $this->assertDatabaseHas('user_item', [
             'user_id' => $buyer->getKey(),
-            'cosmetic_id' => $cosmetic1->getKey(),
+            'item_id' => $item1->getKey(),
             'bought_amount' => 3,
         ]);
 
-        $this->assertDatabaseHas('user_cosmetic', [
+        $this->assertDatabaseHas('user_item', [
             'user_id' => $buyer->getKey(),
-            'cosmetic_id' => $cosmetic2->getKey(),
+            'item_id' => $item2->getKey(),
             'bought_amount' => 3,
         ]);
 
-        $this->assertDatabaseHas('user_cosmetic', [
+        $this->assertDatabaseHas('user_item', [
             'user_id' => $buyer->getKey(),
-            'cosmetic_id' => $cosmetic3->getKey(),
+            'item_id' => $item3->getKey(),
             'bought_amount' => 1,
         ]);
 
@@ -407,52 +407,52 @@ class MarketTest extends TestCase
             'status' => MarketOfferStatusEnum::ACTIVE->value,
         ]);
 
-        $this->assertDatabaseHas('offer_requests', [
-            'id' => $offerRequest->getKey(),
+        $this->assertDatabaseHas('trade_offers', [
+            'id' => $tradeOffer->getKey(),
             'user_id' => $buyer->getKey(),
             'status' => MarketOfferRequestStatusEnum::ACCEPTED->value,
         ]);
 
-        $this->assertDatabaseHas('offer_requests', [
-            'id' => $offerRequest2->getKey(),
+        $this->assertDatabaseHas('trade_offers', [
+            'id' => $tradeOffer2->getKey(),
             'user_id' => $buyer2->getKey(),
             'status' => MarketOfferRequestStatusEnum::REJECTED->value,
         ]);
 
-        $this->assertDatabaseHas('offer_requests', [
-            'id' => $offerRequest3->getKey(),
+        $this->assertDatabaseHas('trade_offers', [
+            'id' => $tradeOffer3->getKey(),
             'user_id' => $buyer2->getKey(),
             'status' => MarketOfferRequestStatusEnum::PENDING->value,
         ]);
 
-        $this->assertDatabaseHas('user_cosmetic', [
+        $this->assertDatabaseHas('user_item', [
             'user_id' => $this->user->getKey(),
-            'cosmetic_id' => $cosmetic1->getKey(),
+            'item_id' => $item1->getKey(),
             'amount' => 5,
             'used_amount' => 0,
             'sold_amount' => 3,
             'reserved_amount' => 2,
         ]);
 
-        $this->assertDatabaseHas('user_cosmetic', [
+        $this->assertDatabaseHas('user_item', [
             'user_id' => $this->user->getKey(),
-            'cosmetic_id' => $cosmetic2->getKey(),
+            'item_id' => $item2->getKey(),
             'amount' => 5,
             'used_amount' => 0,
             'sold_amount' => 3,
             'reserved_amount' => 0,
         ]);
 
-        $this->assertDatabaseHas('user_cosmetic', [
+        $this->assertDatabaseHas('user_item', [
             'user_id' => $this->user->getKey(),
-            'cosmetic_id' => $cosmetic3->getKey(),
+            'item_id' => $item3->getKey(),
             'amount' => 5,
             'used_amount' => 0,
             'sold_amount' => 1,
             'reserved_amount' => 0,
         ]);
 
-        $offerRequest4 = OfferRequest::create([
+        $tradeOffer4 = TradeOffer::create([
             'user_id' => $buyer2->getKey(),
             'offerable_id' => $offer->getKey(),
             'offerable_type' => MarketOffer::class,
@@ -462,23 +462,23 @@ class MarketTest extends TestCase
             'lat_price' => 100,
         ]);
 
-        $offerRequest4->cosmetics()->attach([
-            $cosmetic1->getKey() => [
+        $tradeOffer4->items()->attach([
+            $item1->getKey() => [
                 'amount' => 2,
             ],
         ]);
 
-        $this->actingAs($this->user)->post("/market/{$offer->getKey()}/{$offerRequest4->getKey()}/accept");
+        $this->actingAs($this->user)->post("/market/{$offer->getKey()}/{$tradeOffer4->getKey()}/accept");
 
-        $this->assertDatabaseHas('offer_requests', [
-            'id' => $offerRequest4->getKey(),
+        $this->assertDatabaseHas('trade_offers', [
+            'id' => $tradeOffer4->getKey(),
             'user_id' => $buyer2->getKey(),
             'status' => MarketOfferRequestStatusEnum::ACCEPTED->value,
         ]);
 
-        $this->assertDatabaseHas('user_cosmetic', [
+        $this->assertDatabaseHas('user_item', [
             'user_id' => $this->user->getKey(),
-            'cosmetic_id' => $cosmetic1->getKey(),
+            'item_id' => $item1->getKey(),
             'amount' => 5,
             'used_amount' => 0,
             'sold_amount' => 5,
@@ -496,22 +496,22 @@ class MarketTest extends TestCase
     {
         $buyer = User::factory()->create();
 
-        $cosmetic1 = Cosmetic::factory()->create(['name' => 'abc']);
-        $cosmetic2 = Cosmetic::factory()->create(['name' => 'def']);
-        $cosmetic3 = Cosmetic::factory()->create(['name' => 'ghi']);
+        $item1 = Item::factory()->create(['name' => 'abc']);
+        $item2 = Item::factory()->create(['name' => 'def']);
+        $item3 = Item::factory()->create(['name' => 'ghi']);
 
-        $this->user->cosmetics()->detach();
+        $this->user->items()->detach();
 
-        $this->user->cosmetics()->attach([
-            $cosmetic1->getKey() => [
+        $this->user->items()->attach([
+            $item1->getKey() => [
                 'amount' => 5,
                 'reserved_amount' => 5,
             ],
-            $cosmetic2->getKey() => [
+            $item2->getKey() => [
                 'amount' => 5,
                 'reserved_amount' => 3,
             ],
-            $cosmetic3->getKey() => [
+            $item3->getKey() => [
                 'amount' => 5,
                 'reserved_amount' => 1,
             ],
@@ -523,20 +523,20 @@ class MarketTest extends TestCase
 
         $offer->items()->createMany([
             [
-                'cosmetic_id' => $cosmetic1->getKey(),
+                'item_id' => $item1->getKey(),
                 'amount' => 5,
             ],
             [
-                'cosmetic_id' => $cosmetic2->getKey(),
+                'item_id' => $item2->getKey(),
                 'amount' => 3,
             ],
             [
-                'cosmetic_id' => $cosmetic3->getKey(),
+                'item_id' => $item3->getKey(),
                 'amount' => 1,
             ],
         ]);
 
-        $offerRequest = OfferRequest::create([
+        $tradeOffer = TradeOffer::create([
             'user_id' => $buyer->getKey(),
             'offerable_id' => $offer->getKey(),
             'offerable_type' => MarketOffer::class,
@@ -544,28 +544,28 @@ class MarketTest extends TestCase
             'status' => MarketOfferRequestStatusEnum::PENDING->value,
         ]);
 
-        $offerRequest->cosmetics()->attach([
-            $cosmetic1->getKey() => [
+        $tradeOffer->items()->attach([
+            $item1->getKey() => [
                 'amount' => 3,
             ],
-            $cosmetic2->getKey() => [
+            $item2->getKey() => [
                 'amount' => 3,
             ],
-            $cosmetic3->getKey() => [
+            $item3->getKey() => [
                 'amount' => 1,
             ],
         ]);
 
         $this
             ->actingAs($buyer)
-            ->post("/market/{$offer->getKey()}/{$offerRequest->getKey()}/reject")
+            ->post("/market/{$offer->getKey()}/{$tradeOffer->getKey()}/reject")
             ->assertRedirect();
 
 
         $this->assertEquals(session('errors')->getBag('default')->first(), 'This action is unauthorized.');
 
-        $this->assertDatabaseHas('offer_requests', [
-            'id' => $offerRequest->getKey(),
+        $this->assertDatabaseHas('trade_offers', [
+            'id' => $tradeOffer->getKey(),
             'status' => MarketOfferRequestStatusEnum::PENDING->value,
         ]);
     }
@@ -574,22 +574,22 @@ class MarketTest extends TestCase
     {
         $buyer = User::factory()->create();
 
-        $cosmetic1 = Cosmetic::factory()->create(['name' => 'abc']);
-        $cosmetic2 = Cosmetic::factory()->create(['name' => 'def']);
-        $cosmetic3 = Cosmetic::factory()->create(['name' => 'ghi']);
+        $item1 = Item::factory()->create(['name' => 'abc']);
+        $item2 = Item::factory()->create(['name' => 'def']);
+        $item3 = Item::factory()->create(['name' => 'ghi']);
 
-        $this->user->cosmetics()->detach();
+        $this->user->items()->detach();
 
-        $this->user->cosmetics()->attach([
-            $cosmetic1->getKey() => [
+        $this->user->items()->attach([
+            $item1->getKey() => [
                 'amount' => 5,
                 'reserved_amount' => 5,
             ],
-            $cosmetic2->getKey() => [
+            $item2->getKey() => [
                 'amount' => 5,
                 'reserved_amount' => 3,
             ],
-            $cosmetic3->getKey() => [
+            $item3->getKey() => [
                 'amount' => 5,
                 'reserved_amount' => 1,
             ],
@@ -601,20 +601,20 @@ class MarketTest extends TestCase
 
         $offer->items()->createMany([
             [
-                'cosmetic_id' => $cosmetic1->getKey(),
+                'item_id' => $item1->getKey(),
                 'amount' => 5,
             ],
             [
-                'cosmetic_id' => $cosmetic2->getKey(),
+                'item_id' => $item2->getKey(),
                 'amount' => 3,
             ],
             [
-                'cosmetic_id' => $cosmetic3->getKey(),
+                'item_id' => $item3->getKey(),
                 'amount' => 1,
             ],
         ]);
 
-        $offerRequest = OfferRequest::create([
+        $tradeOffer = TradeOffer::create([
             'user_id' => $buyer->getKey(),
             'offerable_id' => $offer->getKey(),
             'offerable_type' => MarketOffer::class,
@@ -622,22 +622,22 @@ class MarketTest extends TestCase
             'status' => MarketOfferRequestStatusEnum::PENDING->value,
         ]);
 
-        $offerRequest->cosmetics()->attach([
-            $cosmetic1->getKey() => [
+        $tradeOffer->items()->attach([
+            $item1->getKey() => [
                 'amount' => 3,
             ],
-            $cosmetic2->getKey() => [
+            $item2->getKey() => [
                 'amount' => 3,
             ],
-            $cosmetic3->getKey() => [
+            $item3->getKey() => [
                 'amount' => 1,
             ],
         ]);
 
-        $this->actingAs($this->user)->post("/market/{$offer->getKey()}/{$offerRequest->getKey()}/reject");
+        $this->actingAs($this->user)->post("/market/{$offer->getKey()}/{$tradeOffer->getKey()}/reject");
 
-        $this->assertDatabaseHas('offer_requests', [
-            'id' => $offerRequest->getKey(),
+        $this->assertDatabaseHas('trade_offers', [
+            'id' => $tradeOffer->getKey(),
             'user_id' => $buyer->getKey(),
             'status' => MarketOfferRequestStatusEnum::REJECTED->value,
         ]);

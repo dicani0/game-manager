@@ -5,8 +5,6 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Character\CharacterController;
-use App\Http\Controllers\Cosmetics\CosmeticController;
-use App\Http\Controllers\Cosmetics\UserCosmeticController;
 use App\Http\Controllers\Guild\GuildController;
 use App\Http\Controllers\Market\MarketController;
 use App\Http\Controllers\Market\MarketOfferRequestController;
@@ -61,13 +59,11 @@ Route::prefix('characters')->middleware('auth')->group(function () {
 });
 
 Route::prefix('items')->middleware('auth')->group(function () {
-    Route::get('/', [UserCosmeticController::class, 'index']);
-    Route::post('/import', [UserCosmeticController::class, 'sync']);
-    Route::put('/{item}', [UserCosmeticController::class, 'update']);
-    Route::delete('/{item}', [UserCosmeticController::class, 'delete']);
-});
+    Route::get('/my', [UserItemController::class, 'index']);
+    Route::post('/import', [UserItemController::class, 'sync']);
+    Route::put('/{item}', [UserItemController::class, 'update']);
+    Route::delete('/{item}', [UserItemController::class, 'delete']);
 
-Route::prefix('cosmetics')->group(function () {
     Route::get('/', [CosmeticController::class, 'index']);
 });
 

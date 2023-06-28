@@ -19,6 +19,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $owner_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $users
+ * @property-read int|null $users_count
  * @method static \Illuminate\Database\Eloquent\Builder|Guild newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Guild newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Guild query()
@@ -31,6 +33,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Guild whereOwnerId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Guild whereRecruiting($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Guild whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $users
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $users
  * @mixin \Eloquent
  */
 class Guild extends Model
@@ -41,6 +45,6 @@ class Guild extends Model
 
     public function users(): HasMany
     {
-        return $this->hasMany(User::class)->using(GuildUser::class);
+        return $this->hasMany(User::class);
     }
 }

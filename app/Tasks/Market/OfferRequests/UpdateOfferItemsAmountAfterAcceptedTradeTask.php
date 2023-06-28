@@ -2,8 +2,8 @@
 
 namespace App\Tasks\Market\OfferRequests;
 
-use App\Actions\Market\OfferRequests\UpdateOfferItemsAmountAfterAcceptedTrade;
-use App\Models\Market\OfferRequest;
+use App\Actions\Market\TradeOffers\UpdateOfferItemsAmountAfterAcceptedTrade;
+use App\Models\Market\TradeOffer;
 
 readonly class UpdateOfferItemsAmountAfterAcceptedTradeTask
 {
@@ -12,7 +12,7 @@ readonly class UpdateOfferItemsAmountAfterAcceptedTradeTask
     ) {
     }
 
-    public function handle(OfferRequest $request, \Closure $next): OfferRequest
+    public function handle(TradeOffer $request, \Closure $next): TradeOffer
     {
         $this->action->handle($request);
 
