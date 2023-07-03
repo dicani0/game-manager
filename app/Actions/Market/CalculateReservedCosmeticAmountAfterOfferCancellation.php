@@ -8,10 +8,10 @@ class CalculateReservedCosmeticAmountAfterOfferCancellation
 {
     public function handle(CancelMarketOfferDto $dto): void
     {
-        $dto->user->cosmetics()
-            ->whereIn('cosmetic_id', $dto->offer->items->pluck('cosmetic_id'))
+        $dto->user->items()
+            ->whereIn('item_id', $dto->offer->items->pluck('item_id'))
             ->each(function ($cosmetic) use ($dto) {
-                $cosmetic->pivot->reserved_amount -= $dto->offer->items->where('cosmetic_id', $cosmetic->getKey())->first()->amount;
+                $cosmetic->pivot->reserved_amount -= $dto->offer->items->where('item_id', $cosmetic->getKey())->first()->amount;
                 $cosmetic->pivot->save();
             });
     }

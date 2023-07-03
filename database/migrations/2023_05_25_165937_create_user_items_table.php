@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_cosmetic', function (Blueprint $table) {
+        Schema::create('user_item', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('cosmetic_id')->constrained();
+            $table->foreignId('item_id')->constrained();
             $table->unsignedInteger('amount')->default(0);
             $table->unsignedInteger('used_amount')->default(0);
             $table->unsignedInteger('sold_amount')->default(0);

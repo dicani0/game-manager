@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Cosmetics\Cosmetic;
+use App\Models\Items\Item;
 use Illuminate\Database\Seeder;
 
 class CosmeticSeeder extends Seeder
@@ -12,6 +12,6 @@ class CosmeticSeeder extends Seeder
      */
     public function run(): void
     {
-        Cosmetic::factory()->count(60)->create();
+        Item::factory()->count(60)->create();
     }
 }

@@ -2,13 +2,13 @@
 
 namespace App\Tasks\Market;
 
-use App\Actions\Market\OfferRequests\NotifyUserAboutOfferRequest;
-use App\Data\Market\CreateMarketOfferRequestDto;
+use App\Actions\Market\TradeOffers\NotifyUserAboutTradeOffer;
+use App\Data\Market\CreateTradeOfferDto;
 
 class NotifyUserAboutOfferRequestTask
 {
     public function __construct(
-        protected NotifyUserAboutOfferRequest $action
+        protected NotifyUserAboutTradeOffer $action
     )
     {
     }
@@ -16,7 +16,7 @@ class NotifyUserAboutOfferRequestTask
     /**
      * @throws \Exception
      */
-    public function handle(CreateMarketOfferRequestDto $dto, \Closure $next): CreateMarketOfferRequestDto
+    public function handle(CreateTradeOfferDto $dto, \Closure $next): CreateTradeOfferDto
     {
         $this->action->handle($dto);
         return $next($dto);

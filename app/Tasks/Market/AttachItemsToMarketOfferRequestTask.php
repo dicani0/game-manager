@@ -2,18 +2,18 @@
 
 namespace App\Tasks\Market;
 
-use App\Actions\Market\OfferRequests\AttachItemsToMarketOfferRequest;
-use App\Data\Market\CreateMarketOfferRequestDto;
+use App\Actions\Market\TradeOffers\AttachItemsToTradeOffer;
+use App\Data\Market\CreateTradeOfferDto;
 
 class AttachItemsToMarketOfferRequestTask
 {
     public function __construct(
-        protected AttachItemsToMarketOfferRequest $action
+        protected AttachItemsToTradeOffer $action
     )
     {
     }
 
-    public function handle(CreateMarketOfferRequestDto $dto, \Closure $next): CreateMarketOfferRequestDto
+    public function handle(CreateTradeOfferDto $dto, \Closure $next): CreateTradeOfferDto
     {
         $this->action->handle($dto);
         return $next($dto);

@@ -4,7 +4,7 @@ namespace App\Queries\Market;
 
 use App\Enums\MarketOfferStatusEnum;
 use App\Models\Market\MarketOffer;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class UserMarketOffersQuery
@@ -13,8 +13,8 @@ class UserMarketOffersQuery
     {
         return QueryBuilder::for(MarketOffer::class)
             ->orderBy('promoted', 'desc')
-            ->where('user_id', Auth::user()->getKey())
-//            ->where('status', MarketOfferStatusEnum::ACTIVE->value)
-            ->with(['items.cosmetic', 'user', 'offers.creator', 'offers.cosmetics']);
+            ->where('user_id', Auth::id())
+            ->where('status', MarketOfferStatusEnum::ACTIVE->value)
+            ->with(['items.item', 'user', 'offers.creator', 'offers.items']);
     }
 }

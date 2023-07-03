@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('market_offer_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('market_offer_id')->constrained();
-            $table->foreignId('cosmetic_id')->constrained();
+            $table->foreignId('item_id')->constrained();
             $table->integer('amount')->default(1);
             $table->timestamps();
         });

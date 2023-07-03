@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('offer_requests', function (Blueprint $table) {
+        Schema::create('trade_offers', function (Blueprint $table) {
             $table->id();
             $table->morphs('offerable');
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
@@ -25,10 +25,10 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('offer_request_item', function (Blueprint $table) {
+        Schema::create('trade_offer_item', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('offer_request_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('cosmetic_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('trade_offer_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('item_id')->constrained()->cascadeOnDelete();
             $table->integer('amount')->default(1);
             $table->timestamps();
         });
@@ -39,7 +39,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('offer_requests');
-        Schema::dropIfExists('offer_request_item');
+        Schema::dropIfExists('trade_offers');
+        Schema::dropIfExists('trade_offer_item');
     }
 };
