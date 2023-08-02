@@ -3,19 +3,19 @@
 namespace App\Actions\Items;
 
 use App\Data\Items\ImportItemsDto;
-use App\Models\Cosmetics\Cosmetic;
-use App\Models\Cosmetics\UserCosmetic;
+use App\Models\Items\Item;
+use App\Models\Items\UserItem;
 
 class SyncUserItems
 {
     public function handle(ImportItemsDto $dto): void
     {
         $dto->items->each(function ($item) {
-            $cosmetic = Cosmetic::query()->firstOrCreate(['name' => $item['item_name']]);
-            UserCosmetic::query()->updateOrCreate(
+            $cosmetic = Item::query()->firstOrCreate(['name' => $item['item_name']]);
+            UserItem::query()->updateOrCreate(
                 [
                     'user_id' => $item['user_id'],
-                    'cosmetic_id' => $cosmetic->getKey(),
+                    'item_id' => $cosmetic->getKey(),
                 ],
                 [
                     'amount' => $item['amount'],

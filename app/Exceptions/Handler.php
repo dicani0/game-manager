@@ -32,7 +32,6 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $e)
     {
-
         if ($request->header('X-Inertia')) {
             if ($e instanceof ValidationException) {
                 return redirect()->back()->withInput()->withErrors($e->errors());

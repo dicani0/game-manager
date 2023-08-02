@@ -2,11 +2,11 @@
 
 namespace Database\Factories\Market;
 
-use App\Models\Cosmetics\Cosmetic;
+use App\Models\Items\Item;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<Cosmetic>
+ * @extends Factory<Item>
  */
 class MarketOfferFactory extends Factory
 {

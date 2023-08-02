@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Cosmetics;
 
-use App\Models\Cosmetics\Cosmetic;
+use App\Models\Items\Item;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 
@@ -20,7 +20,7 @@ class ImportCosmeticsList extends Command
                 continue;
             }
 
-            Cosmetic::updateOrCreate([
+            Item::updateOrCreate([
                 'name' => str_replace('Token', '', trim($line)),
                 'attributes' => null,
                 'usable_amount' => 1,

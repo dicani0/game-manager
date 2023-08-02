@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Market;
 
 use App\Data\Market\CancelMarketOfferDto;
 use App\Data\Market\CreateMarketOfferDto;
-use App\Data\Market\CreateMarketOfferRequestDto;
+use App\Data\Market\CreateTradeOfferDto;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Market\CancelMarketOfferRequest;
 use App\Http\Requests\Market\CreateBuyOfferRequest;
@@ -56,7 +56,7 @@ class MarketController extends Controller
             user: $request->user(),
             offer: $offer,
         );
-    
+
         $process->run($dto);
 
         return redirect()->back()->with('success', 'Offer canceled!');
@@ -67,7 +67,7 @@ class MarketController extends Controller
      */
     public function createBuyOffer(CreateBuyOfferRequest $request, MarketOffer $offer, CreateBuyOfferRequestProcess $process): RedirectResponse
     {
-        $dto = CreateMarketOfferRequestDto::from(array_merge($request->validated(), [
+        $dto = CreateTradeOfferDto::from(array_merge($request->validated(), [
             'creator' => $request->user(),
             'offer' => $offer,
         ]));

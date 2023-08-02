@@ -2,11 +2,11 @@
 
 namespace App\Actions\Items;
 
-use App\Models\Cosmetics\UserCosmetic;
+use App\Models\Items\UserItem;
 
 class DeleteItem
 {
-    public function handle(UserCosmetic $item): void
+    public function handle(UserItem $item): void
     {
         $item->delete();
     }

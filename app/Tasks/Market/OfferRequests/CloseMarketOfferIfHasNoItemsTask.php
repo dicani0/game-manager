@@ -2,8 +2,8 @@
 
 namespace App\Tasks\Market\OfferRequests;
 
-use App\Actions\Market\OfferRequests\CloseMarketOfferIfHasNoItems;
-use App\Models\Market\OfferRequest;
+use App\Actions\Market\TradeOffers\CloseMarketOfferIfHasNoItems;
+use App\Models\Market\TradeOffer;
 
 readonly class CloseMarketOfferIfHasNoItemsTask
 {
@@ -11,7 +11,7 @@ readonly class CloseMarketOfferIfHasNoItemsTask
         private CloseMarketOfferIfHasNoItems $action,
     ) {
     }
-    public function handle(OfferRequest $request, \Closure $next): OfferRequest
+    public function handle(TradeOffer $request, \Closure $next): TradeOffer
     {
         $this->action->handle($request->offerable);
 
