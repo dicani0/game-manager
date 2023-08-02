@@ -14,7 +14,7 @@ class UserMarketOffersQuery
         return QueryBuilder::for(MarketOffer::class)
             ->orderBy('promoted', 'desc')
             ->where('user_id', Auth::id())
-            ->where('status', MarketOfferStatusEnum::ACTIVE->value)
+            ->where('status', MarketOfferStatusEnum::ACTIVE)
             ->with(['items.item', 'user', 'offers.creator', 'offers.items']);
     }
 }

@@ -5,12 +5,16 @@ namespace Tests\Feature;
 use App\Enums\MarketOfferRequestStatusEnum;
 use App\Enums\MarketOfferStatusEnum;
 use App\Enums\OfferTypeEnum;
+use App\Jobs\Market\SetMarketOfferStatusAsExpired;
 use App\Models\Items\Item;
 use App\Models\Items\UserItem;
 use App\Models\Market\MarketOffer;
 use App\Models\Market\TradeOffer;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Queue;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
@@ -641,5 +645,45 @@ class MarketTest extends TestCase
             'user_id' => $buyer->getKey(),
             'status' => MarketOfferRequestStatusEnum::REJECTED->value,
         ]);
+    }
+
+    public function test_market_offer_expiration(): void
+    {
+        $offer = MarketOffer::factory()->create([
+            'user_id' => $this->user->getKey(),
+            'expires_at' => now()->addDay(),
+            'status' => MarketOfferStatusEnum::ACTIVE->value,
+        ]);
+
+        Bus::fake();
+
+        SetMarketOfferStatusAsExpired::dispatch($offer)->delay($offer->expires_at);
+
+        Bus::assertDispatched(SetMarketOfferStatusAsExpired::class);
+
+        $job = new SetMarketOfferStatusAsExpired($offer);
+        $job->handle();
+
+        $this->assertEquals($offer->status, MarketOfferStatusEnum::EXPIRED);
+    }
+
+    public function test_market_offer_expiration_job_delay(): void
+    {
+        Queue::fake();
+        Carbon::setTestNow(now()->startOfDay());
+
+        $offer = MarketOffer::factory()->create([
+            'user_id' => $this->user->getKey(),
+            'expires_at' => now()->addHours(6),
+            'status' => MarketOfferStatusEnum::ACTIVE->value,
+        ]);
+
+        SetMarketOfferStatusAsExpired::dispatch($offer)->delay(3600);
+
+        $this->assertEquals($offer->status, MarketOfferStatusEnum::ACTIVE);
+
+        Queue::assertPushed(SetMarketOfferStatusAsExpired::class, function ($job) use ($offer) {
+            return $job->delay === 3600;
+        });
     }
 }
