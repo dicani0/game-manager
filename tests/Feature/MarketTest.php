@@ -6,6 +6,7 @@ use App\Enums\MarketOfferRequestStatusEnum;
 use App\Enums\MarketOfferStatusEnum;
 use App\Enums\OfferTypeEnum;
 use App\Jobs\Market\SetMarketOfferStatusAsExpired;
+use App\Mail\MarketOfferExpired;
 use App\Models\Items\Item;
 use App\Models\Items\UserItem;
 use App\Models\Market\MarketOffer;
@@ -14,6 +15,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
@@ -649,6 +651,7 @@ class MarketTest extends TestCase
 
     public function test_market_offer_expiration(): void
     {
+        Mail::fake();
         $offer = MarketOffer::factory()->create([
             'user_id' => $this->user->getKey(),
             'expires_at' => now()->addDay(),
@@ -665,6 +668,10 @@ class MarketTest extends TestCase
         $job->handle();
 
         $this->assertEquals($offer->status, MarketOfferStatusEnum::EXPIRED);
+
+        Mail::assertSent(MarketOfferExpired::class, function (MarketOfferExpired $mail) use ($offer) {
+            return $mail->hasTo($offer->user->email);
+        });
     }
 
     public function test_market_offer_expiration_job_delay(): void
