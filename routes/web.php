@@ -43,6 +43,7 @@ Route::prefix('market')->group(function () {
         Route::post('/{offer}/buy', [MarketController::class, 'createBuyOffer']);
         //market offers
         Route::get('/my', [MarketController::class, 'userOffers']);
+        Route::get('/history', [MarketController::class, 'history']);
         Route::post('/', [MarketController::class, 'store']);
         Route::delete('/{offer}', [MarketController::class, 'cancel']);
 

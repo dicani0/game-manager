@@ -1,6 +1,6 @@
 <template>
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-gray-900 text-white">
-        <h1 class="text-3xl font-bold mb-6">Your offers</h1>
+        <h1 class="text-3xl font-bold mb-6">{{ $page.url.includes('my') ? 'Your Offers' : 'Offers History' }}</h1>
 
         <div class="flex flex-col gap-4">
 
@@ -9,6 +9,7 @@
                  :class="{'border-pulse border-4 bg-cyan-900': offer.promoted}">
                 <Transition>
                     <div>
+                        <h3 class="text-center"> <span class="text-3xl font-bold uppercase" :class="{}">{{ offer.type }} offer</span><span class="text-2xl text-gray-600">({{ offer.status }})</span></h3>
                         <div class="flex flex-col mt-2">
                             <p class="font-semibold">AT price: {{ offer.at_price }}</p>
                             <p class="font-semibold">LAT price: {{ offer.lat_price }}</p>
@@ -23,7 +24,7 @@
                             <p class="text-sm text-gray-400">Created at: {{ parseDate(offer.created_at) }}</p>
                             <p class="text-sm text-gray-400">Expires at: {{ parseDate(offer.expires_at) }}</p>
                         </div>
-                        <div class="flex justify-between mt-6">
+                        <div class="flex justify-between mt-6" v-if="offer.status === MarketOfferStatusEnum.Active">
                             <button @click="cancelOffer(offer)"
                                     class="w-full sm:w-auto mt-2 sm:mt-0 sm:ml-2 px-4 py-2 bg-amber-900 rounded hover:bg-amber-800 transition-all duration-150">
                                 Cancel Offer
@@ -72,13 +73,15 @@
             </div>
         </div>
         <div class="flex justify-between my-4">
-            <button @click="previousPage"
+            <button v-if="usePage().props.offers.prev_page_url"
+                    @click="previousPage"
                     :disabled="!props.offers.prev_page_url"
                     :class="{'cursor-not-allowed bg-gray-600 !hover:bg-gray-700': !props.offers.prev_page_url}"
                     class="px-4 py-2 bg-blue-700 rounded transition-all duration-150"
             >Previous Page
             </button>
-            <button @click="nextPage"
+            <button v-if="usePage().props.offers.next_page_url"
+                    @click="nextPage"
                     :disabled="!props.offers.next_page_url"
                     :class="{'cursor-not-allowed bg-gray-600 !hover:bg-gray-700': !props.offers.next_page_url}"
                     class="px-4 py-2 bg-blue-700 rounded transition-all duration-150"
@@ -89,11 +92,12 @@
 </template>
 
 <script setup>
-import {router} from "@inertiajs/vue3";
+import {router, usePage} from "@inertiajs/vue3";
 import moment from "moment";
 import {ref} from "vue";
 import Toast from "@/Utility/Toast.js";
 import {useToast} from "vue-toastification";
+import {MarketOfferStatusEnum} from "@/Enums/MarketOfferStatusEnum.ts";
 
 let page = ref(1);
 

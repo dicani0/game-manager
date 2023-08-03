@@ -32,6 +32,9 @@
                                 <Link href="/market/my" class="block px-4 py-2 hover:bg-gray-200 hover:text-black">My Offers</Link>
                             </li>
                             <li>
+                                <Link href="/market/history" class="block px-4 py-2 hover:bg-gray-200 hover:text-black">History</Link>
+                            </li>
+                            <li>
                                 <Link href="/market/requests" class="block px-4 py-2 hover:bg-gray-200 hover:text-black">Requests</Link>
                             </li>
                             <li>

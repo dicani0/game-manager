@@ -72,13 +72,15 @@
             </div>
         </div>
         <div class="flex justify-between my-4">
-            <button @click="previousPage"
+            <button v-if="usePage().props.offers.prev_page_url"
+                    @click="previousPage"
                     :disabled="!props.offers.prev_page_url"
                     :class="{'cursor-not-allowed bg-gray-600 !hover:bg-gray-700': !props.offers.prev_page_url}"
                     class="px-4 py-2 bg-blue-700 rounded transition-all duration-150"
             >Previous Page
             </button>
-            <button @click="nextPage"
+            <button v-if="usePage().props.offers.next_page_url"
+                    @click="nextPage"
                     :disabled="!props.offers.next_page_url"
                     :class="{'cursor-not-allowed bg-gray-600 !hover:bg-gray-700': !props.offers.next_page_url}"
                     class="px-4 py-2 bg-blue-700 rounded transition-all duration-150"
@@ -134,7 +136,7 @@
 <script setup>
 import {router, usePage} from "@inertiajs/vue3";
 import moment from "moment";
-import {computed, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import Modal from "@/Components/Modal.vue";
 import {useToast} from "vue-toastification";
 
@@ -143,6 +145,10 @@ let filters = ref({seller: '', at_price: '', lat_price: '', item: ''});
 
 const modalOpen = ref(false);
 const selectedOffer = ref(null);
+
+onMounted(() => {
+    console.log(usePage().props.offers.next_page_url);
+});
 
 const tradeRequest = ref({
     lat_price: '',

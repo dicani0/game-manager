@@ -11,4 +11,5 @@ enum MarketOfferStatusEnum: string
     case INACTIVE = 'inactive';
     case CANCELED = 'canceled';
     case FINISHED = 'finished';
+    case EXPIRED = 'expired';
 }

@@ -46,10 +46,6 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @method static Builder|MarketOffer whereType($value)
  * @method static Builder|MarketOffer whereUpdatedAt($value)
  * @method static Builder|MarketOffer whereUserId($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Market\MarketOfferItem> $items
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Market\TradeOffer> $offers
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Market\MarketOfferItem> $items
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Market\TradeOffer> $offers
  * @mixin \Eloquent
  */
 class MarketOffer extends Model
