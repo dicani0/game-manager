@@ -7,6 +7,7 @@ use App\Tasks\Market\AttachMarketOfferItemsTask;
 use App\Tasks\Market\CalculateReservedCosmeticAmountAfterOfferCreationTask;
 use App\Tasks\Market\CreateMarketOfferTask;
 use App\Tasks\Market\HandleOfferPromotionTask;
+use App\Tasks\Market\SetMarketOfferAsExpiredTask;
 
 class CreateMarketOfferProcess extends Process
 {
@@ -15,5 +16,6 @@ class CreateMarketOfferProcess extends Process
         CreateMarketOfferTask::class,
         AttachMarketOfferItemsTask::class,
         CalculateReservedCosmeticAmountAfterOfferCreationTask::class,
+        SetMarketOfferAsExpiredTask::class,
     ];
 }

@@ -13,7 +13,7 @@ class CalculateReservedCosmeticAmountAfterOfferCancellationTask
 
     public function handle(CancelMarketOfferDto $dto, \Closure $next): CancelMarketOfferDto
     {
-        $this->action->handle($dto);
+        $this->action->handle($dto->user, $dto->offer);
         return $next($dto);
     }
 }

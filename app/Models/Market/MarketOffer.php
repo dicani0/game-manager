@@ -2,6 +2,7 @@
 
 namespace App\Models\Market;
 
+use App\Enums\MarketOfferStatusEnum;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -53,6 +54,11 @@ class MarketOffer extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    protected $casts = [
+        'status' => MarketOfferStatusEnum::class,
+        'expires_at' => 'datetime',
+    ];
 
     public function user(): BelongsTo
     {

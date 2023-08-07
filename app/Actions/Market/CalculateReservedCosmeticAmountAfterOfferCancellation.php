@@ -2,16 +2,17 @@
 
 namespace App\Actions\Market;
 
-use App\Data\Market\CancelMarketOfferDto;
+use App\Models\Market\MarketOffer;
+use App\Models\User;
 
 class CalculateReservedCosmeticAmountAfterOfferCancellation
 {
-    public function handle(CancelMarketOfferDto $dto): void
+    public function handle(User $user, MarketOffer $offer): void
     {
-        $dto->user->items()
-            ->whereIn('item_id', $dto->offer->items->pluck('item_id'))
-            ->each(function ($cosmetic) use ($dto) {
-                $cosmetic->pivot->reserved_amount -= $dto->offer->items->where('item_id', $cosmetic->getKey())->first()->amount;
+        $user->items()
+            ->whereIn('item_id', $offer->items->pluck('item_id'))
+            ->each(function ($cosmetic) use ($offer) {
+                $cosmetic->pivot->reserved_amount -= $offer->items->where('item_id', $cosmetic->getKey())->first()->amount;
                 $cosmetic->pivot->save();
             });
     }
