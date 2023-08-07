@@ -649,6 +649,42 @@ class MarketTest extends TestCase
         ]);
     }
 
+    public function test_offers_history(): void
+    {
+        $offer = MarketOffer::factory()->create([
+            'user_id' => $this->user->getKey(),
+            'status' => MarketOfferStatusEnum::EXPIRED
+        ]);
+
+        MarketOffer::factory()->create([
+            'user_id' => $this->user->getKey(),
+            'status' => MarketOfferStatusEnum::ACTIVE
+        ]);
+
+        MarketOffer::factory()->create([
+            'user_id' => $this->user->getKey(),
+            'status' => MarketOfferStatusEnum::FINISHED
+        ]);
+
+        MarketOffer::factory()->create([
+            'user_id' => $this->user->getKey(),
+            'status' => MarketOfferStatusEnum::CANCELED
+        ]);
+
+        $this->actingAs($this->user)->get('/market/history')
+            ->assertInertia(
+                fn(AssertableInertia $page) => $page
+                    ->component('Market/MyOffers')
+                    ->has(
+                        'offers.data',
+                        3,
+                        fn(AssertableInertia $page) => $page
+                            ->where('id', $offer->getKey())
+                            ->etc()
+                    )
+            );
+    }
+
     public function test_market_offer_expiration(): void
     {
         Mail::fake();

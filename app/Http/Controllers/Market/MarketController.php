@@ -16,6 +16,7 @@ use App\Processes\Market\CancelMarketOfferProcess;
 use App\Processes\Market\CreateBuyOfferRequestProcess;
 use App\Processes\Market\CreateMarketOfferProcess;
 use App\Queries\Market\MarketOffersWithoutUserQuery;
+use App\Queries\Market\UserMarketOffersHistoryQuery;
 use App\Queries\Market\UserMarketOffersQuery;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -33,6 +34,13 @@ class MarketController extends Controller
     }
 
     public function userOffers(UserOfferIndexRequest $request, UserMarketOffersQuery $query): Response
+    {
+        return Inertia::render('Market/MyOffers', [
+            'offers' => $query->handle()->paginate(),
+        ]);
+    }
+
+    public function history(Request $request, UserMarketOffersHistoryQuery $query): Response
     {
         return Inertia::render('Market/MyOffers', [
             'offers' => $query->handle()->paginate(),
