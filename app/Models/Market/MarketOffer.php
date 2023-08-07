@@ -2,6 +2,7 @@
 
 namespace App\Models\Market;
 
+use App\Enums\MarketOfferStatusEnum;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -46,10 +47,6 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @method static Builder|MarketOffer whereType($value)
  * @method static Builder|MarketOffer whereUpdatedAt($value)
  * @method static Builder|MarketOffer whereUserId($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Market\MarketOfferItem> $items
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Market\TradeOffer> $offers
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Market\MarketOfferItem> $items
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Market\TradeOffer> $offers
  * @mixin \Eloquent
  */
 class MarketOffer extends Model
@@ -57,6 +54,11 @@ class MarketOffer extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    protected $casts = [
+        'status' => MarketOfferStatusEnum::class,
+        'expires_at' => 'datetime',
+    ];
 
     public function user(): BelongsTo
     {

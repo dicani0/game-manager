@@ -16,7 +16,7 @@ class MarketOffersWithoutUserQuery
             ->with(['items', 'items.cosmetic', 'user'])
             ->orderBy('promoted', 'desc')
             ->whereNot('user_id', Auth::user()?->getKey())
-            ->where('status', MarketOfferStatusEnum::ACTIVE->value)
+            ->where('status', MarketOfferStatusEnum::ACTIVE)
             ->allowedFilters([
                 AllowedFilter::exact('seller', 'user_id'),
                 AllowedFilter::scope('lat_price', 'maxLatPrice'),
