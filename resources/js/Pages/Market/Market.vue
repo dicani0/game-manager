@@ -146,10 +146,6 @@ let filters = ref({seller: '', at_price: '', lat_price: '', item: ''});
 const modalOpen = ref(false);
 const selectedOffer = ref(null);
 
-onMounted(() => {
-    console.log(usePage().props.offers.next_page_url);
-});
-
 const tradeRequest = ref({
     lat_price: '',
     at_price: '',

@@ -9,6 +9,7 @@
 import {Head} from "@inertiajs/vue3";
 import Nav from "@/Components/Nav.vue";
 import {useToast} from "vue-toastification";
+import {watch} from "vue";
 
 export default {
     components: {
@@ -21,10 +22,16 @@ export default {
         }
     },
     created() {
-        if (this.$page.props.flash.success)
-            setTimeout(() => {
+        watch(() => this.$page.props.errors, () => {
+            Object.values(this.$page.props.errors).forEach(error => {
+                useToast().error(error);
+            });
+        })
+        watch(() => this.$page.props.flash.success, () => {
+            if (this.$page.props.flash.success) {
                 useToast().success(this.$page.props.flash.success);
-            }, 0);
+            }
+        })
     }
 };
 </script>

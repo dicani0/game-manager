@@ -59,16 +59,7 @@ export default {
     },
     methods: {
         login() {
-            this.form.post('/auth/login', {
-                onSuccess: (message) => {
-                    useToast().success(message.props.flash.success)
-                },
-                onError: (errors) => {
-                    Object.values(errors).forEach((error) => {
-                        useToast().error(error);
-                    });
-                },
-            });
+            this.form.post('/auth/login');
         }
     }
 }
