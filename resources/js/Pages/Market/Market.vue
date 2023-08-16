@@ -48,7 +48,7 @@
                 <p class="mt-4 text-gray-300">{{ offer.description }}</p>
                 <div class="grid grid-cols-2 gap-2 mt-4">
                     <div v-for="item in offer.items" class="py-2 px-2 bg-gray-800 rounded text-center">
-                        <p class="text-gray-300 italic">{{ item.amount }}x {{ item.cosmetic.name }}</p>
+                        <p class="text-gray-300 italic">{{ item.amount }}x {{ item.item.name }}</p>
                     </div>
                 </div>
                 <div class="mr-auto mt-2">
@@ -118,7 +118,7 @@
                 <div v-for="item in selectedOffer.items" :key="item.id" class="flex items-center justify-between">
                     <div class="flex items-center">
                         <input type="checkbox" :id="'item-' + item.id" v-model="tradeRequest.items" :value="item.id">
-                        <label :for="'item-' + item.id" class="ml-2">{{ item.cosmetic.name }}</label>
+                        <label :for="'item-' + item.id" class="ml-2">{{ item.item.name }}</label>
                     </div>
                     <input type="number" v-model="tradeRequest.itemAmounts[item.id]" class="w-20 bg-indigo-500" :min="1" :max="item.amount">
                 </div>
@@ -145,10 +145,6 @@ let filters = ref({seller: '', at_price: '', lat_price: '', item: ''});
 
 const modalOpen = ref(false);
 const selectedOffer = ref(null);
-
-onMounted(() => {
-    console.log(usePage().props.offers.next_page_url);
-});
 
 const tradeRequest = ref({
     lat_price: '',

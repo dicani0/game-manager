@@ -20,5 +20,17 @@ export default {
             return this.$page.props.errors;
         }
     },
+    mounted() {
+        this.listenForTradeOffers();
+    },
+    methods: {
+        listenForTradeOffers() {
+            console.log('Listening for trade offers');
+            Echo.private(`trade-offers.${this.$page.props.auth.user.id}`)
+                .listen('TradeOfferCreated', (e) => {
+                    console.log('Trade offer created');
+                })
+        }
+    }
 };
 </script>
