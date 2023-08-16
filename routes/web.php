@@ -3,14 +3,14 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\ProfileController;
+use App\Http\Controllers\Auth\PusherController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Character\CharacterController;
-use App\Http\Controllers\Items\ItemController;
 use App\Http\Controllers\Guild\GuildController;
+use App\Http\Controllers\Items\ItemController;
 use App\Http\Controllers\Items\UserItemController;
 use App\Http\Controllers\Market\MarketController;
 use App\Http\Controllers\Market\MarketOfferRequestController;
-use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -24,9 +24,6 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Broadcast::routes();
-
 Route::get('/', function () {
     return Inertia::render('Home');
 });

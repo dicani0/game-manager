@@ -29,7 +29,6 @@ class CreateTradeOffer
             'message' => $dto->message,
         ]);
 
-        Log::info('About to broadcast event.');
         event(new TradeOfferCreated($dto->tradeOffer));
     }
 }
