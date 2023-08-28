@@ -94,7 +94,7 @@
 <script setup>
 import {router, usePage} from "@inertiajs/vue3";
 import moment from "moment";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import Toast from "@/Utility/Toast.js";
 import {useToast} from "vue-toastification";
 import {MarketOfferStatusEnum} from "@/Enums/MarketOfferStatusEnum.ts";

@@ -15,7 +15,7 @@ const appName = window.document.getElementsByTagName('title')[0]?.innerText || '
 
 
 createInertiaApp({
-    title: (title) => `${title}`,
+    title: (title) => !!title ? `${appName} | ` + title : appName,
     resolve: (name) => {
         const pages = import.meta.glob('./Pages/**/*.vue', { eager: true})
         let page = pages[`./Pages/${name}.vue`]
