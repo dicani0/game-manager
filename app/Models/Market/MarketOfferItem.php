@@ -3,6 +3,7 @@
 namespace App\Models\Market;
 
 use App\Models\Items\Item;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,15 +19,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read Item $cosmetic
  * @property-read \App\Models\Market\MarketOffer|null $offer
- * @method static \Illuminate\Database\Eloquent\Builder|MarketOfferItem newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|MarketOfferItem newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|MarketOfferItem query()
- * @method static \Illuminate\Database\Eloquent\Builder|MarketOfferItem whereAmount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|MarketOfferItem whereCosmeticId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|MarketOfferItem whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|MarketOfferItem whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|MarketOfferItem whereMarketOfferId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|MarketOfferItem whereUpdatedAt($value)
+ * @method static Builder|MarketOfferItem newModelQuery()
+ * @method static Builder|MarketOfferItem newQuery()
+ * @method static Builder|MarketOfferItem query()
+ * @method static Builder|MarketOfferItem whereAmount($value)
+ * @method static Builder|MarketOfferItem whereCosmeticId($value)
+ * @method static Builder|MarketOfferItem whereCreatedAt($value)
+ * @method static Builder|MarketOfferItem whereId($value)
+ * @method static Builder|MarketOfferItem whereMarketOfferId($value)
+ * @method static Builder|MarketOfferItem whereUpdatedAt($value)
+ * @property int $item_id
+ * @property-read Item $item
+ * @method static Builder|MarketOfferItem whereItemId($value)
  * @mixin \Eloquent
  */
 class MarketOfferItem extends Model

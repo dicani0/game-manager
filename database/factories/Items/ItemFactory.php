@@ -2,10 +2,11 @@
 
 namespace Database\Factories\Items;
 
+use App\Models\Items\Item;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Items\Item>
+ * @extends Factory<Item>
  */
 class ItemFactory extends Factory
 {
@@ -17,7 +18,7 @@ class ItemFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->word(),
+            'name' => fake()->company,
             'usable_amount' => fake()->numberBetween(1, 5),
         ];
     }
