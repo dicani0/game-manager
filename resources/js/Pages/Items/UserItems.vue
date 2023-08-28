@@ -1,39 +1,52 @@
 <template>
     <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex">
         <div class="w-5/6 mr-4">
-            <div class="flex justify-between items-center mb-6">
-                <h1 class="text-3xl font-bold text-gray-200">User's Items</h1>
-                <button @click="openImportModal = true"
-                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Import
+            <div class="flex justify-between items-center mb-6 text-center">
+                <h1 class="text-3xl flex-grow font-bold text-gray-200">Your items</h1>
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        @click="openImportModal = true">Import
                 </button>
             </div>
             <ul class="grid grid-cols-5 gap-4 text-xs">
                 <li v-for="item in items" :key="item.name"
-                    class="p-4 flex flex-col justify-between items-start hover:scale-110 bg-gray-800 hover:bg-cyan-900 transition-all rounded-lg">
-                    <div class="flex-grow">
-                        <p></p>
-                        <p class="text-lg font-medium text-gray-200 mb-2">{{ item.item_name }}</p>
-                        <p class="text-gray-400">Amount: {{ item.amount }}</p>
-                        <p :class="{ 'text-red-600': item.available_amount <= 0, 'text-green-600': item.available_amount > 0 }"
-                           class="text-gray-400">
-                            Available amount: {{ item.available_amount }}
-                        </p>
-                        <p class="text-gray-400">Sold amount: {{ item.sold_amount }}</p>
-                        <p class="text-gray-400">Used amount: {{ item.used_amount }}</p>
-                        <p class="text-gray-400">Reserved amount: {{ item.reserved_amount }}</p>
+                    class="p-4 flex flex-col justify-between items-start hover:scale-110 bg-gray-800 hover:bg-cyan-900 hover:z-50 transition-all rounded-lg relative group">
+                    <p class="text-2xl font-medium text-gray-200 mb-2">{{ item.item_name }}</p>
+                    <div class="flex flex-row justify-between w-full">
+                        <div class="">
+                            <p></p>
+                            <p class="text-gray-400">Amount: {{ item.amount }}</p>
+                            <p :class="{ 'text-red-600': item.available_amount <= 0, 'text-green-600': item.available_amount > 0 }"
+                               class="text-gray-400">
+                                Available amount: {{ item.available_amount }}
+                            </p>
+                            <p class="text-gray-400">Sold amount: {{ item.sold_amount }}</p>
+                            <p class="text-gray-400">Used amount: {{ item.used_amount }}</p>
+                            <p class="text-gray-400">Reserved amount: {{ item.reserved_amount }}</p>
+                        </div>
+                        <div
+                            class="">
+                            <div class="mb-4">
+                                <p class="text-2xl">Tier: {{ item.tier }}</p>
+                                <p class="text-xl">Power: {{ item.power }}</p>
+                            </div>
+                            <p v-for="attribute in item.attributes" class="italic">
+                                {{ attribute.name }}: {{ attribute.value }}
+                            </p>
+                        </div>
                     </div>
                     <div class="flex gap-2">
-                        <button @click="addItemToSale(item)"
-                                :disabled="item.available_amount <= 0"
-                                class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-1 px-2 rounded"
-                                :class="{ '!bg-gray-500 !hover:bg-gray-500 cursor-not-allowed': item.available_amount <= 0}">
+                        <button
+                            :class="{ '!bg-gray-500 !hover:bg-gray-500 cursor-not-allowed': item.available_amount <= 0}"
+                            :disabled="item.available_amount <= 0"
+                            class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-1 px-2 rounded"
+                            @click="addItemToSale(item)">
                             Sell
                         </button>
-                        <button @click="openUpdateModal(item)"
-                                class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded">Update
+                        <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded"
+                                @click="openUpdateModal(item)">Update
                         </button>
-                        <button @click="deleteItem(item)"
-                                class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">Delete
+                        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+                                @click="deleteItem(item)">Delete
                         </button>
                     </div>
                 </li>
@@ -47,8 +60,12 @@
                 <div v-if="selectedItemsForSale.length > 0">
                     <div class="flex items-center mb-4">
                         <div class="tooltip-container">
-                            <input :disabled="usePage().props.auth.user.available_promotes < 1" type="checkbox" id="promote" class="form-checkbox bg-blue-700 h-5 w-5 text-blue-600" v-model="promote">
-                            <label for="promote" class="ml-2 text-gray-300">Promote this offer(Available promotes: {{ usePage().props.auth.user.available_promotes }}).</label>
+                            <input id="promote" v-model="promote"
+                                   :disabled="usePage().props.auth.user.available_promotes < 1"
+                                   class="form-checkbox bg-blue-700 h-5 w-5 text-blue-600"
+                                   type="checkbox">
+                            <label class="ml-2 text-gray-300" for="promote">Promote this offer(Available promotes:
+                                {{ usePage().props.auth.user.available_promotes }}).</label>
                             <div class="tooltip-text">
                                 Warning: You won't get your promotion back if you cancel this offer.
                             </div>
@@ -58,81 +75,82 @@
                     <div class="mb-2">
                         <label class="block text-gray-300 text-sm font-bold mb-2" for="content">Price in LATs</label>
                         <input
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            v-model.number="latPrice"/>
+                            v-model.number="latPrice"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-300 text-sm font-bold mb-2" for="content">Price in ATs</label>
                         <input
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            v-model.number="atPrice"/>
+                            v-model.number="atPrice"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
                     </div>
                     <div>
                         <label class="block text-gray-300 text-sm font-bold mb-2" for="content">Description</label>
                         <textarea
-                            rows="5"
+                            v-model="description"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            v-model="description"></textarea>
+                            rows="5"></textarea>
                     </div>
                 </div>
             </Transition>
 
             <div class="flex">
                 <button
-                    @click="createMarketOffer"
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 w-full mb-4"
                     :class="{ 'cursor-not-allowed bg-gray-900 hover:bg-gray-900': selectedItemsForSale.length === 0 }"
-                    :disabled="selectedItemsForSale.length === 0">Create Offer
+                    :disabled="selectedItemsForSale.length === 0"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 w-full mb-4"
+                    @click="createMarketOffer">Create Offer
                 </button>
                 <button
-                    @click="clearSaleItems"
-                    class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 w-full mb-4"
                     :class="{ 'cursor-not-allowed !bg-gray-900 !hover:bg-gray-900': selectedItemsForSale.length === 0 }"
-                    :disabled="selectedItemsForSale.length === 0">Clear
+                    :disabled="selectedItemsForSale.length === 0"
+                    class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 w-full mb-4"
+                    @click="clearSaleItems">Clear
                 </button>
             </div>
             <ul class="mb-4">
                 <li v-for="item in selectedItemsForSale" :key="item.id" class="mb-2 flex items-center border-b pb-2">
                     <div class="flex items-center justify-between w-full">
                         <div class="flex items-center w-full">
-                            <button @click="deleteItemFromSale(item)"
-                                    class="bg-red-500 px-1 py-1 rounded inline-flex mr-2">
+                            <button class="bg-red-500 px-1 py-1 rounded inline-flex mr-2"
+                                    @click="deleteItemFromSale(item)">
                                 <vue-feather type="trash"></vue-feather>
                             </button>
                             <span>{{ item.item_name }}</span>
                         </div>
-                        <input type="number" min="1" class="w-14 h-100 p-2 bg-gray-800 text-white rounded-xl"
-                               v-model.number="item.sell_amount"/>
+                        <input v-model.number="item.sell_amount"
+                               class="w-14 h-100 p-2 bg-gray-800 text-white rounded-xl" min="1"
+                               type="number"/>
                     </div>
                 </li>
             </ul>
         </div>
 
-        <Modal :open="openEditModal" @close="openEditModal = false" :width="'w-1/6'" class="transition-all">
+        <Modal :open="openEditModal" :width="'w-1/6'" class="transition-all" @close="openEditModal = false">
             <form class="flex flex-col items-center w-full text-center p-4" @submit.prevent="updateAmount">
                 <div class="mb-4 w-full">
                     <h2 class="text-xl mb-4">{{ selectedItem?.item_name }}</h2>
                     <label class="block text-gray-300 text-sm font-bold mb-2" for="content">All amount</label>
                     <input
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="all_amount"
                         v-model="updateItemForm.amount"
-                        type="number"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required
-                        id="all_amount">
+                        type="number">
                     <label class="block text-gray-300 text-sm font-bold mb-2" for="content">Sold amount</label>
                     <input
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="sold_amount"
                         v-model="updateItemForm.sold_amount"
-                        type="number"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required
-                        id="sold_amount">
+                        type="number">
                     <label class="block text-gray-300 text-sm font-bold mb-2" for="content">Used amount</label>
                     <input
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="used_amount"
                         v-model="updateItemForm.used_amount"
-                        type="number"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required
-                        id="used_amount">
+                        type="number">
                 </div>
                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-2/6"
                         type="submit">Update
@@ -148,11 +166,11 @@
                     <label class="block text-gray-300 text-sm font-bold mb-2" for="content">Copy paste your exclusives
                         list</label>
                     <textarea
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="content"
                         v-model="importForm.content"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required
-                        rows="20"
-                        id="content"></textarea>
+                        rows="20"></textarea>
                 </div>
                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
                         type="submit">Import
@@ -351,6 +369,19 @@ const createMarketOffer = async () => {
 }
 
 .tooltip-container:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+.item-detail {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    /* Add other styles as needed */
+}
+
+.group:hover .item-detail {
     visibility: visible;
     opacity: 1;
 }
