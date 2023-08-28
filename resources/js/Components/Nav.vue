@@ -68,7 +68,7 @@
                         </Link>
                     </li>
                     <li v-if="!user">
-                        <Link href="/auth/register" :class="{ 'text-teal-300': $page.component === 'Auth/Register' }" class="flex items-center text-lg font-semibold hover:text-orange-300 transition-all duration-200">
+                        <Link href="/auth/register" :class="{ 'text-teal-300': $page.component === 'Auth/Register' }" class="flex items-center text-lg font-bold text-yellow-300 hover:text-orange-300 transition-all duration-200">
                             <vue-feather type="user-plus" class="mr-2"></vue-feather> Register
                         </Link>
                     </li>

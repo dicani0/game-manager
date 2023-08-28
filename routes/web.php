@@ -1,12 +1,15 @@
 <?php
 
+use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Character\CharacterController;
-use App\Http\Controllers\Items\ItemController;
 use App\Http\Controllers\Guild\GuildController;
+use App\Http\Controllers\Items\ItemController;
 use App\Http\Controllers\Items\UserItemController;
 use App\Http\Controllers\Market\MarketController;
 use App\Http\Controllers\Market\MarketOfferRequestController;
@@ -71,12 +74,21 @@ Route::prefix('items')->middleware('auth')->group(function () {
 });
 
 Route::prefix('auth')->group(function () {
+    Route::get('email/{id}/{hash}', [EmailVerificationController::class, 'verify'])->name('verification.verify');
     Route::middleware('guest')->group(function () {
         Route::inertia('register', 'Auth/Register')->name('register');
         Route::inertia('login', 'Auth/Login')->name('login');
-
         Route::post('register', RegisterController::class);
         Route::post('login', LoginController::class);
+
+        Route::inertia('forgot-password', 'Auth/ForgotPassword')->name('password.request');
+        Route::post('forgot-password', ResetPasswordController::class)->name('password.email');
+        Route::get('/reset-password/{token}', [NewPasswordController::class, 'get'])->name('password.reset');
+        Route::post('/reset-password', [NewPasswordController::class, 'post'])->name('password.update');
+
+        Route::inertia('resend-verification', 'Auth/ResendVerificationEmail')->name('verification.resend');
+
+
     });
 
     Route::middleware('auth')->group(function () {

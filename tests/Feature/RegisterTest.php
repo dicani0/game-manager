@@ -9,6 +9,7 @@ use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
 
@@ -30,6 +31,8 @@ class RegisterTest extends TestCase
 
     public function test_register(): void
     {
+        Notification::fake();
+
         $request = new RegisterRequest();
         $request->merge([
             'name' => 'test',
