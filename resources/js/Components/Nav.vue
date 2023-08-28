@@ -91,7 +91,9 @@
                                 <Link href="/characters" class="block px-4 py-2 hover:bg-gray-200 hover:text-black">Characters</Link>
                             </li>
                             <li>
-                                <Link href="/settings" class="block px-4 py-2 hover:bg-gray-200 hover:text-black">Settings</Link>
+                                <Link class="block px-4 py-2 hover:bg-gray-200 hover:text-black" href="/auth/settings">
+                                    Settings
+                                </Link>
                             </li>
                             <li>
                                 <Link href="/auth/logout" class="block px-4 py-2 hover:bg-gray-200 hover:text-black">Logout</Link>
@@ -108,6 +110,7 @@
 
 <script>
 import {Link} from "@inertiajs/vue3";
+
 export default {
     components: {
         Link

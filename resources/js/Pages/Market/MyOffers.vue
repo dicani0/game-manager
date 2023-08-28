@@ -94,12 +94,10 @@
 <script setup>
 import {router, usePage} from "@inertiajs/vue3";
 import moment from "moment";
-import {onMounted, ref} from "vue";
+import {ref} from "vue";
 import Toast from "@/Utility/Toast.js";
 import {useToast} from "vue-toastification";
 import {MarketOfferStatusEnum} from "@/Enums/MarketOfferStatusEnum.ts";
-
-let page = ref(1);
 
 const props = defineProps({
     offers: Object,

@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\SettingsController;
 use App\Http\Controllers\Character\CharacterController;
 use App\Http\Controllers\Guild\GuildController;
 use App\Http\Controllers\Items\ItemController;
@@ -94,5 +95,7 @@ Route::prefix('auth')->group(function () {
     Route::middleware('auth')->group(function () {
         Route::get('profile', ProfileController::class);
         Route::get('logout', LogoutController::class);
+        Route::get('settings', [SettingsController::class, 'get']);
+        Route::patch('settings', [SettingsController::class, 'patch']);
     });
 });

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('discord_name')->nullable();
+            $table->boolean('private')->default(true);
             $table->rememberToken();
             $table->timestamps();
         });
