@@ -13,7 +13,7 @@ class MarketOffersWithoutUserQuery
     public function handle(): QueryBuilder
     {
         return QueryBuilder::for(MarketOffer::class)
-            ->with(['items', 'items.cosmetic', 'user'])
+            ->with(['items', 'items.item', 'user'])
             ->orderBy('promoted', 'desc')
             ->whereNot('user_id', Auth::user()?->getKey())
             ->where('status', MarketOfferStatusEnum::ACTIVE)

@@ -4,6 +4,8 @@ namespace App\Actions\Market\TradeOffers;
 
 use App\Data\Market\CreateTradeOfferDto;
 use App\Enums\OfferTypeEnum;
+use App\Events\Market\TradeOfferCreated;
+use Illuminate\Support\Facades\Log;
 
 class CreateTradeOffer
 {
@@ -16,7 +18,7 @@ class CreateTradeOffer
             config('market.max_offers_enabled')
             && $dto->offer->offers()->where('user_id', $dto->creator->getKey())->count() >= config('market.max_offers_per_user', 5)
         ) {
-            throw new \Exception('You can only have 3 offers per market offer!');
+            throw new \Exception('You can only have ' . config('max_offers_per_user') . ' offers per market offer!');
         }
 
         $dto->tradeOffer = $dto->offer->offers()->create([
@@ -26,5 +28,7 @@ class CreateTradeOffer
             'type' => OfferTypeEnum::BUY->value,
             'message' => $dto->message,
         ]);
+
+        event(new TradeOfferCreated($dto->tradeOffer));
     }
 }

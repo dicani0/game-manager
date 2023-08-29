@@ -28,7 +28,7 @@ class CreateBuyOfferRequest extends FormRequest
             'at_price' => ['required', 'numeric', 'min:0'],
             'message' => ['nullable', 'string', 'max:255'],
             'items' => ['required', 'array'],
-            'items.*.id' => ['required', 'numeric', 'exists:cosmetics,id'],
+            'items.*.id' => ['required', 'numeric', 'exists:items,id'],
             'items.*.amount' => ['required', 'numeric', 'min:1'],
         ];
     }

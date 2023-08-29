@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Enums\MarketOfferRequestStatusEnum;
 use App\Enums\MarketOfferStatusEnum;
 use App\Enums\OfferTypeEnum;
+use App\Events\Market\TradeOfferCreated;
 use App\Jobs\Market\SetMarketOfferStatusAsExpired;
 use App\Mail\MarketOfferExpired;
 use App\Models\Items\Item;
@@ -15,6 +16,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
 use Inertia\Testing\AssertableInertia;
@@ -123,6 +125,46 @@ class MarketTest extends TestCase
             'sold_amount' => 0,
             'reserved_amount' => 1,
         ]);
+    }
+
+    public function test_create_buy_offer(): void
+    {
+        Event::fake();
+        $buyer = User::factory()->create();
+
+        $marketOffer = MarketOffer::factory()->create([
+            'user_id' => $this->user->getKey(),
+        ]);
+
+        $response = $this->actingAs($buyer)->post('market/' . $marketOffer->getKey() . '/buy', [
+            'lat_price' => 0,
+            'at_price' => 0,
+            'items' => [
+                [
+                    'id' => $this->item1->getKey(),
+                    'amount' => 1,
+                ],
+                [
+                    'id' => $this->item2->getKey(),
+                    'amount' => 1,
+                ],
+                [
+                    'id' => $this->item3->getKey(),
+                    'amount' => 1,
+                ],
+            ],
+        ]);
+
+        $this->assertDatabaseHas('trade_offers', [
+            'offerable_type' => MarketOffer::class,
+            'user_id' => $buyer->getKey(),
+            'at_price' => 0,
+            'lat_price' => 0,
+            'type' => OfferTypeEnum::BUY->value,
+            'status' => MarketOfferRequestStatusEnum::PENDING->value,
+        ]);
+
+        Event::assertDispatched(TradeOfferCreated::class);
     }
 
     public function test_cancel_market_offer()
