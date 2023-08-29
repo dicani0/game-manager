@@ -3,6 +3,7 @@
 namespace App\Models\Items;
 
 use Database\Factories\Items\ItemFactory;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -22,11 +23,19 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|Item whereId($value)
  * @method static Builder|Item whereName($value)
  * @method static Builder|Item whereUsableAmount($value)
- * @mixin \Eloquent
+ * @property int $tier
+ * @property int $power
+ * @method static Builder|Item wherePower($value)
+ * @method static Builder|Item whereTier($value)
+ * @mixin Eloquent
  */
 class Item extends Model
 {
     use HasFactory;
-    protected $guarded = [];
+
     public $timestamps = false;
+    protected $guarded = ['id'];
+    protected $casts = [
+        'attributes' => 'array',
+    ];
 }
