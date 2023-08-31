@@ -17,6 +17,8 @@ class UserSeeder extends Seeder
             'email' => 'admin@example.com',
             'password' => bcrypt('password'),
             'available_promotes' => 1000,
+            'private' => false,
+            'discord_name' => 'Admin',
         ])->assignRole('admin');
 
         User::factory()->create([
@@ -24,6 +26,8 @@ class UserSeeder extends Seeder
             'email' => 'user@example.com',
             'password' => bcrypt('password'),
             'available_promotes' => 1000,
+            'private' => false,
+            'discord_name' => 'User',
         ])->assignRole('user');
     }
 }

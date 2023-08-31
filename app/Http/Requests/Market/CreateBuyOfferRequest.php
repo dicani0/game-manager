@@ -2,24 +2,15 @@
 
 namespace App\Http\Requests\Market;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateBuyOfferRequest extends FormRequest
+abstract class CreateBuyOfferRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        $offer = $this->route('offer');
-
-        return !$offer->user->is($this->user());
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
+     * @return array<string, ValidationRule|array|string>
      */
     public function rules(): array
     {
@@ -29,7 +20,13 @@ class CreateBuyOfferRequest extends FormRequest
             'message' => ['nullable', 'string', 'max:255'],
             'items' => ['required', 'array'],
             'items.*.id' => ['required', 'numeric', 'exists:items,id'],
-            'items.*.amount' => ['required', 'numeric', 'min:1'],
+            'items.*.amount' => ['required', 'numeric', 'min:1', function ($attribute, $value, $fail) {
+                $item = $this->route('user')->items()->where('item_id', $this->input('items.*.id'))->first();
+
+                if (is_null($item) || $item->pivot->available_amount < $value) {
+                    $fail(__('User does not have enough items.'));
+                }
+            }],
         ];
     }
 }

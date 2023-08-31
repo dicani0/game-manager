@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
@@ -36,7 +37,7 @@ class Handler extends ExceptionHandler
             if ($e instanceof ValidationException) {
                 return redirect()->back()->withInput()->withErrors($e->errors());
             }
-            if ($e instanceof \Exception) {
+            if ($e instanceof Exception) {
                 return redirect()->back()->withErrors(['error' => $e->getMessage()])->with('errorId', uniqid());
             }
         }

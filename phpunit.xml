@@ -20,8 +20,8 @@
     <php>
         <env name="DB_DATABASE" value="game_manager"/>
         <env name="DB_CONNECTION" value="mysql"/>
-        <env name="DB_USERNAME" value="sail"/>
-        <env name="DB_PASSWORD" value="password"/>
+        <env name="DB_USERNAME" value="root"/>
+        <env name="DB_PASSWORD" value=""/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="QUEUE_CONNECTION" value="database"/>
     </php>

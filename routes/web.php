@@ -3,12 +3,13 @@
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Auth\PusherController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
-use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\SettingsController;
+use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Character\CharacterController;
 use App\Http\Controllers\Guild\GuildController;
 use App\Http\Controllers\Items\ItemController;
@@ -44,7 +45,8 @@ Route::prefix('market')->group(function () {
     Route::get('/', [MarketController::class, 'index']);
     Route::middleware('auth')->group(function () {
         //trade requests
-        Route::post('/{offer}/buy', [MarketController::class, 'createBuyOffer']);
+        Route::post('/user/{user}/buy', [MarketController::class, 'createBuyOfferUser']);
+        Route::post('/{offer}/buy', [MarketController::class, 'createBuyOfferMarket']);
         //market offers
         Route::get('/my', [MarketController::class, 'userOffers']);
         Route::get('/history', [MarketController::class, 'history']);
@@ -76,6 +78,7 @@ Route::prefix('items')->middleware('auth')->group(function () {
 
 Route::prefix('auth')->group(function () {
     Route::get('email/{id}/{hash}', [EmailVerificationController::class, 'verify'])->name('verification.verify');
+    Route::get('users', [UserController::class, 'getPublicUsers']);
     Route::middleware('guest')->group(function () {
         Route::inertia('register', 'Auth/Register')->name('register');
         Route::inertia('login', 'Auth/Login')->name('login');

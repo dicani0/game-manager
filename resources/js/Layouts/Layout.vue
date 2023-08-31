@@ -1,6 +1,6 @@
 <template>
     <Head title="Game Helper"/>
-    <div class="min-h-screen bg-gray-900 text-gray-200">
+    <div class="min-h-screen bg-gray-900 text-gray-200 flex flex-col w-100">
         <Nav/>
         <slot></slot>
     </div>
@@ -22,24 +22,28 @@ export default {
             return this.$page.props.errors;
         }
     },
-    mounted() {
-        this.listenForTradeOffers();
-    },
     created() {
         watch(() => this.$page.props.errors, () => {
             Object.values(this.$page.props.errors).forEach(error => {
                 useToast().error(error);
             });
-        })
+        });
         watch(() => this.$page.props.flash.success, () => {
             if (this.$page.props.flash.success) {
                 useToast().success(this.$page.props.flash.success);
             }
-        })
+        });
+        watch(() => this.$page.props.auth.user, (newUser, oldUser) => {
+            if (newUser && !oldUser) {
+                this.listenForTradeOffers();
+            } else if (!newUser && oldUser) {
+                Echo.leaveChannel(`trade-offer.${oldUser.id}`);
+            }
+        }, {immediate: true});
     },
     methods: {
         listenForTradeOffers() {
-            Echo.private(`trade-offer.${this.$page.props.auth.user.id}`)
+            Echo.private(`trade-offer.${this.$page.props.auth.user?.id}`)
                 .listen('.TradeOfferCreated', (e) => {
                     //Check current component
                     if (this.$page.component === 'Market/MyOffers') {

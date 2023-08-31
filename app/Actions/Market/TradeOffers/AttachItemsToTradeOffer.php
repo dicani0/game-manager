@@ -14,6 +14,7 @@ class AttachItemsToTradeOffer
                 'amount' => $item->amount,
             ];
         });
+        
         $dto->tradeOffer->items()->attach($items);
     }
 }
