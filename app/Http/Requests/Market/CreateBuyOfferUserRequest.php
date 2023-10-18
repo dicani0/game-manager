@@ -17,4 +17,17 @@ class CreateBuyOfferUserRequest extends CreateBuyOfferRequest
 
         return $user->isNot(Auth::user());
     }
+
+    public function rules(): array
+    {
+        return array_merge(parent::rules(), [
+            'items.*.amount' => ['required', 'numeric', 'min:1', function ($attribute, $value, $fail) {
+                $item = $this->route('user')->items()->where('item_id', $this->input('items.*.id'))->first();
+
+                if (is_null($item) || $item->pivot->available_amount < $value) {
+                    $fail(__('User does not have enough items.'));
+                }
+            }],
+        ]);
+    }
 }

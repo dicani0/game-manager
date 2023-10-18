@@ -6,7 +6,7 @@
             <h2 class="text-2xl font-semibold mb-4">Filters</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                 <div>
-                    <label for="userFilter" class="block text-sm font-medium text-gray-400">User:</label>
+                    <label class="block text-sm font-medium text-gray-400" for="userFilter">User:</label>
                     <select id="userFilter" v-model="filters.seller"
                             class="mt-1 block w-full py-2 px-3 border border-gray-700 bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-white">
                         <option value="">All</option>
@@ -14,32 +14,32 @@
                     </select>
                 </div>
                 <div>
-                    <label for="priceFilter" class="block text-sm font-medium text-gray-400">Max LAT Price:</label>
-                    <input type="number" id="priceFilter" v-model="filters.lat_price" @keyup.enter="applyFilters"
-                           class="mt-1 block w-full py-2 px-3 border border-gray-700 bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-white">
+                    <label class="block text-sm font-medium text-gray-400" for="priceFilter">Max LAT Price:</label>
+                    <input id="priceFilter" v-model="filters.lat_price" class="mt-1 block w-full py-2 px-3 border border-gray-700 bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-white" type="number"
+                           @keyup.enter="applyFilters">
                 </div>
                 <div>
-                    <label for="priceFilter" class="block text-sm font-medium text-gray-400">Max AT Price:</label>
-                    <input type="number" id="priceFilter" v-model="filters.at_price" @keyup.enter="applyFilters"
-                           class="mt-1 block w-full py-2 px-3 border border-gray-700 bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-white">
+                    <label class="block text-sm font-medium text-gray-400" for="priceFilter">Max AT Price:</label>
+                    <input id="priceFilter" v-model="filters.at_price" class="mt-1 block w-full py-2 px-3 border border-gray-700 bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-white" type="number"
+                           @keyup.enter="applyFilters">
                 </div>
                 <div>
-                    <label for="itemFilter" class="block text-sm font-medium text-gray-400">Item:</label>
-                    <input type="text" id="itemFilter" v-model="filters.item" @keyup.enter="applyFilters"
-                           class="mt-1 block w-full py-2 px-3 border border-gray-700 bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-white">
+                    <label class="block text-sm font-medium text-gray-400" for="itemFilter">Item:</label>
+                    <input id="itemFilter" v-model="filters.item" class="mt-1 block w-full py-2 px-3 border border-gray-700 bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-white" type="text"
+                           @keyup.enter="applyFilters">
                 </div>
             </div>
-            <button @click="applyFilters"
-                    class="w-full sm:w-auto px-4 py-2 bg-indigo-700 rounded-md hover:bg-indigo-600 transition-all duration-150 text-white font-semibold">
+            <button class="w-full sm:w-auto px-4 py-2 bg-indigo-700 rounded-md hover:bg-indigo-600 transition-all duration-150 text-white font-semibold"
+                    @click="applyFilters">
                 Apply Filters
             </button>
         </div>
 
         <div class="flex flex-col gap-4">
             <div v-for="offer in offers.data" :key="offer.id"
-                 class="rounded-lg p-4 border-2 border bg-clip-border shadow-lg w-full"
-                 :class="{'border-pulse border-4 bg-cyan-900': offer.promoted}">
-                <h2 class="text-xl text-center font-bold mb-2 font-mono" :class="{'text-orange-500': offer.promoted}">
+                 :class="{'border-pulse border-4 bg-cyan-900': offer.promoted}"
+                 class="rounded-lg p-4 border-2 border bg-clip-border shadow-lg w-full">
+                <h2 :class="{'text-orange-500': offer.promoted}" class="text-xl text-center font-bold mb-2 font-mono">
                     {{ offer.promoted ? 'Promoted' : '' }} Offer by {{ offer.user.name }}</h2>
                 <div class="flex flex-col mt-2">
                     <p class="font-semibold">AT price: {{ offer.at_price }}</p>
@@ -57,15 +57,15 @@
                 </div>
                 <div class="flex justify-between mt-6">
                     <button
-                        @click="openModalWithOffer(offer)"
                         v-if="usePage().props.auth?.user"
+                        :class="{'cursor-not-allowed bg-gray-600': isUserOffer(offer)}"
                         :disabled="isUserOffer(offer)"
                         class="w-full sm:w-auto px-4 py-2 bg-sky-600 rounded hover:bg-sky-700 transition-all duration-150"
-                        :class="{'cursor-not-allowed bg-gray-600': isUserOffer(offer)}">
+                        @click="openModalWithOffer(offer)">
                         {{ isUserOffer(offer) ? 'Your offer' : 'Request trade' }}
                     </button>
-                    <button @click="cancelOffer(offer)" v-if="isUserOffer(offer)"
-                            class="w-full sm:w-auto mt-2 sm:mt-0 sm:ml-2 px-4 py-2 bg-amber-900 rounded hover:bg-amber-800 transition-all duration-150">
+                    <button v-if="isUserOffer(offer)" class="w-full sm:w-auto mt-2 sm:mt-0 sm:ml-2 px-4 py-2 bg-amber-900 rounded hover:bg-amber-800 transition-all duration-150"
+                            @click="cancelOffer(offer)">
                         Cancel Offer
                     </button>
                 </div>
@@ -73,17 +73,17 @@
         </div>
         <div class="flex justify-between my-4">
             <button v-if="usePage().props.offers.prev_page_url"
-                    @click="previousPage"
-                    :disabled="!props.offers.prev_page_url"
                     :class="{'cursor-not-allowed bg-gray-600 !hover:bg-gray-700': !props.offers.prev_page_url}"
+                    :disabled="!props.offers.prev_page_url"
                     class="px-4 py-2 bg-blue-700 rounded transition-all duration-150"
+                    @click="previousPage"
             >Previous Page
             </button>
             <button v-if="usePage().props.offers.next_page_url"
-                    @click="nextPage"
-                    :disabled="!props.offers.next_page_url"
                     :class="{'cursor-not-allowed bg-gray-600 !hover:bg-gray-700': !props.offers.next_page_url}"
+                    :disabled="!props.offers.next_page_url"
                     class="px-4 py-2 bg-blue-700 rounded transition-all duration-150"
+                    @click="nextPage"
             >Next Page
             </button>
         </div>
@@ -97,34 +97,35 @@
 
             <form class="flex flex-col space-y-4" @submit.prevent="submitTradeRequest">
                 <div>
-                    <label for="latPrice" class="block text-sm font-medium text-gray-400">Your LAT Price:</label>
-                    <input id="latPrice" v-model="tradeRequest.lat_price" type="number" required
-                           class="mt-1 block w-full py-2 px-3 border border-gray-700 bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-white">
+                    <label class="block text-sm font-medium text-gray-400" for="latPrice">Your LAT Price:</label>
+                    <input id="latPrice" v-model="tradeRequest.lat_price" class="mt-1 block w-full py-2 px-3 border border-gray-700 bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-white" required
+                           type="number">
                 </div>
 
                 <div>
-                    <label for="atPrice" class="block text-sm font-medium text-gray-400">Your AT Price:</label>
-                    <input id="atPrice" v-model="tradeRequest.at_price" type="number" required
-                           class="mt-1 block w-full py-2 px-3 border border-gray-700 bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-white">
+                    <label class="block text-sm font-medium text-gray-400" for="atPrice">Your AT Price:</label>
+                    <input id="atPrice" v-model="tradeRequest.at_price" class="mt-1 block w-full py-2 px-3 border border-gray-700 bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-white" required
+                           type="number">
                 </div>
 
                 <div>
-                    <label for="message" class="block text-sm font-medium text-gray-400">Message:</label>
-                    <textarea id="message" v-model="tradeRequest.message" rows="3"
-                              class="mt-1 block w-full py-2 px-3 border border-gray-700 bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-white"></textarea>
+                    <label class="block text-sm font-medium text-gray-400" for="message">Message:</label>
+                    <textarea id="message" v-model="tradeRequest.message" class="mt-1 block w-full py-2 px-3 border border-gray-700 bg-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-white"
+                              rows="3"></textarea>
                 </div>
 
                 <p class="block text-sm font-medium text-gray-400">Items:</p>
                 <div v-for="item in selectedOffer.items" :key="item.id" class="flex items-center justify-between">
                     <div class="flex items-center">
-                        <input type="checkbox" :id="'item-' + item.id" v-model="tradeRequest.items" :value="item.id">
+                        <input :id="'item-' + item.id" v-model="tradeRequest.items" :value="item.id" type="checkbox">
                         <label :for="'item-' + item.id" class="ml-2">{{ item.item.name }}</label>
                     </div>
-                    <input type="number" v-model="tradeRequest.itemAmounts[item.id]" class="w-20 bg-indigo-500" :min="1" :max="item.amount">
+                    <input v-model="tradeRequest.itemAmounts[item.id]" :max="item.amount" :min="1" class="w-20 bg-indigo-500"
+                           type="number">
                 </div>
 
-                <button type="submit"
-                        class="w-full px-4 py-2 bg-indigo-700 rounded-md hover:bg-indigo-600 transition-all duration-150 text-white font-semibold">
+                <button class="w-full px-4 py-2 bg-indigo-700 rounded-md hover:bg-indigo-600 transition-all duration-150 text-white font-semibold"
+                        type="submit">
                     Submit Trade Request
                 </button>
             </form>
@@ -174,7 +175,6 @@ const submitTradeRequest = () => {
     router.post('market/' + selectedOffer.value.id + '/buy', requestData, {
         preserveScroll: true,
         onSuccess: (message) => {
-            useToast().success('Trade request sent!');
             closeModal();
         },
         onError: (errors) => {

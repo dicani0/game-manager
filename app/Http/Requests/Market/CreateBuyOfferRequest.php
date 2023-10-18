@@ -20,13 +20,7 @@ abstract class CreateBuyOfferRequest extends FormRequest
             'message' => ['nullable', 'string', 'max:255'],
             'items' => ['required', 'array'],
             'items.*.id' => ['required', 'numeric', 'exists:items,id'],
-            'items.*.amount' => ['required', 'numeric', 'min:1', function ($attribute, $value, $fail) {
-                $item = $this->route('user')->items()->where('item_id', $this->input('items.*.id'))->first();
-
-                if (is_null($item) || $item->pivot->available_amount < $value) {
-                    $fail(__('User does not have enough items.'));
-                }
-            }],
+            'items.*.amount' => ['required', 'numeric', 'min:1'],
         ];
     }
 }

@@ -125,8 +125,8 @@ const modalOpen = ref(false);
 const selectedUser = ref(null);
 
 const tradeRequest = ref({
-    lat_price: '',
-    at_price: '',
+    lat_price: 0,
+    at_price: 0,
     message: '',
     items: [],
     itemAmounts: {},

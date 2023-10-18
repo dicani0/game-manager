@@ -5,7 +5,6 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\ProfileController;
-use App\Http\Controllers\Auth\PusherController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\SettingsController;
@@ -16,6 +15,7 @@ use App\Http\Controllers\Items\ItemController;
 use App\Http\Controllers\Items\UserItemController;
 use App\Http\Controllers\Market\MarketController;
 use App\Http\Controllers\Market\MarketOfferRequestController;
+use App\Http\Controllers\Market\TradeOfferController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -44,6 +44,7 @@ Route::prefix('guild')->group(function () {
 Route::prefix('market')->group(function () {
     Route::get('/', [MarketController::class, 'index']);
     Route::middleware('auth')->group(function () {
+        Route::get('/requests', [TradeOfferController::class, 'index']);
         //trade requests
         Route::post('/user/{user}/buy', [MarketController::class, 'createBuyOfferUser']);
         Route::post('/{offer}/buy', [MarketController::class, 'createBuyOfferMarket']);
