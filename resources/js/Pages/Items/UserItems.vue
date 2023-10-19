@@ -9,7 +9,8 @@
             </div>
             <ul class="grid grid-cols-5 gap-4 text-xs">
                 <li v-for="item in items" :key="item.name"
-                    class="p-4 flex flex-col justify-between items-start hover:scale-110 bg-gray-800 hover:bg-cyan-900 hover:z-50 transition-all rounded-lg relative group">
+                    @mouseover="toggleTooltip(item, true)" @mouseleave="toggleTooltip(item, false)"
+                    class="p-4 flex flex-col justify-between items-start hover:scale-110 bg-gray-800 hover:bg-cyan-900 hover:z-50 transition-all rounded-lg relative group cursor-grab">
                     <p class="text-2xl font-medium text-gray-200 mb-2">{{ item.item_name }}</p>
                     <div class="flex flex-row justify-between w-full">
                         <div class="">
@@ -21,17 +22,18 @@
                             </p>
                             <p class="text-gray-400">Sold amount: {{ item.sold_amount }}</p>
                             <p class="text-gray-400">Used amount: {{ item.used_amount }}</p>
-                            <p class="text-gray-400">Reserved amount: {{ item.reserved_amount }}</p>
+                            <p :class="{'text-purple-500': item.reserved_amount > 0}" class="text-gray-400">Reserved
+                                amount: {{ item.reserved_amount }}</p>
                         </div>
-                        <div
-                            class="">
-                            <div class="mb-4">
-                                <p class="text-2xl">Tier: {{ item.tier }}</p>
-                                <p class="text-xl">Power: {{ item.power }}</p>
+                        <div v-show="item.showTooltip" class="flex attributes-tooltip w-full h-full">
+                            <div>
+                                <div class="mb-4">
+                                    <p class="text-lg"><span>Tier: {{ item.tier }} Power: {{ item.power }}</span></p>
+                                </div>
+                                <p v-for="attribute in item.attributes" class="italic">
+                                    {{ attribute.name }}: {{ attribute.value }}
+                                </p>
                             </div>
-                            <p v-for="attribute in item.attributes" class="italic">
-                                {{ attribute.name }}: {{ attribute.value }}
-                            </p>
                         </div>
                     </div>
                     <div class="flex gap-2">
@@ -182,7 +184,7 @@
 </template>
 
 <script setup>
-import {ref} from 'vue';
+import {reactive, ref} from 'vue';
 import Modal from "@/Components/Modal.vue";
 import {useToast} from "vue-toastification";
 import {router, useForm, usePage} from "@inertiajs/vue3";
@@ -333,55 +335,46 @@ const createMarketOffer = async () => {
             }
         })
 };
+let reactiveItems = reactive(props.items.map(item => ({ ...item, showTooltip: false })));
+const toggleTooltip = (item, show) => {
+    item.showTooltip = show;
+};
 
 </script>
 
 <style scoped>
-.v-enter-active,
-.v-leave-active {
-    transition: opacity 0.5s ease;
-}
 
-.v-enter-from,
-.v-leave-to {
-    opacity: 0;
-}
 
-.tooltip-container {
-    position: relative;
-    display: inline-block;
-}
-
-.tooltip-container .tooltip-text {
-    visibility: hidden;
-    background-color: black;
-    color: #fff;
-    text-align: center;
-    padding: 5px;
-    border-radius: 6px;
-    position: absolute;
-    z-index: 1;
-    bottom: 100%; /* Position the tooltip above the text */
-    left: 50%;
-    margin-left: -60px; /* Use half of the width to center the tooltip */
-    opacity: 0;
-    transition: opacity 1s;
-}
-
-.tooltip-container:hover .tooltip-text {
+.group:hover .item-detail {
     visibility: visible;
     opacity: 1;
 }
 
-.item-detail {
+.attributes-tooltip {
+    visibility: hidden;
+    background-color: rgba(0, 0, 0, 0.8); /* semi-transparent background */
+    color: #fff;
+    padding: 5px;
+    border-radius: 6px;
     position: absolute;
+    z-index: 1;
     top: 0;
     left: 0;
-    z-index: 1000;
-    /* Add other styles as needed */
+    width: 100%;
+    height: 100%;
+    transition: visibility 0.3s, opacity 0.3s;
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
-.group:hover .item-detail {
+button {
+    z-index: 2;
+}
+
+.group:hover .attributes-tooltip {
     visibility: visible;
     opacity: 1;
 }

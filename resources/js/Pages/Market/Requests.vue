@@ -16,6 +16,12 @@
                     <p class="text-gray-400">Message: {{ request.message }}</p>
                 </div>
 
+                <ul>
+                    <li v-for="item in request.items">
+                        <p><span class="font-bold">{{ item.name}}</span> - <span class="italic">{{ item.amount}}</span></p>
+                    </li>
+                </ul>
+
                 <div class="mt-4 flex justify-end space-x-2">
                     <button class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
                             @click="acceptOffer(request.id)">
@@ -32,12 +38,6 @@
 </template>
 
 <script setup>
-import {router, usePage} from "@inertiajs/vue3";
-import moment from "moment";
-import {onMounted, ref} from "vue";
-import Toast from "@/Utility/Toast.js";
-import {useToast} from "vue-toastification";
-import {MarketOfferStatusEnum} from "@/Enums/MarketOfferStatusEnum.ts";
 
 const props = defineProps({
     requests: Object,

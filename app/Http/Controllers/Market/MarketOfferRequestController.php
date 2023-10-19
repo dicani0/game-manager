@@ -9,9 +9,13 @@ use App\Models\Market\MarketOffer;
 use App\Models\Market\TradeOffer;
 use App\Processes\Market\AcceptTradeRequestProcess;
 use Illuminate\Http\RedirectResponse;
+use Throwable;
 
 class MarketOfferRequestController extends Controller
 {
+    /**
+     * @throws Throwable
+     */
     public function accept(AcceptRejectTradeRequest $request, MarketOffer $offer, TradeOffer $offerRequest, AcceptTradeRequestProcess $process): RedirectResponse
     {
         $process->run($offerRequest);

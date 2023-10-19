@@ -6,15 +6,12 @@ use App\Data\Market\CreateTradeOfferDto;
 
 class AttachItemsToTradeOffer
 {
-    public function handle(CreateTradeOfferDto $dto)
+    public function handle(CreateTradeOfferDto $dto): void
     {
-        $items = $dto->items->toCollection()->map(function ($item) {
-            return [
-                'item_id' => $item->id,
-                'amount' => $item->amount,
-            ];
+        $items = $dto->items->toCollection()->mapWithKeys(function ($item) {
+            return [$item->id => ['amount' => $item->amount]];
         });
-        
-        $dto->tradeOffer->items()->attach($items);
+
+        $dto->tradeOffer->items()->sync($items->toArray());
     }
 }

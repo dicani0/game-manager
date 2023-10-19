@@ -28,6 +28,7 @@ class TradeOfferResource extends JsonResource
             'message' => $this->getResource()->message,
             'at_price' => $this->getResource()->at_price,
             'lat_price' => $this->getResource()->lat_price,
+            'items' => TradeItemsResource::collection($this->getResource()->items),
         ];
     }
 

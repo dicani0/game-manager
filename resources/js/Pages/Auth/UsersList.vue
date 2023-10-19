@@ -2,7 +2,10 @@
     <!-- Wrapper -->
     <div class="overflow-hidden w-100 flex flex-col items-center">
         <!-- User List -->
-        <ul class="space-y-4 p-4 bg-gray-800 rounded-lg shadow-lg w-1/3">
+        <div v-if="props.users.data.length === 0" class="mt-12">
+            <p class="text-2xl">No users with public status!</p>
+        </div>
+        <ul v-if="props.users.length > 0" class="space-y-4 p-4 bg-gray-800 rounded-lg shadow-lg w-1/3">
             <li v-for="user in props.users.data" :key="user.id" class="border-b border-gray-700 pb-4">
                 <p class="text-xl text-gray-300 font-semibold mb-2">{{ user.name }}</p>
                 <p class="text-sm text-gray-400 mb-4">{{ user.discord_name }}</p>
@@ -132,14 +135,12 @@ const tradeRequest = ref({
     itemAmounts: {},
 })
 
-// Function to navigate to the next page
 const nextPage = () => {
     if (props.users.next_page_url) {
         router.get(props.users.next_page_url);
     }
 }
 
-// Function to navigate to the previous page
 const previousPage = () => {
     if (props.users.prev_page_url) {
         router.get(props.users.prev_page_url);
@@ -170,6 +171,8 @@ const submitTradeRequest = () => {
         message: tradeRequest.value.message,
         items: formattedItems.value,
     };
+
+    console.log(requestData);
 
     router.post('/market/user/' + selectedUser.value.id + '/buy', requestData, {
         preserveState: true,

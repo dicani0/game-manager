@@ -13,7 +13,7 @@ class CreateTradeOffer
     /**
      * @throws Exception
      */
-    public function handle(CreateTradeOfferDto $dto)
+    public function handle(CreateTradeOfferDto $dto): void
     {
         if (
             config('market.max_offers_enabled')

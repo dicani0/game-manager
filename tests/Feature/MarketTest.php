@@ -429,7 +429,7 @@ class MarketTest extends TestCase
             ],
         ]);
 
-        $res = $this->actingAs($this->user)->post("/market/{$offer->getKey()}/{$tradeOffer->getKey()}/accept");
+        $this->actingAs($this->user)->post("/market/{$offer->getKey()}/{$tradeOffer->getKey()}/accept");
 
         $this->assertDatabaseHas('user_item', [
             'user_id' => $buyer->getKey(),

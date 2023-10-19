@@ -17,7 +17,6 @@ use App\Http\Controllers\Market\MarketController;
 use App\Http\Controllers\Market\MarketOfferRequestController;
 use App\Http\Controllers\Market\TradeOfferController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,13 +28,8 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/', function () {
-    return Inertia::render('Home');
-});
-
-Route::get('/about', function () {
-    return Inertia::render('About');
-});
+Route::inertia('/', 'Home')->name('home');
+Route::inertia('/about', 'About')->name('about');
 
 Route::prefix('guild')->group(function () {
     Route::get('/', [GuildController::class, 'dashboard']);

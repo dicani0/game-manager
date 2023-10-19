@@ -2,6 +2,7 @@
 
 namespace App\Models\Market;
 
+use App\Enums\OfferTypeEnum;
 use App\Models\Items\Item;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -51,6 +52,10 @@ class TradeOffer extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    protected $casts = [
+        'type' => OfferTypeEnum::class,
+    ];
 
     public function offerable(): MorphTo
     {
