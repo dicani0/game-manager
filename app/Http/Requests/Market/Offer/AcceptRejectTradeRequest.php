@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests\Market\Offer;
 
+use App\Enums\MarketOfferRequestStatusEnum;
+use Illuminate\Contracts\Validation\ValidationRule;
+
 class AcceptRejectTradeRequest extends MarketOfferRequest
 {
     /**
@@ -9,13 +12,14 @@ class AcceptRejectTradeRequest extends MarketOfferRequest
      */
     public function authorize(): bool
     {
-        return $this->getMarketOffer()->user->getKey() === $this->user()->getKey();
+        return $this->getMarketOffer()->user->getKey() === $this->user()->getKey()
+            && $this->getOfferRequest()->status === MarketOfferRequestStatusEnum::PENDING;
     }
 
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
+     * @return array<string, ValidationRule|array|string>
      */
     public function rules(): array
     {

@@ -23,8 +23,8 @@ class TradeOfferResource extends JsonResource
         return [
             'offer_type' => $this->getOfferableType(),
             'user' => PublicUserResource::make($this->getUser())->withoutItems(),
-            'status' => Str::ucfirst($this->getResource()->status),
-            'type' => Str::ucfirst($this->getResource()->type),
+            'status' => Str::ucfirst($this->getResource()->status->value),
+            'type' => Str::ucfirst($this->getResource()->type->value),
             'message' => $this->getResource()->message,
             'at_price' => $this->getResource()->at_price,
             'lat_price' => $this->getResource()->lat_price,

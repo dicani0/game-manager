@@ -695,22 +695,22 @@ class MarketTest extends TestCase
     {
         $offer = MarketOffer::factory()->create([
             'user_id' => $this->user->getKey(),
-            'status' => MarketOfferStatusEnum::EXPIRED
+            'status' => MarketOfferStatusEnum::EXPIRED,
         ]);
 
         MarketOffer::factory()->create([
             'user_id' => $this->user->getKey(),
-            'status' => MarketOfferStatusEnum::ACTIVE
+            'status' => MarketOfferStatusEnum::ACTIVE,
         ]);
 
         MarketOffer::factory()->create([
             'user_id' => $this->user->getKey(),
-            'status' => MarketOfferStatusEnum::FINISHED
+            'status' => MarketOfferStatusEnum::FINISHED,
         ]);
 
         MarketOffer::factory()->create([
             'user_id' => $this->user->getKey(),
-            'status' => MarketOfferStatusEnum::CANCELED
+            'status' => MarketOfferStatusEnum::CANCELED,
         ]);
 
         $this->actingAs($this->user)->get('/market/history')
@@ -745,7 +745,7 @@ class MarketTest extends TestCase
         $job = new SetMarketOfferStatusAsExpired($offer);
         $job->handle();
 
-        $this->assertEquals($offer->status, MarketOfferStatusEnum::EXPIRED);
+        $this->assertEquals(MarketOfferStatusEnum::EXPIRED, $offer->status);
 
         Mail::assertSent(MarketOfferExpired::class, function (MarketOfferExpired $mail) use ($offer) {
             return $mail->hasTo($offer->user->email);
