@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Market\Offer;
 
 use App\Enums\MarketOfferRequestStatusEnum;
+use App\Models\Market\MarketOffer;
+use App\Models\User;
 use Illuminate\Contracts\Validation\ValidationRule;
 
 class AcceptRejectTradeRequest extends MarketOfferRequest
@@ -12,8 +14,15 @@ class AcceptRejectTradeRequest extends MarketOfferRequest
      */
     public function authorize(): bool
     {
-        return $this->getMarketOffer()->user->getKey() === $this->user()->getKey()
-            && $this->getOfferRequest()->status === MarketOfferRequestStatusEnum::PENDING;
+        $offerable = $this->getOfferRequest()->offerable;
+
+        $condition = match (true) {
+            $offerable instanceof MarketOffer => $offerable->user->getKey() === $this->user()->getKey(),
+            $offerable instanceof User => $offerable->getKey() === $this->user()->getKey(),
+            default => false,
+        };
+
+        return $condition && $this->getOfferRequest()->status === MarketOfferRequestStatusEnum::PENDING;
     }
 
     /**

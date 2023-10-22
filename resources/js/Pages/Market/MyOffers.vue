@@ -166,7 +166,7 @@ const acceptRequest = async (offer, request) => {
     return;
   }
 
-  router.post('/market/' + offer.id + '/' + request.id + '/accept', null, {
+  router.post('/market/' + request.id + '/' + offer.id + '/accept', null, {
     preserveScroll: true,
     preserveState: true,
   })
@@ -184,7 +184,7 @@ const rejectRequest = async (offer, request) => {
     return;
   }
 
-  router.post('/market/' + offer.id + '/' + request.id + '/reject', {
+  router.post('/market/' + request.id + '/' + offer.id + '/reject', {
     preserveScroll: true,
     preserveState: true,
   })

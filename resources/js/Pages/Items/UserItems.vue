@@ -20,7 +20,12 @@
                  class="text-gray-400">
                 Available amount: {{ item.available_amount }}
               </p>
-              <p class="text-gray-400">Sold amount: {{ item.sold_amount }}</p>
+              <p :class="{'text-teal-700': item.sold_amount > 0}" class="text-gray-400">Sold amount: {{
+                  item.sold_amount
+                }}</p>
+              <p :class="{'text-teal-700': item.bought_amount > 0}" class="text-gray-400">Bought amount: {{
+                  item.bought_amount
+                }}</p>
               <p class="text-gray-400">Used amount: {{ item.used_amount }}</p>
               <p :class="{'text-purple-500': item.reserved_amount > 0}" class="text-gray-400">Reserved
                 amount: {{ item.reserved_amount }}</p>

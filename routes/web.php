@@ -48,8 +48,8 @@ Route::prefix('market')->group(function () {
         Route::post('/', [MarketController::class, 'store']);
         Route::delete('/{offer}', [MarketController::class, 'cancel']);
 
-        Route::post('/{offer}/{offerRequest}/accept', [MarketOfferRequestController::class, 'accept']);
-        Route::post('/{offer}/{offerRequest}/reject', [MarketOfferRequestController::class, 'reject']);
+        Route::post('/{offerRequest}/{offer}/accept', [MarketOfferRequestController::class, 'accept']);
+        Route::post('/{offerRequest}/{offer}/reject', [MarketOfferRequestController::class, 'reject']);
     });
 });
 

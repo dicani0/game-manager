@@ -21,6 +21,7 @@ class TradeOfferResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->getResource()->id,
             'offer_type' => $this->getOfferableType(),
             'user' => PublicUserResource::make($this->getUser())->withoutItems(),
             'status' => Str::ucfirst($this->getResource()->status->value),
@@ -29,6 +30,7 @@ class TradeOfferResource extends JsonResource
             'at_price' => $this->getResource()->at_price,
             'lat_price' => $this->getResource()->lat_price,
             'items' => TradeItemsResource::collection($this->getResource()->items),
+            'offerable' => $this->getResource()->offerable->only(['id']),
         ];
     }
 
