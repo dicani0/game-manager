@@ -2,12 +2,12 @@
 
 namespace App\Actions\Character;
 
-use App\Data\Character\CharacterDto;
+use App\Data\Character\CharacterUpdateDto;
 use App\Models\Character\Character;
 
 class UpdateCharacter
 {
-    public function handle(Character $character, CharacterDto $data)
+    public function handle(Character $character, CharacterUpdateDto $data)
     {
         $character->update($data->toArray());
     }

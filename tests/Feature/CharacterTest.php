@@ -29,7 +29,7 @@ class CharacterTest extends TestCase
             'vocation' => 'knight',
         ]);
 
-        $response->assertInertia(fn (AssertableInertia $page) => $page
+        $response->assertInertia(fn(AssertableInertia $page) => $page
             ->component('Character/Character')
             ->has('characters', 1)
             ->where('characters.0.name', 'test')
@@ -54,7 +54,7 @@ class CharacterTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->user)->get('/characters/edit/' . $character->id);
-        $response->assertInertia(fn (AssertableInertia $page) => $page
+        $response->assertInertia(fn(AssertableInertia $page) => $page
             ->component('Character/Edit')
             ->where('character.name', 'test')
             ->where('character.vocation', 'knight')
