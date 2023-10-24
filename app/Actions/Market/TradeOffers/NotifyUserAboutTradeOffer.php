@@ -3,17 +3,19 @@
 namespace App\Actions\Market\TradeOffers;
 
 use App\Data\Market\CreateTradeOfferDto;
-use App\Mail\MarketOfferRequest;
-use Illuminate\Support\Facades\Mail;
+use App\Models\User;
+use App\Notifications\TradeRequest;
+use Exception;
 
 class NotifyUserAboutTradeOffer
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle(CreateTradeOfferDto $dto): void
     {
-        $user = $dto->offer->user;
-        Mail::to($user->email)->send(new MarketOfferRequest($dto->tradeOffer, $dto->offer));
+        $user = $dto->target instanceof User ? $dto->target : $dto->target->user;
+        
+        $user->notify(new TradeRequest($dto->tradeOffer, $dto->target));
     }
 }

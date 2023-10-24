@@ -5,29 +5,33 @@ namespace App\Actions\Market\TradeOffers;
 use App\Data\Market\CreateTradeOfferDto;
 use App\Enums\OfferTypeEnum;
 use App\Events\Market\TradeOfferCreated;
-use Illuminate\Support\Facades\Log;
+use App\Models\Market\TradeOffer;
+use Exception;
 
 class CreateTradeOffer
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
-    public function handle(CreateTradeOfferDto $dto)
+    public function handle(CreateTradeOfferDto $dto): void
     {
         if (
             config('market.max_offers_enabled')
-            && $dto->offer->offers()->where('user_id', $dto->creator->getKey())->count() >= config('market.max_offers_per_user', 5)
+            && $dto->target->offers()->where('user_id', $dto->creator->getKey())->count() >= config('market.max_offers_per_user', 5)
         ) {
-            throw new \Exception('You can only have ' . config('max_offers_per_user') . ' offers per market offer!');
+            throw new Exception('You can only have ' . config('max_offers_per_user') . ' offers per market offer!');
         }
 
-        $dto->tradeOffer = $dto->offer->offers()->create([
+        /** @var TradeOffer $tradeOffer */
+        $tradeOffer = $dto->target->offers()->create([
             'user_id' => $dto->creator->getKey(),
             'at_price' => $dto->at_price,
             'lat_price' => $dto->lat_price,
             'type' => OfferTypeEnum::BUY->value,
             'message' => $dto->message,
         ]);
+
+        $dto->tradeOffer = $tradeOffer;
 
         event(new TradeOfferCreated($dto->tradeOffer));
     }

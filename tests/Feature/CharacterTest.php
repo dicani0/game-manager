@@ -13,15 +13,6 @@ class CharacterTest extends TestCase
 
     public User $user;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->user = User::factory()->create([
-            'email' => 'test@example.com',
-            'password' => bcrypt('password'),
-        ]);
-    }
-
     public function test_create_character(): void
     {
         $response = $this->actingAs($this->user)->post('/characters', [
@@ -29,7 +20,7 @@ class CharacterTest extends TestCase
             'vocation' => 'knight',
         ]);
 
-        $response->assertInertia(fn (AssertableInertia $page) => $page
+        $response->assertInertia(fn(AssertableInertia $page) => $page
             ->component('Character/Character')
             ->has('characters', 1)
             ->where('characters.0.name', 'test')
@@ -54,7 +45,7 @@ class CharacterTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->user)->get('/characters/edit/' . $character->id);
-        $response->assertInertia(fn (AssertableInertia $page) => $page
+        $response->assertInertia(fn(AssertableInertia $page) => $page
             ->component('Character/Edit')
             ->where('character.name', 'test')
             ->where('character.vocation', 'knight')
@@ -70,7 +61,7 @@ class CharacterTest extends TestCase
 
         $user2 = User::factory()->create();
 
-        $response = $this->actingAs($user2)->get('/characters/edit/' . $character->id);
+        $response = $this->actingAs($user2)->get('/characters/edit/' . $character->getKey());
         $response->assertRedirect();
     }
 
@@ -125,6 +116,15 @@ class CharacterTest extends TestCase
 
         $this->assertDatabaseMissing('characters', [
             'id' => $character->getKey(),
+        ]);
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->user = User::factory()->create([
+            'email' => 'test@example.com',
+            'password' => bcrypt('password'),
         ]);
     }
 }

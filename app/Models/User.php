@@ -4,49 +4,61 @@ namespace App\Models;
 
 use App\Models\Character\Character;
 use App\Models\Guild\Guild;
+use App\Models\Interfaces\Offerable as OfferableInterface;
 use App\Models\Items\Item;
 use App\Models\Items\UserItem;
 use App\Models\Market\MarketOffer;
+use App\Models\Market\TradeOffer;
+use App\Traits\Offerable;
+use Database\Factories\UserFactory;
+use Eloquent;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Laravel\Sanctum\HasApiTokens;
+use Laravel\Sanctum\PersonalAccessToken;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
  * App\Models\User
  *
- * @property int $id
- * @property string $name
- * @property string $email
- * @property \Illuminate\Support\Carbon|null $email_verified_at
- * @property string $password
- * @property string|null $discord_name
- * @property string|null $remember_token
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int $available_promotes
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Character> $characters
- * @property-read int|null $characters_count
- * @property-read Guild $guild
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Item> $items
- * @property-read int|null $items_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, MarketOffer> $marketOffers
- * @property-read int|null $market_offers_count
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
- * @property-read int|null $notifications_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Permission> $permissions
- * @property-read int|null $permissions_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Permission\Models\Role> $roles
- * @property-read int|null $roles_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
- * @property-read int|null $tokens_count
- * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
+ * @property int                                                            $id
+ * @property string                                                         $name
+ * @property string                                                         $email
+ * @property Carbon|null                                                    $email_verified_at
+ * @property string                                                         $password
+ * @property string|null                                                    $discord_name
+ * @property string|null                                                    $remember_token
+ * @property Carbon|null                                                    $created_at
+ * @property Carbon|null                                                    $updated_at
+ * @property int                                                            $available_promotes
+ * @property-read Collection<int, Character>                                $characters
+ * @property-read int|null                                                  $characters_count
+ * @property-read Guild                                                     $guild
+ * @property-read Collection<int, Item>                                     $items
+ * @property-read int|null                                                  $items_count
+ * @property-read Collection<int, MarketOffer>                              $marketOffers
+ * @property-read int|null                                                  $market_offers_count
+ * @property-read DatabaseNotificationCollection<int, DatabaseNotification> $notifications
+ * @property-read int|null                                                  $notifications_count
+ * @property-read Collection<int, Permission>                               $permissions
+ * @property-read int|null                                                  $permissions_count
+ * @property-read Collection<int, Role>                                     $roles
+ * @property-read int|null                                                  $roles_count
+ * @property-read Collection<int, PersonalAccessToken>                      $tokens
+ * @property-read int|null                                                  $tokens_count
+ * @method static UserFactory factory($count = null, $state = [])
  * @method static Builder|User newModelQuery()
  * @method static Builder|User newQuery()
  * @method static Builder|User permission($permissions)
@@ -62,13 +74,15 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static Builder|User wherePassword($value)
  * @method static Builder|User whereRememberToken($value)
  * @method static Builder|User whereUpdatedAt($value)
- * @property int $private
+ * @property int                                                            $private
  * @method static Builder|User wherePrivate($value)
- * @mixin \Eloquent
+ * @property-read Collection<int, TradeOffer>                               $offers
+ * @property-read int|null                                                  $offers_count
+ * @mixin Eloquent
  */
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail, OfferableInterface
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, Offerable;
 
     /**
      * The attributes that are mass assignable.
@@ -119,6 +133,7 @@ class User extends Authenticatable implements MustVerifyEmail
             ->using(UserItem::class)
             ->withPivot(['id', 'amount', 'used_amount', 'sold_amount', 'reserved_amount', 'bought_amount']);
     }
+
 
     public function marketOffers(): HasMany
     {
