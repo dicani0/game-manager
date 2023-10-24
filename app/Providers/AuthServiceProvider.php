@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Models\Character\Character;
+use App\Models\Guild\Guild;
 use App\Policies\CharacterPolicy;
+use App\Policies\GuildPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -14,7 +16,8 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-         Character::class => CharacterPolicy::class,
+        Character::class => CharacterPolicy::class,
+        Guild::class => GuildPolicy::class,
     ];
 
     /**

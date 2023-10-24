@@ -2,9 +2,13 @@
 
 namespace App\Enums;
 
+use App\Enums\Trait\EnumExtras;
+
 enum GuildRoleEnum: string
 {
+    use EnumExtras;
+
     case LEADER = 'leader';
-    const VICE_LEADER = 'vice_leader';
-    const MEMBER = 'member';
+    case VICE_LEADER = 'vice_leader';
+    case MEMBER = 'member';
 }

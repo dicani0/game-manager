@@ -71,6 +71,10 @@ Route::prefix('items')->middleware('auth')->group(function () {
     Route::get('/', [ItemController::class, 'index']);
 });
 
+Route::prefix('guild')->middleware('auth')->group(function () {
+    Route::post('/', [GuildController::class, 'store']);
+});
+
 Route::prefix('auth')->group(function () {
     Route::get('email/{id}/{hash}', [EmailVerificationController::class, 'verify'])->name('verification.verify');
     Route::get('users', [UserController::class, 'getPublicUsers']);

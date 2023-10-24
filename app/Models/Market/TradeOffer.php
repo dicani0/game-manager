@@ -49,6 +49,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|TradeOffer whereUpdatedAt($value)
  * @method static Builder|TradeOffer whereUserId($value)
  * @mixin Eloquent
+ * @mixin \Eloquent
  */
 class TradeOffer extends Model
 {
