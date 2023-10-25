@@ -11,7 +11,7 @@ class GuildPolicy
 {
     public function create(User $user): bool
     {
-        if (Config::get('guilds.amount_limitation.disabled')) {
+        if (!Config::get('guilds.amount_limitation.enabled')) {
             return true;
         }
 

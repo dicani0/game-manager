@@ -10,11 +10,12 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
- * App\Models\Guild\Guild
+ * App\Models\GuildIndexQuery\GuildIndexQuery
  *
  * @property int                             $id
  * @property string                          $name
@@ -45,7 +46,7 @@ use Illuminate\Support\Carbon;
  */
 class Guild extends Model
 {
-    use HasFactory;
+    use HasFactory, Prunable;
 
     const TABLE = 'guilds';
     protected $table = self::TABLE;

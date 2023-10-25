@@ -31,10 +31,6 @@ use Illuminate\Support\Facades\Route;
 Route::inertia('/', 'Home')->name('home');
 Route::inertia('/about', 'About')->name('about');
 
-Route::prefix('guild')->group(function () {
-    Route::get('/', [GuildController::class, 'dashboard']);
-});
-
 Route::prefix('market')->group(function () {
     Route::get('/', [MarketController::class, 'index']);
     Route::middleware('auth')->group(function () {
@@ -71,7 +67,10 @@ Route::prefix('items')->middleware('auth')->group(function () {
     Route::get('/', [ItemController::class, 'index']);
 });
 
-Route::prefix('guild')->middleware('auth')->group(function () {
+Route::prefix('guilds')->middleware('auth')->group(function () {
+    Route::get('/', [GuildController::class, 'index']);
+    Route::get('/create', [GuildController::class, 'create']);
+    Route::get('/{guild:name}', [GuildController::class, 'show']);
     Route::post('/', [GuildController::class, 'store']);
 });
 

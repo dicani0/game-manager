@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\GuildRoleEnum;
 use App\Models\Character\Character;
 use App\Models\User;
 use Tests\TestCase;
@@ -26,12 +27,21 @@ class GuildTest extends TestCase
      */
     public function test_example(): void
     {
-        $response = $this->actingAs($this->user)->post('/guild', [
+        $this->actingAs($this->user)->post('/guild', [
             'name' => 'test guild',
             'recruiting' => false,
             'leader_id' => $this->character->getKey(),
         ]);
-        dd($response);
-        $response->assertStatus(200);
+
+        $this->assertDatabaseHas('guilds', [
+            'name' => 'test guild',
+            'recruiting' => false,
+        ]);
+
+        $this->assertDatabaseHas('guild_character', [
+            'guild_id' => 1,
+            'character_id' => $this->character->getKey(),
+            'role' => GuildRoleEnum::LEADER->value,
+        ]);
     }
 }

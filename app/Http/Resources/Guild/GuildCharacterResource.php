@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Guild;
 
+use App\Models\Guild\GuildCharacter;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -14,6 +15,16 @@ class GuildCharacterResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->getResource()->id,
+            'role' => $this->getResource()->role,
+            'nickname' => $this->getResource()->character->name,
+            'vocation' => $this->getResource()->character->vocation,
+        ];
+    }
+
+    public function getResource(): GuildCharacter
+    {
+        return $this->resource;
     }
 }
