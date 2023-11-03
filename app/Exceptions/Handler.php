@@ -43,7 +43,7 @@ class Handler extends ExceptionHandler
         }
 
         if ($e instanceof AuthorizationException) {
-            return redirect()->back()->withInput()->withErrors($e->getMessage());
+            return redirect(status: 403)->back()->withInput()->withErrors($e->getMessage());
         }
 
         return parent::render($request, $e);

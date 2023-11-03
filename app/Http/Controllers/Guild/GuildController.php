@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Guild;
 
 use App\Data\Guild\CreateGuildDto;
+use App\Data\Guild\EditGuildDto;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Guild\GuildResource;
 use App\Models\Guild\Guild;
 use App\Processes\Guild\CreateGuildProcess;
+use App\Processes\Guild\EditGuildProcess;
 use App\Queries\Guild\GuildIndexQuery;
 use Auth;
 use Illuminate\Http\RedirectResponse;
@@ -51,12 +53,14 @@ class GuildController extends Controller
         return redirect('/guilds/' . $guild->name)->with('success', 'Guild created!');
     }
 
-    public function edit()
+    /**
+     * @throws Throwable
+     */
+    public function update(Guild $guild, EditGuildDto $dto, EditGuildProcess $process): RedirectResponse
     {
-    }
+        $process->run($dto);
 
-    public function update()
-    {
+        return redirect('/guilds/' . $guild->name)->with('success', 'Guild updated!');
     }
 
     public function delete()

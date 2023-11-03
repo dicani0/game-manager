@@ -16,6 +16,7 @@ class GuildResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->getResource()->id,
             'name' => $this->getResource()->name,
             'description' => $this->getResource()->description,
             'logo' => $this->getResource()->logo,

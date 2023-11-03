@@ -60,6 +60,10 @@ class Guild extends Model
         'owner_id',
     ];
 
+    protected $casts = [
+        'recruiting' => 'boolean',
+    ];
+
     public function characters(): HasMany
     {
         return $this->hasMany(GuildCharacter::class);

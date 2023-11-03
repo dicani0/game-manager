@@ -2,7 +2,9 @@
 
 namespace App\Policies;
 
+use App\Enums\GuildRoleEnum;
 use App\Models\Guild\Guild;
+use App\Models\Guild\GuildCharacter;
 use App\Models\User;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Config;
@@ -24,5 +26,26 @@ class GuildPolicy
     public function store(User $user): bool
     {
         return $this->create($user);
+    }
+
+    public function update(User $user, Guild $guild): bool
+    {
+        $leader = $this->getLeader($guild);
+
+        if (!$leader) {
+            return false;
+        }
+
+        return $user->characters->pluck('id')->contains($leader->character_id);
+    }
+
+    public function delete(User $user, Guild $guild): bool
+    {
+        return $this->update($user, $guild);
+    }
+
+    private function getLeader(Guild $guild): ?GuildCharacter
+    {
+        return $guild->characters->where('role', GuildRoleEnum::LEADER)->first();
     }
 }
