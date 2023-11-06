@@ -21,7 +21,7 @@ class GuildCharacter extends Model
         'role' => GuildRoleEnum::class,
     ];
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     public function guild(): BelongsTo
     {

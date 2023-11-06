@@ -18,7 +18,12 @@
         >
           {{ form.description }}
         </textarea>
-        <label class="block text-gray-300 text-sm font-bold mb-2" for="content">Recruiting</label>
+
+        <label class="block text-gray-300 text-sm font-bold mb-2" for="leader">Leader</label>
+        <select class="w-full text-black" name="leader" id="leader" v-model="form.leader_id">
+          <option v-for="character in guild.characters" :value="character.id">{{ character.nickname }}</option>
+        </select>
+        <label class="block text-gray-300 text-sm font-bold mb-2" for="recruiting">Recruiting</label>
         <input
             id="recruiting"
             class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -37,12 +42,8 @@
 <script setup lang="ts">
 import {defineEmits, defineProps, ref} from 'vue';
 import Modal from "@/Components/Modal.vue";
+import {Guild} from "@/types/Guild";
 
-interface Guild {
-  name: string;
-  recruiting: boolean;
-  description: string;
-}
 
 const props = defineProps<{
   open: boolean;
@@ -54,6 +55,7 @@ const emit = defineEmits(['update', 'close']);
 const form = ref({
   name: props.guild.name,
   recruiting: props.guild.recruiting,
+  leader_id: props.guild.characters.filter(character => character.role === 'leader')[0].id,
   description: props.guild.description,
 });
 

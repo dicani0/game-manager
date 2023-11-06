@@ -17,6 +17,7 @@ class GuildCharacterResource extends JsonResource
     {
         return [
             'id' => $this->getResource()->id,
+            'character_id' => $this->getResource()->character_id,
             'role' => $this->getResource()->role,
             'nickname' => $this->getResource()->character->name,
             'vocation' => $this->getResource()->character->vocation,

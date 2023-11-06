@@ -7,11 +7,13 @@ use App\Models\Character\Character;
 use App\Models\Guild\Guild;
 use App\Models\Guild\GuildCharacter;
 use App\Models\User;
-use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class GuildTest extends TestCase
 {
+    use DatabaseTransactions;
+
     public User $user;
     public Character $character;
 
@@ -48,7 +50,7 @@ class GuildTest extends TestCase
         ]);
     }
 
-    public function test_update_guild(): void
+    public function test_update_guild_ok(): void
     {
         $guild = Guild::factory()->create([
             'recruiting' => false,
@@ -60,11 +62,22 @@ class GuildTest extends TestCase
             'role' => GuildRoleEnum::LEADER->value,
         ]);
 
+        $secondCharacter = Character::factory()->create([
+            'user_id' => $this->user->getKey(),
+        ]);
+
+        $newLeader = GuildCharacter::create([
+            'guild_id' => $guild->getKey(),
+            'character_id' => $secondCharacter->getKey(),
+            'role' => GuildRoleEnum::MEMBER->value,
+        ]);
+
         $this->actingAs($this->user)
             ->patch('/guilds/' . $guild->getKey(), [
                 'name' => 'test guild',
                 'description' => 'test description',
                 'recruiting' => false,
+                'leader_id' => $newLeader->getKey(),
             ])
             ->assertRedirect();
 
@@ -72,6 +85,18 @@ class GuildTest extends TestCase
             'name' => 'test guild',
             'description' => 'test description',
             'recruiting' => false,
+        ]);
+
+        $this->assertDatabaseHas('guild_character', [
+            'guild_id' => $guild->getKey(),
+            'character_id' => $this->character->getKey(),
+            'role' => GuildRoleEnum::MEMBER->value,
+        ]);
+
+        $this->assertDatabaseHas('guild_character', [
+            'guild_id' => $guild->getKey(),
+            'character_id' => $secondCharacter->getKey(),
+            'role' => GuildRoleEnum::LEADER->value,
         ]);
     }
 
@@ -92,6 +117,7 @@ class GuildTest extends TestCase
                 'name' => 'test guild',
                 'description' => 'test description',
                 'recruiting' => false,
+                'leader_id' => $this->character->getKey(),
             ]);
 
         $response->assertRedirect();
@@ -103,5 +129,33 @@ class GuildTest extends TestCase
             'description' => 'test description',
             'recruiting' => false,
         ]);
+    }
+
+    public function test_kick_from_guild_as_leader_ok(): void
+    {
+        $guild = Guild::factory()->create([
+            'recruiting' => false,
+        ]);
+
+        GuildCharacter::create([
+            'guild_id' => $guild->getKey(),
+            'character_id' => $this->character->getKey(),
+            'role' => GuildRoleEnum::MEMBER->value,
+        ]);
+
+        $secondCharacter = Character::factory()->create([
+            'user_id' => $this->user->getKey(),
+        ]);
+
+        $kickedCharacter = GuildCharacter::create([
+            'guild_id' => $guild->getKey(),
+            'character_id' => $secondCharacter->getKey(),
+            'role' => GuildRoleEnum::MEMBER->value,
+        ]);
+
+        $res = $this->actingAs($this->user)
+            ->delete('/guilds/' . $guild->getKey() . '/kick/' . $kickedCharacter->getKey());
+
+        dd($res);
     }
 }

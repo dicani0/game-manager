@@ -3,9 +3,10 @@
 namespace Database\Factories\Guild;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Model;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
+ * @extends Factory<Model>
  */
 class GuildFactory extends Factory
 {
@@ -18,7 +19,7 @@ class GuildFactory extends Factory
     {
         return [
             'name' => $this->faker->word,
-            'description' => $this->faker->paragraph,
+            'description' => $this->faker->paragraph(1),
             'recruiting' => $this->faker->boolean,
         ];
     }

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Guild;
 
+use App\Actions\Guild\KickGuildMember;
 use App\Data\Guild\CreateGuildDto;
 use App\Data\Guild\EditGuildDto;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Guild\GuildResource;
 use App\Models\Guild\Guild;
+use App\Models\Guild\GuildCharacter;
 use App\Processes\Guild\CreateGuildProcess;
 use App\Processes\Guild\EditGuildProcess;
 use App\Queries\Guild\GuildIndexQuery;
@@ -59,6 +61,15 @@ class GuildController extends Controller
     public function update(Guild $guild, EditGuildDto $dto, EditGuildProcess $process): RedirectResponse
     {
         $process->run($dto);
+
+        return redirect('/guilds/' . $guild->name)->with('success', 'Guild updated!');
+    }
+
+    public function kick(Guild $guild, GuildCharacter $member, KickGuildMember $action)
+    {
+        Gate::allows('kick', [$guild, $member]);
+
+        $action->handle($member);
 
         return redirect('/guilds/' . $guild->name)->with('success', 'Guild updated!');
     }

@@ -70,6 +70,7 @@ Route::prefix('items')->middleware('auth')->group(function () {
 Route::prefix('guilds')->middleware('auth')->group(function () {
     Route::get('/', [GuildController::class, 'index']);
     Route::get('/create', [GuildController::class, 'create']);
+    Route::delete('/{guild}/kick/{member}', [GuildController::class, 'kick']);
     Route::get('/{guild:name}', [GuildController::class, 'show']);
     Route::post('/', [GuildController::class, 'store']);
     Route::patch('/{guild}', [GuildController::class, 'update']);
