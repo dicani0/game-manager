@@ -20,9 +20,10 @@ class TransferLeadership
 
         GuildCharacter::query()
             ->where('guild_id', $guild->getKey())
-            ->where('character_id', $guildMemberId)
+            ->where('id', $guildMemberId)
             ->update([
                 'role' => GuildRoleEnum::LEADER,
             ]);
+
     }
 }
