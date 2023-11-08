@@ -1,21 +1,33 @@
 <template>
-    <h2 v-if="guild">{{ guild.name }}</h2>
-    <h2 v-else>Not found</h2>
+  <div class="container mx-auto px-4 py-8">
+    <ul class="space-y-4">
+      <li v-for="guild in guilds.data" :key="guild.id"
+          class="flex p-4 border rounded-lg bg-gray-900 shadow">
+        <Link :href="`/guilds/${guild.name}`" class="text-blue-500 hover:text-blue-700 hover:underline">
+          {{ guild.name }}
+          Recruiting {{ guild.recruiting ? 'Yes' : 'No' }}
+        </Link>
+      </li>
+    </ul>
+  </div>
 </template>
 
-<script>
-import {Link} from "@inertiajs/vue3";
-import Layout from "@/Layouts/Layout.vue";
-import GuildLayout from "@/Layouts/GuildLayout.vue";
+<script setup lang="ts">
+import {defineProps} from 'vue';
+import {Link} from '@inertiajs/vue3';
 
-export default {
-    props: {
-        guild: Object,
-    },
-    components: {
-        GuildLayout,
-        Link
-    },
-    layout: GuildLayout,
-};
+interface Guild {
+  id: number;
+  name: string;
+  recruiting: boolean;
+}
+
+interface GuildData {
+  data: Guild[];
+}
+
+const props = defineProps({
+  guilds: Object as () => GuildData,
+})
+
 </script>

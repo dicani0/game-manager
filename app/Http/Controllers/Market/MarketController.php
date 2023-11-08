@@ -44,6 +44,7 @@ class MarketController extends Controller
 
     public function history(Request $request, UserMarketHistoryOffersQuery $query): Response
     {
+
         return Inertia::render('Market/MyOffers', [
             'offers' => $query->handle()->paginate(),
             'sellers' => User::query()->whereNot('id', $request->user()?->getKey())->has('marketOffers')->get(),
