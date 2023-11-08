@@ -309,7 +309,7 @@ class MarketTest extends TestCase
 
         $this
             ->actingAs($buyer2)
-            ->post("/market/{$offer->getKey()}/{$tradeOffer->getKey()}/accept")
+            ->post("/market/{$tradeOffer->getKey()}/{$offer->getKey()}/accept")
             ->assertRedirect();
 
         $this->assertEquals(session('errors')->getBag('default')->first(), 'This action is unauthorized.');
@@ -429,7 +429,7 @@ class MarketTest extends TestCase
             ],
         ]);
 
-        $res = $this->actingAs($this->user)->post("/market/{$offer->getKey()}/{$tradeOffer->getKey()}/accept");
+        $this->actingAs($this->user)->post("/market/{$tradeOffer->getKey()}/{$offer->getKey()}/accept");
 
         $this->assertDatabaseHas('user_item', [
             'user_id' => $buyer->getKey(),
@@ -516,8 +516,8 @@ class MarketTest extends TestCase
             ],
         ]);
 
-        $this->actingAs($this->user)->post("/market/{$offer->getKey()}/{$tradeOffer4->getKey()}/accept");
-
+        $res = $this->actingAs($this->user)->post("/market/{$tradeOffer4->getKey()}/{$offer->getKey()}/accept");
+        
         $this->assertDatabaseHas('trade_offers', [
             'id' => $tradeOffer4->getKey(),
             'user_id' => $buyer2->getKey(),
@@ -606,7 +606,7 @@ class MarketTest extends TestCase
 
         $this
             ->actingAs($buyer)
-            ->post("/market/{$offer->getKey()}/{$tradeOffer->getKey()}/reject")
+            ->post("/market/{$tradeOffer->getKey()}/{$offer->getKey()}/reject")
             ->assertRedirect();
 
 
@@ -682,7 +682,7 @@ class MarketTest extends TestCase
             ],
         ]);
 
-        $this->actingAs($this->user)->post("/market/{$offer->getKey()}/{$tradeOffer->getKey()}/reject");
+        $this->actingAs($this->user)->post("/market/{$tradeOffer->getKey()}/{$offer->getKey()}/reject");
 
         $this->assertDatabaseHas('trade_offers', [
             'id' => $tradeOffer->getKey(),
@@ -695,22 +695,22 @@ class MarketTest extends TestCase
     {
         $offer = MarketOffer::factory()->create([
             'user_id' => $this->user->getKey(),
-            'status' => MarketOfferStatusEnum::EXPIRED
+            'status' => MarketOfferStatusEnum::EXPIRED,
         ]);
 
         MarketOffer::factory()->create([
             'user_id' => $this->user->getKey(),
-            'status' => MarketOfferStatusEnum::ACTIVE
+            'status' => MarketOfferStatusEnum::ACTIVE,
         ]);
 
         MarketOffer::factory()->create([
             'user_id' => $this->user->getKey(),
-            'status' => MarketOfferStatusEnum::FINISHED
+            'status' => MarketOfferStatusEnum::FINISHED,
         ]);
 
         MarketOffer::factory()->create([
             'user_id' => $this->user->getKey(),
-            'status' => MarketOfferStatusEnum::CANCELED
+            'status' => MarketOfferStatusEnum::CANCELED,
         ]);
 
         $this->actingAs($this->user)->get('/market/history')

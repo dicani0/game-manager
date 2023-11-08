@@ -23,6 +23,7 @@ class UserItemResource extends JsonResource
             'used_amount' => $this->getResource()->pivot->used_amount,
             'available_amount' => $this->getResource()->pivot->available_amount,
             'reserved_amount' => $this->getResource()->pivot->reserved_amount,
+            'bought_amount' => $this->getResource()->pivot->bought_amount,
             'tier' => $this->getResource()->tier,
             'power' => $this->getResource()->power,
             'attributes' => $this->getResource()->attributes,

@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Market\Offer;
 
-use App\Models\Market\MarketOffer;
+use App\Models\Interfaces\Offerable;
 use App\Models\Market\TradeOffer;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -18,8 +18,8 @@ class MarketOfferRequest extends FormRequest
         return $this->route('offerRequest');
     }
 
-    protected function getMarketOffer(): MarketOffer
+    protected function getOfferable(): Offerable
     {
-        return $this->route('offer');
+        return $this->getOfferRequest()->offerable;
     }
 }

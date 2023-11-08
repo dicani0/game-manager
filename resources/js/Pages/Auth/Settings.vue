@@ -16,7 +16,7 @@
                 <label class="text-sm font-medium text-gray-400" for="private">Private</label>
                 <!-- Tooltip -->
                 <div :class="{ 'tooltip-visible': showTooltip, 'tooltip-hidden': !showTooltip }"
-                     class="absolute tooltip-content -top-10 left-52 transform -translate-x-1/2 p-2 bg-gray-800 text-gray-300 rounded text-xs z-10">
+                     class="absolute width-full tooltip-content -top-6 left-44 transform -translate-x-1/2 p-2 bg-gray-800 text-gray-300 rounded text-xs z-10">
                     Your items will be visible to other players and they will be able to request a trade.
                 </div>
             </div>
@@ -84,6 +84,7 @@ const updateSettings = () => {
 .tooltip-visible {
     opacity: 1;
     visibility: visible;
+    width: 200px;
 }
 
 .tooltip-hidden {

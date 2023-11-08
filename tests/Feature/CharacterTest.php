@@ -13,15 +13,6 @@ class CharacterTest extends TestCase
 
     public User $user;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->user = User::factory()->create([
-            'email' => 'test@example.com',
-            'password' => bcrypt('password'),
-        ]);
-    }
-
     public function test_create_character(): void
     {
         $response = $this->actingAs($this->user)->post('/characters', [
@@ -70,7 +61,7 @@ class CharacterTest extends TestCase
 
         $user2 = User::factory()->create();
 
-        $response = $this->actingAs($user2)->get('/characters/edit/' . $character->id);
+        $response = $this->actingAs($user2)->get('/characters/edit/' . $character->getKey());
         $response->assertRedirect();
     }
 
@@ -125,6 +116,15 @@ class CharacterTest extends TestCase
 
         $this->assertDatabaseMissing('characters', [
             'id' => $character->getKey(),
+        ]);
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->user = User::factory()->create([
+            'email' => 'test@example.com',
+            'password' => bcrypt('password'),
         ]);
     }
 }

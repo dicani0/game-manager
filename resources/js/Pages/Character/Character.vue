@@ -1,6 +1,6 @@
 <template>
   <div class="max-w-7xl py-4 mx-auto sm:px-6 lg:px-8 bg-gray-800 text-white">
-    <div class="flex justify-between items-center mt-6">
+    <div class="flex gap-8 justify-between items-center mt-6">
       <h1 class="text-3xl font-semibold text-white">Your Characters</h1>
       <Link href="/characters/create"
             class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
@@ -12,17 +12,17 @@
            :key="character.id">
         <h2 class="text-2xl font-semibold text-white">{{ character.name }}</h2>
         <p class="text-lg text-gray-300">{{ character.vocation }}</p>
-        <p v-if="character.guild">{{ character.guild.name }}</p>
+        <p v-if="character.guild">{{ character.guild }}</p>
         <p v-else>No guild</p>
         <div class="flex gap-2">
           <button
-              class="mt-4 bg-teal-400 hover:bg-teal-900 text-white font-bold py-2 px-4 rounded flex items-center"
+              class="mt-4 bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded flex items-center"
               @click="editCharacter(character.id)">
             <vue-feather type="x-circle" class="mr-2"></vue-feather>
             Edit
           </button>
           <button
-              class="mt-4 bg-red-500 hover:bg-red-900 text-white font-bold py-2 px-4 rounded flex items-center"
+              class="mt-4 bg-gray-500 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded flex items-center"
               @click="deleteCharacter(character.id)">
             <vue-feather type="x-circle" class="mr-2"></vue-feather>
             Delete

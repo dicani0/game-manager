@@ -3,20 +3,20 @@
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\ProfileController;
-use App\Http\Controllers\Auth\PusherController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
-use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\SettingsController;
+use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Character\CharacterController;
 use App\Http\Controllers\Guild\GuildController;
 use App\Http\Controllers\Items\ItemController;
 use App\Http\Controllers\Items\UserItemController;
 use App\Http\Controllers\Market\MarketController;
 use App\Http\Controllers\Market\MarketOfferRequestController;
+use App\Http\Controllers\Market\TradeOfferController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,31 +28,24 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/', function () {
-    return Inertia::render('Home');
-});
-
-Route::get('/about', function () {
-    return Inertia::render('About');
-});
-
-Route::prefix('guild')->group(function () {
-    Route::get('/', [GuildController::class, 'dashboard']);
-});
+Route::inertia('/', 'Home')->name('home');
+Route::inertia('/about', 'About')->name('about');
 
 Route::prefix('market')->group(function () {
     Route::get('/', [MarketController::class, 'index']);
     Route::middleware('auth')->group(function () {
+        Route::get('/requests', [TradeOfferController::class, 'index']);
         //trade requests
-        Route::post('/{offer}/buy', [MarketController::class, 'createBuyOffer']);
+        Route::post('/user/{user}/buy', [MarketController::class, 'createBuyOfferUser']);
+        Route::post('/{offer}/buy', [MarketController::class, 'createBuyOfferMarket']);
         //market offers
         Route::get('/my', [MarketController::class, 'userOffers']);
         Route::get('/history', [MarketController::class, 'history']);
         Route::post('/', [MarketController::class, 'store']);
         Route::delete('/{offer}', [MarketController::class, 'cancel']);
 
-        Route::post('/{offer}/{offerRequest}/accept', [MarketOfferRequestController::class, 'accept']);
-        Route::post('/{offer}/{offerRequest}/reject', [MarketOfferRequestController::class, 'reject']);
+        Route::post('/{offerRequest}/{offer}/accept', [MarketOfferRequestController::class, 'accept']);
+        Route::post('/{offerRequest}/{offer}/reject', [MarketOfferRequestController::class, 'reject']);
     });
 });
 
@@ -74,8 +67,18 @@ Route::prefix('items')->middleware('auth')->group(function () {
     Route::get('/', [ItemController::class, 'index']);
 });
 
+Route::prefix('guilds')->middleware('auth')->group(function () {
+    Route::get('/', [GuildController::class, 'index']);
+    Route::get('/create', [GuildController::class, 'create']);
+    Route::delete('/{guild}/kick/{member}', [GuildController::class, 'kick']);
+    Route::get('/{guild:name}', [GuildController::class, 'show']);
+    Route::post('/', [GuildController::class, 'store']);
+    Route::patch('/{guild}', [GuildController::class, 'update']);
+});
+
 Route::prefix('auth')->group(function () {
     Route::get('email/{id}/{hash}', [EmailVerificationController::class, 'verify'])->name('verification.verify');
+    Route::get('users', [UserController::class, 'getPublicUsers']);
     Route::middleware('guest')->group(function () {
         Route::inertia('register', 'Auth/Register')->name('register');
         Route::inertia('login', 'Auth/Login')->name('login');

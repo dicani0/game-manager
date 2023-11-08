@@ -3,9 +3,11 @@
 namespace App\Models\Character;
 
 use App\Models\User;
+use Eloquent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Character\Character
@@ -15,8 +17,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $vocation
  * @property int|null $guild_id
  * @property int $user_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property-read User $user
  * @method static \Illuminate\Database\Eloquent\Builder|Character newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Character newQuery()
@@ -28,7 +30,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|Character whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Character whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Character whereVocation($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class Character extends Model
 {

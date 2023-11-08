@@ -1,11 +1,10 @@
 <template>
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-gray-900 text-white">
+  <div class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-gray-900 text-white">
     <h1 class="text-3xl font-bold mb-6">{{ $page.url.includes('my') ? 'Your Offers' : 'Offers History' }}</h1>
 
-    <div class="flex flex-col gap-4">
-
+    <div class="flex flex-col gap-4 w-full">
       <div v-for="offer in offers.data" :key="offer.id"
-           class="relative rounded-lg p-4 border-2 border bg-clip-border shadow-lg w-full"
+           class="relative rounded-lg p-4 border-2 border bg-clip-border shadow-lg"
            :class="{'border-pulse border-4 bg-cyan-900': offer.promoted}">
         <Transition>
           <div>
@@ -167,15 +166,9 @@ const acceptRequest = async (offer, request) => {
     return;
   }
 
-  router.post('/market/' + offer.id + '/' + request.id + '/accept', null, {
+  router.post('/market/' + request.id + '/' + offer.id + '/accept', null, {
     preserveScroll: true,
     preserveState: true,
-    onSuccess: () => {
-      useToast().success('Request accepted successfully')
-    },
-    onError: () => {
-      useToast().error('Something went wrong')
-    }
   })
 }
 
@@ -191,15 +184,9 @@ const rejectRequest = async (offer, request) => {
     return;
   }
 
-  router.post('/market/' + offer.id + '/' + request.id + '/reject', {
+  router.post('/market/' + request.id + '/' + offer.id + '/reject', {
     preserveScroll: true,
     preserveState: true,
-    onSuccess: () => {
-      Toast.fire({
-        icon: 'success',
-        title: 'Request rejected successfully'
-      })
-    }
   })
 }
 

@@ -7,7 +7,8 @@ use App\Data\Market\CreateMarketOfferDto;
 use App\Data\Market\CreateTradeOfferDto;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Market\CancelMarketOfferRequest;
-use App\Http\Requests\Market\CreateBuyOfferRequest;
+use App\Http\Requests\Market\CreateBuyOfferMarketRequest;
+use App\Http\Requests\Market\CreateBuyOfferUserRequest;
 use App\Http\Requests\Market\CreateMarketOfferRequest;
 use App\Http\Requests\Market\UserOfferIndexRequest;
 use App\Models\Market\MarketOffer;
@@ -22,6 +23,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Throwable;
 
 class MarketController extends Controller
 {
@@ -42,6 +44,7 @@ class MarketController extends Controller
 
     public function history(Request $request, UserMarketHistoryOffersQuery $query): Response
     {
+
         return Inertia::render('Market/MyOffers', [
             'offers' => $query->handle()->paginate(),
             'sellers' => User::query()->whereNot('id', $request->user()?->getKey())->has('marketOffers')->get(),
@@ -72,13 +75,28 @@ class MarketController extends Controller
     }
 
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
-    public function createBuyOffer(CreateBuyOfferRequest $request, MarketOffer $offer, CreateBuyOfferRequestProcess $process): RedirectResponse
+    public function createBuyOfferMarket(CreateBuyOfferMarketRequest $request, MarketOffer $offer, CreateBuyOfferRequestProcess $process): RedirectResponse
     {
         $dto = CreateTradeOfferDto::from(array_merge($request->validated(), [
             'creator' => $request->user(),
-            'offer' => $offer,
+            'target' => $offer,
+        ]));
+
+        $process->run($dto);
+
+        return redirect()->back()->with('success', 'Trade offer sent!');
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function createBuyOfferUser(CreateBuyOfferUserRequest $request, User $user, CreateBuyOfferRequestProcess $process): RedirectResponse
+    {
+        $dto = CreateTradeOfferDto::from(array_merge($request->validated(), [
+            'creator' => $request->user(),
+            'target' => $user,
         ]));
 
         $process->run($dto);

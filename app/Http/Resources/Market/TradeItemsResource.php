@@ -2,11 +2,11 @@
 
 namespace App\Http\Resources\Market;
 
-use App\Models\Market\MarketOffer;
+use App\Models\Items\Item;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MarketOfferResource extends JsonResource
+class TradeItemsResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,11 +16,12 @@ class MarketOfferResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-
+            'name' => $this->getResource()->name,
+            'amount' => $this->getResource()->pivot->amount,
         ];
     }
 
-    private function getResource(): MarketOffer
+    public function getResource(): Item
     {
         return $this->resource;
     }
