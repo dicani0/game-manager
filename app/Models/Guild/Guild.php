@@ -69,7 +69,7 @@ class Guild extends Model
         return $this->hasMany(GuildCharacter::class);
     }
 
-    public function getLeaderAttribute(): GuildCharacter
+    public function getLeaderAttribute(): ?GuildCharacter
     {
         return $this->characters->where('role', GuildRoleEnum::LEADER)->first();
     }

@@ -12,8 +12,6 @@ use Tests\TestCase;
 
 class GuildTest extends TestCase
 {
-    use DatabaseTransactions;
-
     public User $user;
     public Character $character;
 
@@ -23,6 +21,7 @@ class GuildTest extends TestCase
 
         $this->user = User::factory()->create();
         $this->character = Character::factory()->create([
+            'name' => 'main_character',
             'user_id' => $this->user->id,
         ]);
     }
@@ -32,11 +31,13 @@ class GuildTest extends TestCase
      */
     public function test_create_guild(): void
     {
-        $this->actingAs($this->user)->post('/guilds', [
+        $res = $this->actingAs($this->user)->post('/guilds', [
             'name' => 'test guild',
             'recruiting' => false,
             'leader_id' => $this->character->getKey(),
         ]);
+
+        $guild = Guild::first();
 
         $this->assertDatabaseHas('guilds', [
             'name' => 'test guild',
@@ -44,7 +45,7 @@ class GuildTest extends TestCase
         ]);
 
         $this->assertDatabaseHas('guild_character', [
-            'guild_id' => 1,
+            'guild_id' => $guild->getKey(),
             'character_id' => $this->character->getKey(),
             'role' => GuildRoleEnum::LEADER->value,
         ]);
@@ -64,6 +65,7 @@ class GuildTest extends TestCase
 
         $secondCharacter = Character::factory()->create([
             'user_id' => $this->user->getKey(),
+            'name' => 'new_leader'
         ]);
 
         $newLeader = GuildCharacter::create([
@@ -158,7 +160,7 @@ class GuildTest extends TestCase
 
         $this->assertDatabaseMissing('guild_character', [
             'guild_id' => $guild->getKey(),
-            'character_id' => $kickedCharacter->getKey(),
+            'id' => $kickedCharacter->getKey(),
         ]);
     }
 
@@ -189,7 +191,7 @@ class GuildTest extends TestCase
 
         $this->assertDatabaseMissing('guild_character', [
             'guild_id' => $guild->getKey(),
-            'character_id' => $kickedCharacter->getKey(),
+            'id' => $kickedCharacter->getKey(),
         ]);
     }
 
@@ -215,14 +217,14 @@ class GuildTest extends TestCase
             'role' => GuildRoleEnum::LEADER->value,
         ]);
 
-        $this->actingAs($this->user)
+        $res = $this->actingAs($this->user)
             ->delete('/guilds/' . $guild->getKey() . '/kick/' . $kickedCharacter->getKey());
 
         $this->assertEquals(session('errors')->getBag('default')->first(), 'This action is unauthorized.');
 
         $this->assertDatabaseHas('guild_character', [
             'guild_id' => $guild->getKey(),
-            'character_id' => $kickedCharacter->getKey(),
+            'id' => $kickedCharacter->getKey(),
         ]);
     }
 
@@ -255,7 +257,7 @@ class GuildTest extends TestCase
 
         $this->assertDatabaseHas('guild_character', [
             'guild_id' => $guild->getKey(),
-            'character_id' => $kickedCharacter->getKey(),
+            'id' => $kickedCharacter->getKey(),
         ]);
     }
 }
