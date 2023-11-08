@@ -6,14 +6,15 @@ use App\Actions\Character\CreateCharacter;
 use App\Actions\Character\DeleteCharacter;
 use App\Actions\Character\UpdateCharacter;
 use App\Data\Character\CharacterDto;
+use App\Data\Character\CharacterUpdateDto;
 use App\Enums\VocationEnum;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Character\StoreCharacterRequest;
+use App\Http\Requests\Character\DeleteCharacterRequest;
 use App\Http\Requests\Character\EditCharacterRequest;
-use App\Http\Requests\Character\UpdateCharacterRequest;
 use App\Models\Character\Character;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -41,22 +42,22 @@ class CharacterController extends Controller
         ]);
     }
 
-    public function update(UpdateCharacterRequest $request, Character $character, UpdateCharacter $action): RedirectResponse
+    public function update(CharacterUpdateDto $dto, Character $character, UpdateCharacter $action): RedirectResponse
     {
-        $action->handle($character, CharacterDto::from($request->validated()));
+        $action->handle($character, $dto);
         return redirect('/characters')->with('success', 'Character updated successfully!');
     }
 
-    public function store(StoreCharacterRequest $request, CreateCharacter $action)
+    public function store(CharacterDto $dto, CreateCharacter $action)
     {
-        $action->handle(CharacterDto::from($request->validated()), $request->user());
+        $action->handle($dto, Auth::user());
         return Inertia::render('Character/Character', [
-            'characters' => $request->user()->characters,
+            'characters' => Auth::user()->characters,
             'success' => 'Character created successfully!',
         ])->with('success', 'Character created successfully!');
     }
 
-    public function delete(Request $request, Character $character, DeleteCharacter $deleteCharacter): RedirectResponse
+    public function delete(DeleteCharacterRequest $request, Character $character, DeleteCharacter $deleteCharacter): RedirectResponse
     {
         $deleteCharacter->handle($request->user(), $character);
         return redirect('/characters')->with('success', 'Character deleted successfully!');

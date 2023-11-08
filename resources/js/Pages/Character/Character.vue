@@ -38,7 +38,6 @@
 
 <script setup>
 import {Link, router} from "@inertiajs/vue3";
-import {useToast} from "vue-toastification";
 import Toast from "@/Utility/Toast.js";
 
 const props = defineProps({
@@ -54,16 +53,7 @@ const deleteCharacter = async (id) => {
   })
 
   if (result.isConfirmed) {
-    router.delete(`/characters/${id}`, {
-      onSuccess: (response) => {
-        useToast().success(response.props.flash.success)
-      },
-      onError: (errors) => {
-        Object.values(errors).forEach((error) => {
-          useToast().error(error);
-        });
-      },
-    })
+    router.delete(`/characters/${id}`)
   }
 }
 const editCharacter = (id) => {
