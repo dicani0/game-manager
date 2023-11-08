@@ -140,7 +140,7 @@ class GuildTest extends TestCase
         GuildCharacter::create([
             'guild_id' => $guild->getKey(),
             'character_id' => $this->character->getKey(),
-            'role' => GuildRoleEnum::MEMBER->value,
+            'role' => GuildRoleEnum::LEADER->value,
         ]);
 
         $secondCharacter = Character::factory()->create([
@@ -153,9 +153,109 @@ class GuildTest extends TestCase
             'role' => GuildRoleEnum::MEMBER->value,
         ]);
 
-        $res = $this->actingAs($this->user)
+        $this->actingAs($this->user)
             ->delete('/guilds/' . $guild->getKey() . '/kick/' . $kickedCharacter->getKey());
 
-        dd($res);
+        $this->assertDatabaseMissing('guild_character', [
+            'guild_id' => $guild->getKey(),
+            'character_id' => $kickedCharacter->getKey(),
+        ]);
+    }
+
+    public function test_kick_from_guild_as_vice_leader_ok(): void
+    {
+        $guild = Guild::factory()->create([
+            'recruiting' => false,
+        ]);
+
+        GuildCharacter::create([
+            'guild_id' => $guild->getKey(),
+            'character_id' => $this->character->getKey(),
+            'role' => GuildRoleEnum::VICE_LEADER->value,
+        ]);
+
+        $secondCharacter = Character::factory()->create([
+            'user_id' => $this->user->getKey(),
+        ]);
+
+        $kickedCharacter = GuildCharacter::create([
+            'guild_id' => $guild->getKey(),
+            'character_id' => $secondCharacter->getKey(),
+            'role' => GuildRoleEnum::MEMBER->value,
+        ]);
+
+        $this->actingAs($this->user)
+            ->delete('/guilds/' . $guild->getKey() . '/kick/' . $kickedCharacter->getKey());
+
+        $this->assertDatabaseMissing('guild_character', [
+            'guild_id' => $guild->getKey(),
+            'character_id' => $kickedCharacter->getKey(),
+        ]);
+    }
+
+    public function test_cant_kick_leader_as_vice_leader(): void
+    {
+        $guild = Guild::factory()->create([
+            'recruiting' => false,
+        ]);
+
+        GuildCharacter::create([
+            'guild_id' => $guild->getKey(),
+            'character_id' => $this->character->getKey(),
+            'role' => GuildRoleEnum::VICE_LEADER->value,
+        ]);
+
+        $secondCharacter = Character::factory()->create([
+            'user_id' => $this->user->getKey(),
+        ]);
+
+        $kickedCharacter = GuildCharacter::create([
+            'guild_id' => $guild->getKey(),
+            'character_id' => $secondCharacter->getKey(),
+            'role' => GuildRoleEnum::LEADER->value,
+        ]);
+
+        $this->actingAs($this->user)
+            ->delete('/guilds/' . $guild->getKey() . '/kick/' . $kickedCharacter->getKey());
+
+        $this->assertEquals(session('errors')->getBag('default')->first(), 'This action is unauthorized.');
+
+        $this->assertDatabaseHas('guild_character', [
+            'guild_id' => $guild->getKey(),
+            'character_id' => $kickedCharacter->getKey(),
+        ]);
+    }
+
+    public function test_cant_kick_vice_leader_as_vice_leader(): void
+    {
+        $guild = Guild::factory()->create([
+            'recruiting' => false,
+        ]);
+
+        GuildCharacter::create([
+            'guild_id' => $guild->getKey(),
+            'character_id' => $this->character->getKey(),
+            'role' => GuildRoleEnum::VICE_LEADER->value,
+        ]);
+
+        $secondCharacter = Character::factory()->create([
+            'user_id' => $this->user->getKey(),
+        ]);
+
+        $kickedCharacter = GuildCharacter::create([
+            'guild_id' => $guild->getKey(),
+            'character_id' => $secondCharacter->getKey(),
+            'role' => GuildRoleEnum::VICE_LEADER->value,
+        ]);
+
+        $this->actingAs($this->user)
+            ->delete('/guilds/' . $guild->getKey() . '/kick/' . $kickedCharacter->getKey());
+
+        $this->assertEquals(session('errors')->getBag('default')->first(), 'This action is unauthorized.');
+
+        $this->assertDatabaseHas('guild_character', [
+            'guild_id' => $guild->getKey(),
+            'character_id' => $kickedCharacter->getKey(),
+        ]);
     }
 }

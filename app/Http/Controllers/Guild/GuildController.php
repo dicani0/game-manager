@@ -67,7 +67,7 @@ class GuildController extends Controller
 
     public function kick(Guild $guild, GuildCharacter $member, KickGuildMember $action)
     {
-        Gate::allows('kick', [$guild, $member]);
+        $this->authorize('kick', [$guild, $member]);
 
         $action->handle($member);
 

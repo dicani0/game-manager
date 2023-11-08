@@ -43,7 +43,6 @@ class GuildPolicy
         if ($character->guild_id !== $guild->getKey()) {
             return false;
         }
-
         if ($this->isLeader($user, $guild) && $character->role !== GuildRoleEnum::LEADER) {
             return true;
         }
