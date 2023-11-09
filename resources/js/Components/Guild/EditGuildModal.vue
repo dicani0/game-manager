@@ -20,16 +20,16 @@
         </textarea>
 
         <label class="block text-gray-300 text-sm font-bold mb-2" for="leader">Leader</label>
-        <select class="w-full text-black" name="leader" id="leader" v-model="form.leader_id">
+        <select id="leader" v-model="form.leader_id" class="w-full text-black" name="leader">
           <option v-for="character in guild.characters" :value="character.id">{{ character.nickname }}</option>
         </select>
         <label class="block text-gray-300 text-sm font-bold mb-2" for="recruiting">Recruiting</label>
         <input
             id="recruiting"
-            class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             :checked="form.recruiting"
-            @change="form.recruiting = !form.recruiting"
-            type="checkbox">
+            class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            type="checkbox"
+            @change="form.recruiting = !form.recruiting">
       </div>
       <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-2/6"
               type="submit">Update
@@ -39,7 +39,7 @@
   </Modal>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import {defineEmits, defineProps, ref} from 'vue';
 import Modal from "@/Components/Modal.vue";
 import {Guild} from "@/types/Guild";
@@ -50,7 +50,7 @@ const props = defineProps<{
   guild: Guild;
 }>();
 
-const emit = defineEmits(['update', 'close']);
+const emit = defineEmits(['update', 'closeEditModal']);
 
 const form = ref({
   name: props.guild.name,
@@ -60,7 +60,7 @@ const form = ref({
 });
 
 const closeModal = () => {
-  emit('close', false);
+  emit('closeEditModal', false);
 }
 
 const updateGuild = () => {

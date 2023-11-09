@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 /**
- * App\Models\Guild\GuildCharacter
+ * App\Models\Guild\GuildInvitation
  *
  * @property int            $id
  * @property int            $guild_id
@@ -21,27 +21,28 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null    $updated_at
  * @property-read Character $character
  * @property-read Guild     $guild
- * @method static Builder|GuildCharacter newModelQuery()
- * @method static Builder|GuildCharacter newQuery()
- * @method static Builder|GuildCharacter query()
- * @method static Builder|GuildCharacter whereCharacterId($value)
- * @method static Builder|GuildCharacter whereCreatedAt($value)
- * @method static Builder|GuildCharacter whereGuildId($value)
- * @method static Builder|GuildCharacter whereId($value)
- * @method static Builder|GuildCharacter whereRole($value)
- * @method static Builder|GuildCharacter whereUpdatedAt($value)
+ * @method static Builder|GuildInvitation newModelQuery()
+ * @method static Builder|GuildInvitation newQuery()
+ * @method static Builder|GuildInvitation query()
+ * @method static Builder|GuildInvitation whereCharacterId($value)
+ * @method static Builder|GuildInvitation whereCreatedAt($value)
+ * @method static Builder|GuildInvitation whereGuildId($value)
+ * @method static Builder|GuildInvitation whereId($value)
+ * @method static Builder|GuildInvitation whereRole($value)
+ * @method static Builder|GuildInvitation whereUpdatedAt($value)
  * @mixin Eloquent
  */
-class GuildCharacter extends Model
+class GuildInvitation extends Model
 {
-    public $timestamps = true;
-    protected $table = 'guild_character';
     protected $fillable = [
         'guild_id',
         'character_id',
         'role',
     ];
+
     protected $casts = [
+        'guild_id' => 'integer',
+        'character_id' => 'integer',
         'role' => GuildRoleEnum::class,
     ];
 

@@ -8,6 +8,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class GuildResource extends JsonResource
 {
+    private bool $includeInvitations = false;
+
     /**
      * Transform the resource into an array.
      *
@@ -23,7 +25,17 @@ class GuildResource extends JsonResource
             'recruiting' => $this->getResource()->recruiting,
             'leader' => GuildCharacterResource::make($this->getResource()->leader),
             'characters' => GuildCharacterResource::collection($this->getResource()->characters),
+            $this->mergeWhen($this->includeInvitations, [
+                'invitations' => GuildInvitationResource::collection($this->getResource()->invitations),
+            ]),
         ];
+    }
+
+    public function withInvitations(): self
+    {
+        $this->includeInvitations = true;
+
+        return $this;
     }
 
     public function getResource(): Guild

@@ -43,6 +43,7 @@ class GuildPolicy
         if ($character->guild_id !== $guild->getKey()) {
             return false;
         }
+
         if ($this->isLeader($user, $guild) && $character->role !== GuildRoleEnum::LEADER) {
             return true;
         }
@@ -51,8 +52,12 @@ class GuildPolicy
             && $character->role !== GuildRoleEnum::VICE_LEADER) {
             return true;
         }
-
         return false;
+    }
+
+    public function invite(User $user, Guild $guild): bool
+    {
+        return $this->isLeader($user, $guild) || $this->isViceLeader($user, $guild);
     }
 
     private function isLeader(User $user, Guild $guild): bool
