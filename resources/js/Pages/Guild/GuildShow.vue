@@ -2,11 +2,12 @@
   <div class="container mx-auto px-4 py-8 bg-gray-800 rounded-xl text-white">
     <GuildHeader :guild="guild" @edit="openEditModal = true" @invite="openInviteModal = true"/>
     <RecruitmentStatus :recruiting="props.guild.recruiting"/>
-    <GuildMembers :members="guild.characters" @kick="kickMember"/>
+    <GuildMembers :members="guild.characters" :permissions="permissions" @kick="kickMember"/>
     <EditGuildModal :guild="guild" :open.sync="openEditModal" @closeEditModal="openEditModal = false"
                     @update="updateGuild"/>
     <InviteToGuildModal :characters="props.characters" :guild="guild" :open.sync="openInviteModal"
                         @closeInviteModal="openInviteModal = false" @invited="reload"/>
+    <InvitedCharacters :invitations="props.guild.invitations"/>
   </div>
 </template>
 
@@ -17,19 +18,20 @@ import GuildHeader from "@/Components/Guild/GuildHeader.vue";
 import RecruitmentStatus from "@/Components/Guild/RecruitmentStatus.vue";
 import GuildMembers from "@/Components/Guild/GuildMembers.vue";
 import EditGuildModal from "@/Components/Guild/EditGuildModal.vue";
-import {Guild} from "@/types/Guild";
+import {CharactersPagination, Guild} from "@/types/Guild";
 import InviteToGuildModal from "@/Components/Guild/InviteToGuildModal.vue";
-
-interface CharactersPagination {
-  data: Array<{ id: number; name: string; }>;
-  current_page: number;
-  last_page: number;
-}
+import InvitedCharacters from "@/Components/Guild/InvitedCharacters.vue";
 
 const props = defineProps<{
   guild: Guild;
   characters: CharactersPagination;
+  invitations: any;
 }>();
+
+const permissions = {
+  is_leader: props.guild.is_leader,
+  is_vice_leader: props.guild.is_vice_leader
+};
 
 const openEditModal = ref(false);
 const openInviteModal = ref(false);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Guild;
 
+use App\Http\Resources\Character\CharacterResource;
 use App\Models\Guild\GuildInvitation;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -18,7 +19,9 @@ class GuildInvitationResource extends JsonResource
     {
         return [
             'id' => $this->getResource()->getKey(),
-            'character' => $this->getResource()->character(),
+            'character' => CharacterResource::make($this->getResource()->character),
+            'guild' => GuildResource::make($this->getResource()->guild),
+            'invited_at' => $this->getResource()->created_at,
         ];
     }
 

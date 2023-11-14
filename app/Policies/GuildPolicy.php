@@ -30,12 +30,12 @@ class GuildPolicy
 
     public function update(User $user, Guild $guild): bool
     {
-        return $this->isLeader($user, $guild);
+        return $guild->isLeader($user);
     }
 
     public function delete(User $user, Guild $guild): bool
     {
-        return $this->isLeader($user, $guild);
+        return $guild->isLeader($user);
     }
 
     public function kick(User $user, Guild $guild, GuildCharacter $character): bool
@@ -44,11 +44,11 @@ class GuildPolicy
             return false;
         }
 
-        if ($this->isLeader($user, $guild) && $character->role !== GuildRoleEnum::LEADER) {
+        if ($guild->isLeader($user) && $character->role !== GuildRoleEnum::LEADER) {
             return true;
         }
 
-        if ($this->isViceLeader($user, $guild) && $character->role !== GuildRoleEnum::LEADER
+        if ($guild->isViceLeader($user) && $character->role !== GuildRoleEnum::LEADER
             && $character->role !== GuildRoleEnum::VICE_LEADER) {
             return true;
         }
@@ -57,30 +57,6 @@ class GuildPolicy
 
     public function invite(User $user, Guild $guild): bool
     {
-        return $this->isLeader($user, $guild) || $this->isViceLeader($user, $guild);
-    }
-
-    private function isLeader(User $user, Guild $guild): bool
-    {
-        $leader = $this->getLeader($guild);
-
-        if (!$leader) {
-            return false;
-        }
-
-        return $user->characters->pluck('id')->contains($leader->character_id);
-    }
-
-    private function isViceLeader(User $user, Guild $guild): bool
-    {
-        $viceLeaders = $guild->characters->where('role', GuildRoleEnum::VICE_LEADER);
-        return $viceLeaders->contains(
-            fn(GuildCharacter $character) => $user->characters->pluck('id')->contains($character->character_id)
-        );
-    }
-
-    private function getLeader(Guild $guild): ?GuildCharacter
-    {
-        return $guild->characters->where('role', GuildRoleEnum::LEADER)->first();
+        return $guild->isLeader($user) || $guild->isViceLeader($user);
     }
 }

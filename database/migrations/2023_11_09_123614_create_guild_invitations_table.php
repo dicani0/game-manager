@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->foreignId('guild_id')->constrained()->cascadeOnDelete();
             $table->foreignId('character_id')->constrained()->cascadeOnDelete();
             $table->string('role')->default(GuildRoleEnum::MEMBER->value);
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }

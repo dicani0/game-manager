@@ -2,6 +2,7 @@
 
 namespace App\Models\Guild;
 
+use App\Enums\GuildInvitationStatus;
 use App\Enums\GuildRoleEnum;
 use App\Models\Character\Character;
 use Eloquent;
@@ -38,12 +39,14 @@ class GuildInvitation extends Model
         'guild_id',
         'character_id',
         'role',
+        'status',
     ];
 
     protected $casts = [
         'guild_id' => 'integer',
         'character_id' => 'integer',
         'role' => GuildRoleEnum::class,
+        'status' => GuildInvitationStatus::class,
     ];
 
     public function guild(): BelongsTo

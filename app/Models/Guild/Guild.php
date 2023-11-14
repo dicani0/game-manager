@@ -47,6 +47,7 @@ use Illuminate\Support\Carbon;
  * @property-read Collection<int, GuildInvitation> $invitations
  * @property-read int|null                         $invitations_count
  * @method static GuildFactory factory($count = null, $state = [])
+ * @property-read Collection                       $vice_leaders
  * @mixin Eloquent
  */
 class Guild extends Model
@@ -79,8 +80,31 @@ class Guild extends Model
         return $this->characters->where('role', GuildRoleEnum::LEADER)->first();
     }
 
+    public function getViceLeadersAttribute(): Collection
+    {
+        return $this->characters->where('role', GuildRoleEnum::VICE_LEADER);
+    }
+
     public function invitations(): HasMany
     {
         return $this->hasMany(GuildInvitation::class);
+    }
+
+    public function isLeader(User $user): bool
+    {
+        $leader = $this->leader;
+
+        if (!$leader) {
+            return false;
+        }
+
+        return $user->characters->pluck('id')->contains($leader->character_id);
+    }
+
+    public function isViceLeader(User $user): bool
+    {
+        return $this->vice_leaders->contains(
+            fn(GuildCharacter $character) => $user->characters->pluck('id')->contains($character->character_id)
+        );
     }
 }

@@ -1,5 +1,8 @@
 <template>
   <Modal :open="open" :width="'w-1/6'" class="transition-all" @close="closeInviteModal">
+    <div v-if="characters && characters.data.length < 1" class="text-center">
+      <p>There's no characters that can be invited!</p>
+    </div>
     <div class="my-4 p-4">
       <ul>
         <li v-for="character in characters?.data" :key="character.id" class="flex justify-between items-center my-2">
@@ -38,13 +41,8 @@
 import {computed, defineEmits, defineProps, watch} from 'vue';
 import Modal from "@/Components/Modal.vue";
 import {router} from "@inertiajs/vue3";
-import {Guild} from "@/types/Guild";
+import {CharactersPagination, Guild} from "@/types/Guild";
 
-interface CharactersPagination {
-  data: Array<{ id: number; name: string; }>;
-  current_page: number;
-  last_page: number;
-}
 
 const props = defineProps<{
   open: boolean;
@@ -54,7 +52,7 @@ const props = defineProps<{
 
 const emit = defineEmits(['invited', 'closeInviteModal']);
 
-watch(() => props.open, (newOpenValue) => {
+watch(() => props.open, (newOpenValue: boolean) => {
   if (newOpenValue) {
     router.reload({only: ['characters'], data: {page: 1}});
   }
@@ -81,7 +79,7 @@ const buttonClass = (isDisabled: boolean) => [
 
 const inviteCharacter = (characterId: number) => {
   const page = props.characters?.current_page || 1;
-  
+
   router.post(`/guilds/${props.guild.id}/invite/${characterId}`, {}, {
     preserveState: true,
     onSuccess: () => {

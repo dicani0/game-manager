@@ -92,7 +92,7 @@
                 </Link>
               </li>
               <li>
-                <Link class="block px-4 py-2 hover:bg-gray-200 hover:text-black" href="/guilds?my=1">Invites
+                <Link class="block px-4 py-2 hover:bg-gray-200 hover:text-black" href="/guilds/invites">Invites
                 </Link>
               </li>
             </ul>

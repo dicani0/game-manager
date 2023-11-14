@@ -20,7 +20,7 @@ class CharacterUpdateDto extends Data
     #[Required, Enum(VocationEnum::class)]
     public string $vocation;
 
-    public static function authorize()
+    public static function authorize(): bool
     {
         return Gate::allows('edit', request('character'));
     }

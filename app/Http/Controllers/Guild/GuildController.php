@@ -4,15 +4,12 @@ namespace App\Http\Controllers\Guild;
 
 use App\Data\Guild\CreateGuildDto;
 use App\Data\Guild\EditGuildDto;
-use App\Data\Guild\InviteToGuildDto;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Guild\GuildResource;
-use App\Models\Character\Character;
 use App\Models\Guild\Guild;
 use App\Models\Guild\GuildCharacter;
 use App\Processes\Guild\CreateGuildProcess;
 use App\Processes\Guild\EditGuildProcess;
-use App\Processes\Guild\InviteToGuildProcess;
 use App\Processes\Guild\KickFromGuildProcess;
 use App\Queries\Guild\GuildIndexQuery;
 use App\Queries\Guild\PossibleGuildMembersQuery;
@@ -75,18 +72,12 @@ class GuildController extends Controller
      * @throws AuthorizationException
      * @throws Throwable
      */
-    public function kick(Guild $guild, GuildCharacter $member, KickFromGuildProcess $process)
+    public function kick(Guild $guild, GuildCharacter $member, KickFromGuildProcess $process): RedirectResponse
     {
         $this->authorize('kick', [$guild, $member]);
         $process->run($member);
 
         return redirect('/guilds/' . $guild->name)->with('success', 'Member kicked!');
-    }
-
-    public function invite(InviteToGuildDto $dto, Guild $guild, Character $character, InviteToGuildProcess $process)
-    {
-        $process->run($dto);
-        return redirect('/guilds/' . $dto->guild->name)->with('success', 'Member invited!');
     }
 
     public function delete()
