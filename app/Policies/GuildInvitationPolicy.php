@@ -10,11 +10,12 @@ class GuildInvitationPolicy
 {
     public function accept(User $user, GuildInvitation $invitation): bool
     {
-        if ($invitation->status !== GuildInvitationStatus::PENDING) {
+
+        if ($invitation->character->user_id !== $user->id) {
             return false;
         }
 
-        if ($invitation->character->user_id !== $user->id) {
+        if ($invitation->status !== GuildInvitationStatus::PENDING) {
             return false;
         }
 
