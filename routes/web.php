@@ -72,7 +72,7 @@ Route::prefix('guilds')->middleware('auth')->group(function () {
 
     Route::prefix('invites')->group(function () {
         Route::get('/', [GuildInvitationController::class, 'invites']);
-        
+
         Route::post('/{guildInvitation}/accept', [GuildInvitationController::class, 'accept']);
         Route::post('/{guildInvitation}/reject', [GuildInvitationController::class, 'reject']);
         Route::post('/{guildInvitation}/cancel', [GuildInvitationController::class, 'cancel']);
@@ -96,7 +96,7 @@ Route::prefix('auth')->group(function () {
         Route::inertia('register', 'Auth/Register')->name('register');
         Route::inertia('login', 'Auth/Login')->name('login');
         Route::post('register', RegisterController::class);
-        Route::post('login', LoginController::class);
+        Route::post('login', LoginController::class)->middleware(['throttle:login']);
 
         Route::inertia('forgot-password', 'Auth/ForgotPassword')->name('password.request');
         Route::post('forgot-password', ResetPasswordController::class)->name('password.email');

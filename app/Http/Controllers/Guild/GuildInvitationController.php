@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Guild;
 
 use App\Data\Guild\InviteToGuildDto;
+use App\Enums\GuildInvitationStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Guild\GuildInvitationResource;
 use App\Models\Character\Character;
@@ -31,6 +32,7 @@ class GuildInvitationController extends Controller
                         ->map
                         ->guildInvitation
                         ->flatten()
+                        ->where('status', GuildInvitationStatus::PENDING)
                 )]
         );
     }
@@ -55,7 +57,7 @@ class GuildInvitationController extends Controller
 
         $process->run($guildInvitation);
 
-        return redirect('/guilds/' . $guildInvitation->guild->name)->with('success', 'Member accepted!');
+        return redirect('/guilds/' . $guildInvitation->guild->name)->with('success', 'You have joined the guild');
     }
 
     /**
@@ -68,7 +70,7 @@ class GuildInvitationController extends Controller
 
         $process->run($guildInvitation);
 
-        return redirect('/guilds/' . $guildInvitation->guild->name)->with('success', 'Member rejected!');
+        return redirect('/guilds/' . $guildInvitation->guild->name)->with('success', 'You have rejected the invitation');
     }
 
     /**

@@ -5,11 +5,12 @@ namespace App\Events\Guild;
 use App\Models\Guild\GuildCharacter;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Broadcasting\PresenceChannel;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NewGuildCharacter
+class NewGuildCharacter implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -18,7 +19,6 @@ class NewGuildCharacter
      */
     public function __construct(private GuildCharacter $guildCharacter)
     {
-        //TODO: Implement
     }
 
     /**
@@ -29,7 +29,22 @@ class NewGuildCharacter
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('channel-name'),
+            new PresenceChannel('guild.' . $this->guildCharacter->guild->getKey()),
+        ];
+    }
+
+    public function broadcastAs(): string
+    {
+        return 'NewGuildCharacter';
+    }
+
+    public function broadcastWith(): array
+    {
+        return [
+            'character' => [
+                'name' => $this->guildCharacter->character->name,
+                'vocation' => $this->guildCharacter->character->vocation,
+            ],
         ];
     }
 }

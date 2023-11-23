@@ -14,9 +14,7 @@ use Database\Factories\UserFactory;
 use Eloquent;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -24,6 +22,7 @@ use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Sanctum\PersonalAccessToken;
 use Spatie\Permission\Models\Permission;
@@ -116,11 +115,6 @@ class User extends Authenticatable implements MustVerifyEmail, OfferableInterfac
         'email_verified_at' => 'datetime',
     ];
 
-    public function guild(): BelongsTo
-    {
-        return $this->belongsTo(Guild::class);
-    }
-
     public function characters(): HasMany
     {
         return $this->hasMany(Character::class);
@@ -134,6 +128,10 @@ class User extends Authenticatable implements MustVerifyEmail, OfferableInterfac
             ->withPivot(['id', 'amount', 'used_amount', 'sold_amount', 'reserved_amount', 'bought_amount']);
     }
 
+    public function getGuildsAttribute(): Collection
+    {
+        return $this->characters->pluck('guildCharacter')->filter()->pluck('guild')->unique('id');
+    }
 
     public function marketOffers(): HasMany
     {

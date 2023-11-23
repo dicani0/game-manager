@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center items-center h-screen bg-gray-800">
+  <div class="flex justify-center">
     <ul class="max-w-6xl w-full bg-gray-700 rounded-lg shadow-lg">
       <li v-for="invitation in invites" :key="invitation.id" class="border-b border-gray-600 last:border-b-0">
         <div class="flex justify-between items-center p-4 hover:bg-gray-600 transition-colors duration-150 ease-in-out">
@@ -25,16 +25,17 @@
 <script lang="ts" setup>
 import {defineProps} from 'vue';
 import {GuildInvitation} from "@/types/Guild";
+import {router} from "@inertiajs/vue3";
 
 const props = defineProps<{
   invites: GuildInvitation[]
 }>();
 
 const acceptInvitation = (id: number) => {
-  // router.get(`/guilds/invitations/${id}/accept`);
+  router.post(`/guilds/invites/${id}/accept`);
 };
 
 const rejectInvitation = (id: number) => {
-  // router.get(`/guilds/invitations/${id}/reject`);
+  router.post(`/guilds/invites/${id}/reject`);
 };
 </script>
