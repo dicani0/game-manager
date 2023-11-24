@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Resources\Guild\GuildResourceCollection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
@@ -33,12 +34,17 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             'flash' => [
-                'success' => fn () => $request->session()->get('success'),
-                'data' => fn () => $request->session()->get('data'),
+                'success' => fn() => $request->session()->get('success'),
+                'data' => fn() => $request->session()->get('data'),
             ],
             'auth' => [
                 'user' => Auth::user()?->only('id', 'name', 'email', 'available_promotes'),
             ],
+            'my_guilds' => Auth::user() ? new GuildResourceCollection(
+                Auth::user()->characters->pluck('guildCharacter')
+                    ->filter()
+                    ->pluck('guild')->unique('id')
+            ) : null,
             'ziggy' => function () use ($request) {
                 return array_merge((new Ziggy)->toArray(), [
                     'location' => $request->url(),

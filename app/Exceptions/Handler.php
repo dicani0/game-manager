@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
 use Throwable;
@@ -35,17 +36,25 @@ class Handler extends ExceptionHandler
     {
         if ($request->header('X-Inertia')) {
             if ($e instanceof ValidationException) {
-                return redirect()->back()->withInput()->withErrors($e->errors());
+                return redirect()
+                    ->back()
+                    ->withInput()
+                    ->withErrors($e->errors());
             }
-            if ($e instanceof Exception) {
-                return redirect()->back()->withErrors(['error' => $e->getMessage()])->with('errorId', uniqid());
+            if ($e instanceof Exception && !$e instanceof AuthenticationException) {
+                return redirect()
+                    ->back()
+                    ->withErrors(['error' => $e->getMessage()])
+                    ->with('errorId', uniqid());
             }
         }
 
         if ($e instanceof AuthorizationException) {
-            return redirect()->back()->withInput()->withErrors($e->getMessage());
+            return redirect()
+                ->back()
+                ->withInput()
+                ->withErrors($e->getMessage());
         }
-
         return parent::render($request, $e);
     }
 }

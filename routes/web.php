@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\SettingsController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Character\CharacterController;
 use App\Http\Controllers\Guild\GuildController;
+use App\Http\Controllers\Guild\GuildInvitationController;
 use App\Http\Controllers\Items\ItemController;
 use App\Http\Controllers\Items\UserItemController;
 use App\Http\Controllers\Market\MarketController;
@@ -68,6 +69,18 @@ Route::prefix('items')->middleware('auth')->group(function () {
 });
 
 Route::prefix('guilds')->middleware('auth')->group(function () {
+
+    Route::prefix('invites')->group(function () {
+        Route::get('/', [GuildInvitationController::class, 'invites']);
+
+        Route::post('/{guildInvitation}/accept', [GuildInvitationController::class, 'accept']);
+        Route::post('/{guildInvitation}/reject', [GuildInvitationController::class, 'reject']);
+        Route::post('/{guildInvitation}/cancel', [GuildInvitationController::class, 'cancel']);
+    });
+
+
+    Route::post('/{guild}/invite/{character}', [GuildInvitationController::class, 'invite']);
+
     Route::get('/', [GuildController::class, 'index']);
     Route::get('/create', [GuildController::class, 'create']);
     Route::delete('/{guild}/kick/{member}', [GuildController::class, 'kick']);
@@ -81,9 +94,9 @@ Route::prefix('auth')->group(function () {
     Route::get('users', [UserController::class, 'getPublicUsers']);
     Route::middleware('guest')->group(function () {
         Route::inertia('register', 'Auth/Register')->name('register');
-        Route::inertia('login', 'Auth/Login')->name('login');
+        Route::get('login', [LoginController::class, 'loginForm'])->name('login');
         Route::post('register', RegisterController::class);
-        Route::post('login', LoginController::class);
+        Route::post('login', [LoginController::class, 'login'])->middleware('failed-logins:5,1');
 
         Route::inertia('forgot-password', 'Auth/ForgotPassword')->name('password.request');
         Route::post('forgot-password', ResetPasswordController::class)->name('password.email');

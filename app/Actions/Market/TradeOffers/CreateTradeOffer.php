@@ -3,6 +3,7 @@
 namespace App\Actions\Market\TradeOffers;
 
 use App\Data\Market\CreateTradeOfferDto;
+use App\Enums\MarketOfferRequestStatusEnum;
 use App\Enums\OfferTypeEnum;
 use App\Events\Market\TradeOfferCreated;
 use App\Models\Market\TradeOffer;
@@ -29,6 +30,7 @@ class CreateTradeOffer
             'lat_price' => $dto->lat_price,
             'type' => OfferTypeEnum::BUY->value,
             'message' => $dto->message,
+            'status' => MarketOfferRequestStatusEnum::PENDING->value,
         ]);
 
         $dto->tradeOffer = $tradeOffer;

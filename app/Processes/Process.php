@@ -4,13 +4,14 @@ namespace App\Processes;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Pipeline;
+use Throwable;
 
 abstract class Process
 {
     protected array $tasks = [];
 
     /**
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function run(object $payload): mixed
     {

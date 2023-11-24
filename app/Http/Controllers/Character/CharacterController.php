@@ -52,7 +52,7 @@ class CharacterController extends Controller
     {
         $action->handle($dto, Auth::user());
         return Inertia::render('Character/Character', [
-            'characters' => Auth::user()->characters,
+            'characters' => Auth::user()->refresh()->characters,
             'success' => 'Character created successfully!',
         ])->with('success', 'Character created successfully!');
     }

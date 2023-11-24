@@ -1,27 +1,40 @@
 <template>
   <div class="container mx-auto px-4 py-8 bg-gray-800 rounded-xl text-white">
-    <GuildHeader :guild="guild" @edit="openEditModal = true" />
-    <RecruitmentStatus :recruiting="props.guild.recruiting" />
-    <GuildMembers :members="guild.characters" @kick="kickMember" />
-    <EditGuildModal :open.sync="openEditModal" :guild="guild" @update="updateGuild" @close="openEditModal = false" />
+    <GuildHeader :guild="guild" @edit="openEditModal = true" @invite="openInviteModal = true"/>
+    <RecruitmentStatus :recruiting="props.guild.recruiting"/>
+    <GuildMembers :members="guild.characters" :permissions="permissions" @kick="kickMember"/>
+    <EditGuildModal :guild="guild" :open.sync="openEditModal" @closeEditModal="openEditModal = false"
+                    @update="updateGuild"/>
+    <InviteToGuildModal :characters="props.characters" :guild="guild" :open.sync="openInviteModal"
+                        @closeInviteModal="openInviteModal = false" @invited="reload"/>
+    <InvitedCharacters :invitations="props.guild.invitations"/>
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import {ref} from 'vue';
-import { router } from "@inertiajs/vue3";
+import {router} from "@inertiajs/vue3";
 import GuildHeader from "@/Components/Guild/GuildHeader.vue";
 import RecruitmentStatus from "@/Components/Guild/RecruitmentStatus.vue";
 import GuildMembers from "@/Components/Guild/GuildMembers.vue";
 import EditGuildModal from "@/Components/Guild/EditGuildModal.vue";
-import {Guild} from "@/types/Guild";
-
+import {CharactersPagination, Guild} from "@/types/Guild";
+import InviteToGuildModal from "@/Components/Guild/InviteToGuildModal.vue";
+import InvitedCharacters from "@/Components/Guild/InvitedCharacters.vue";
 
 const props = defineProps<{
   guild: Guild;
+  characters: CharactersPagination;
+  invitations: any;
 }>();
 
+const permissions = {
+  is_leader: props.guild.is_leader,
+  is_vice_leader: props.guild.is_vice_leader
+};
+
 const openEditModal = ref(false);
+const openInviteModal = ref(false);
 const updateGuild = (formData: any) => {
   router.patch(`/guilds/${props.guild.id}`, formData, {
     onSuccess: () => {
@@ -30,7 +43,11 @@ const updateGuild = (formData: any) => {
   });
 };
 
+const reload = (page: number) => {
+  router.reload({only: ['characters'], data: {page: page}});
+};
+
 const kickMember = (memberId: number) => {
-  router.delete(`/guilds/${props.guild.name}/kick/${memberId}`);
+  router.delete(`/guilds/${props.guild.id}/kick/${memberId}`);
 };
 </script>
