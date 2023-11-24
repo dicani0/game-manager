@@ -5,24 +5,31 @@ namespace App\Policies;
 use App\Enums\GuildInvitationStatus;
 use App\Models\Guild\GuildInvitation;
 use App\Models\User;
+use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Auth\Access\Response;
 
 class GuildInvitationPolicy
 {
-    public function accept(User $user, GuildInvitation $invitation): bool
-    {
+    use HandlesAuthorization;
 
-        if ($invitation->character->user_id !== $user->id) {
-            return false;
+    public function accept(User $user, GuildInvitation $invitation): true|Response
+    {
+        if (!empty($invitation->character->guildCharacter)) {
+            return $this->deny('This character is already in a guild.');
+        }
+
+        if ($invitation->character->user_id !== $user->getKey()) {
+            return $this->deny('You do not own this character.');
         }
 
         if ($invitation->status !== GuildInvitationStatus::PENDING) {
-            return false;
+            return $this->deny('This invitation is no longer valid.');
         }
 
         return true;
     }
 
-    public function reject(User $user, GuildInvitation $invitation): bool
+    public function reject(User $user, GuildInvitation $invitation): true|Response
     {
         return $this->accept($user, $invitation);
     }

@@ -7,7 +7,6 @@ use App\Data\Auth\NewPasswordFormDto;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\NewPasswordFormRequest;
 use App\Http\Requests\Auth\NewPasswordRequest;
-use App\Models\User;
 use App\Processes\Auth\ResetPasswordProcess;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Password;
@@ -29,7 +28,6 @@ class NewPasswordController extends Controller
 
     public function post(NewPasswordRequest $request, SetNewPassword $action): RedirectResponse
     {
-        $user = User::whereEmail($request->get('email'))->firstOrFail();
         $status = $action->handle($request->toDto());
 
         return match ($status) {

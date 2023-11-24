@@ -94,9 +94,9 @@ Route::prefix('auth')->group(function () {
     Route::get('users', [UserController::class, 'getPublicUsers']);
     Route::middleware('guest')->group(function () {
         Route::inertia('register', 'Auth/Register')->name('register');
-        Route::inertia('login', 'Auth/Login')->name('login');
+        Route::get('login', [LoginController::class, 'loginForm'])->name('login');
         Route::post('register', RegisterController::class);
-        Route::post('login', LoginController::class)->middleware(['throttle:login']);
+        Route::post('login', [LoginController::class, 'login'])->middleware('failed-logins:5,1');
 
         Route::inertia('forgot-password', 'Auth/ForgotPassword')->name('password.request');
         Route::post('forgot-password', ResetPasswordController::class)->name('password.email');

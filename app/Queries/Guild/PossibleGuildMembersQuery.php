@@ -2,6 +2,7 @@
 
 namespace App\Queries\Guild;
 
+use App\Enums\GuildInvitationStatus;
 use App\Models\Character\Character;
 use App\Models\Guild\Guild;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,7 +16,9 @@ class PossibleGuildMembersQuery
             ->whereDoesntHave('guildCharacter')
             ->whereDoesntHave(
                 'guildInvitation',
-                fn(Builder $query) => $query->where('guild_id', $guild->getKey())
+                fn(Builder $query) => $query
+                    ->where('guild_id', $guild->getKey())
+                    ->where('status', GuildInvitationStatus::PENDING->value)
             );
     }
 }

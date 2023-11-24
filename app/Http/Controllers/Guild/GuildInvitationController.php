@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Guild;
 
 use App\Data\Guild\InviteToGuildDto;
-use App\Enums\GuildInvitationStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Guild\GuildInvitationResource;
 use App\Models\Character\Character;
@@ -13,27 +12,21 @@ use App\Processes\Guild\AcceptGuildInviteProcess;
 use App\Processes\Guild\CancelGuildInviteProcess;
 use App\Processes\Guild\InviteToGuildProcess;
 use App\Processes\Guild\RejectGuildInviteProcess;
+use App\Queries\Guild\GuildInvitationQuery;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 use Throwable;
 
 class GuildInvitationController extends Controller
 {
-    public function invites(Request $request): Response
+    public function invites(Request $request, GuildInvitationQuery $query): Response
     {
         return Inertia::render('Guild/GuildInvites', [
-                'invites' => GuildInvitationResource::collection(
-                    Auth::user()
-                        ->characters
-                        ->map
-                        ->guildInvitation
-                        ->flatten()
-                        ->where('status', GuildInvitationStatus::PENDING)
-                )]
+                'invites' => GuildInvitationResource::collection($query->handle($request->user())->get()),
+            ]
         );
     }
 

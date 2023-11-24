@@ -159,7 +159,7 @@ class GuildInvitesTest extends TestCase
             ->actingAs($this->user)
             ->post('/guilds/invites/' . $guildInvitation->getKey() . '/accept');
 
-        $this->assertEquals(session('errors')->getBag('default')->first(), "This action is unauthorized.");
+        $this->assertEquals(session('errors')->getBag('default')->first(), "You do not own this character.");
 
         Event::assertNotDispatched(NewGuildCharacter::class);
 
@@ -196,7 +196,7 @@ class GuildInvitesTest extends TestCase
             ->actingAs($this->user)
             ->post('/guilds/invites/' . $guildInvitation->getKey() . '/reject');
 
-        $this->assertEquals(session('errors')->getBag('default')->first(), "This action is unauthorized.");
+        $this->assertEquals(session('errors')->getBag('default')->first(), "You do not own this character.");
 
         Event::assertNotDispatched(NewGuildCharacter::class);
 
@@ -234,7 +234,52 @@ class GuildInvitesTest extends TestCase
             ->actingAs($anotherUser)
             ->post('/guilds/invites/' . $guildInvitation->getKey() . '/' . $action);
 
-        $this->assertEquals(session('errors')->getBag('default')->first(), "This action is unauthorized.");
+        $this->assertEquals(session('errors')->getBag('default')->first(), "This invitation is no longer valid.");
+
+        Event::assertNotDispatched(NewGuildCharacter::class);
+
+        $this->assertDatabaseMissing('guild_character', [
+            'guild_id' => $this->guild->getKey(),
+            'character_id' => $character->getKey(),
+            'role' => GuildRoleEnum::MEMBER->value,
+        ]);
+
+        $this->assertDatabaseHas('guild_invitations', [
+            'guild_id' => $this->guild->getKey(),
+            'character_id' => $character->getKey(),
+            'status' => $status->value,
+        ]);
+    }
+
+    /** @dataProvider statusProvider */
+    public function test_react_invite_invitation_already_in_guild(string $action, GuildInvitationStatus $status): void
+    {
+        Event::fake();
+        $guild = Guild::factory()->create();
+        $anotherUser = User::factory()->create();
+
+        $character = Character::factory()->create([
+            'user_id' => $anotherUser->getKey(),
+        ]);
+
+        GuildCharacter::create([
+            'guild_id' => $guild->getKey(),
+            'character_id' => $character->getKey(),
+            'role' => GuildRoleEnum::MEMBER,
+        ]);
+
+        $guildInvitation = GuildInvitation::create([
+            'guild_id' => $this->guild->getKey(),
+            'character_id' => $character->getKey(),
+            'status' => $status,
+            'role' => GuildRoleEnum::MEMBER,
+        ]);
+
+        $this
+            ->actingAs($anotherUser)
+            ->post('/guilds/invites/' . $guildInvitation->getKey() . '/' . $action);
+
+        $this->assertEquals(session('errors')->getBag('default')->first(), "This character is already in a guild.");
 
         Event::assertNotDispatched(NewGuildCharacter::class);
 

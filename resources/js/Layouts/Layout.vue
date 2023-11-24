@@ -68,7 +68,7 @@ export default {
           });
     },
     listenForGuildsNotifications() {
-      this.$page.props.my_guilds.forEach(guild => {
+      this.$page.props.my_guilds?.forEach(guild => {
         Echo.join(`guild.${guild.id}`)
             .listen('.NewGuildCharacter', (e) => {
               useToast().success(`New guild member ${e.character.name} joined the guild!`)
@@ -79,7 +79,7 @@ export default {
       })
     },
     leaveGuildChannels() {
-      this.$page.props.my_guilds.forEach(guild => {
+      this.$page.props.my_guilds?.forEach(guild => {
         Echo.leaveChannel(`guild.${guild.id}`);
       })
     }

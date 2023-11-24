@@ -60,14 +60,7 @@ export default {
   },
   methods: {
     login() {
-      this.form.post('/auth/login', {
-        onSuccess: (e) => {
-          console.log(e);
-        },
-        onError: (e) => {
-          console.log(e);
-        },
-      });
+      this.form.post('/auth/login');
     }
   }
 }

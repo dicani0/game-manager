@@ -55,7 +55,7 @@ const emit = defineEmits(['update', 'closeEditModal']);
 const form = ref({
   name: props.guild.name,
   recruiting: props.guild.recruiting,
-  leader_id: props.guild.characters.filter(character => character.role === 'leader')[0].id,
+  leader_id: props.guild.characters?.filter(character => character.role === 'leader')[0]?.id,
   description: props.guild.description,
 });
 
