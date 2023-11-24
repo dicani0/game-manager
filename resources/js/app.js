@@ -1,29 +1,37 @@
 import './bootstrap';
 import '../css/app.css';
 
-import { createApp, h } from 'vue';
-import { createInertiaApp } from '@inertiajs/vue3';
-import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
+import {createApp, h} from 'vue';
+import {createInertiaApp} from '@inertiajs/vue3';
+import {ZiggyVue} from '../../vendor/tightenco/ziggy/dist/vue.m';
 import Toast from "vue-toastification";
-import Layout from "@/Layouts/Layout.vue";
 import VueFeather from 'vue-feather';
 import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 import "vue-toastification/dist/index.css";
+import {resolvePageComponent} from "laravel-vite-plugin/inertia-helpers";
+import Layout from "@/Layouts/Layout.vue";
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
 
 createInertiaApp({
     title: (title) => !!title ? `${appName} | ` + title : appName,
-    resolve: (name) => {
-        const pages = import.meta.glob('./Pages/**/*.vue', { eager: true})
-        let page = pages[`./Pages/${name}.vue`]
-        page.default.layout = page.default.layout || Layout
-        return page
+    // resolve: (name) => {
+    //     const pages = import.meta.glob('./Pages/**/*.vue', { eager: true})
+    //     let page = pages[`./Pages/${name}.vue`]
+    //     page.default.layout = page.default.layout || Layout
+    //     return page
+    // },
+    resolve: async (name) => {
+        const page = await resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue'));
+        if (page.default.layout === undefined) {
+            page.default.layout = Layout; // Set default layout if none is defined
+        }
+        return page;
     },
-    setup({ el, App, props, plugin }) {
-        return createApp({ render: () => h(App, props) })
+    setup({el, App, props, plugin}) {
+        return createApp({render: () => h(App, props)})
             .use(plugin)
             .use(ZiggyVue, Ziggy)
             .use(VueSweetalert2)
