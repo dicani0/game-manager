@@ -136,7 +136,7 @@ class MarketTest extends TestCase
             'user_id' => $this->user->getKey(),
         ]);
 
-        $this->actingAs($buyer)->post('market/' . $marketOffer->getKey() . '/buy', [
+        $res = $this->actingAs($buyer)->post('market/' . $marketOffer->getKey() . '/buy', [
             'lat_price' => 0,
             'at_price' => 0,
             'items' => [
@@ -154,6 +154,8 @@ class MarketTest extends TestCase
                 ],
             ],
         ]);
+
+        dd($res->json());
 
         $this->assertDatabaseHas('trade_offers', [
             'offerable_type' => MarketOffer::class,
