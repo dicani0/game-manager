@@ -155,6 +155,8 @@ class MarketTest extends TestCase
             ],
         ]);
 
+        dd($response->json());
+
         $this->assertDatabaseHas('trade_offers', [
             'offerable_type' => MarketOffer::class,
             'user_id' => $buyer->getKey(),
@@ -517,7 +519,7 @@ class MarketTest extends TestCase
         ]);
 
         $res = $this->actingAs($this->user)->post("/market/{$tradeOffer4->getKey()}/{$offer->getKey()}/accept");
-        
+
         $this->assertDatabaseHas('trade_offers', [
             'id' => $tradeOffer4->getKey(),
             'user_id' => $buyer2->getKey(),
