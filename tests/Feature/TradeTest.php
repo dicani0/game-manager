@@ -45,7 +45,7 @@ class TradeTest extends TestCase
 
     public function test_create_user_offer(): void
     {
-
+        Notification::fake();
         $this->actingAs($this->buyer)->post("/market/user/{$this->seller->getKey()}/buy", [
             'lat_price' => 1,
             'at_price' => 1,

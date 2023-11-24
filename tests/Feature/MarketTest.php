@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
 use Inertia\Testing\AssertableInertia;
+use Notification;
 use Tests\TestCase;
 
 class MarketTest extends TestCase
@@ -130,6 +131,7 @@ class MarketTest extends TestCase
     public function test_create_buy_offer(): void
     {
         Event::fake();
+        Notification::fake();
         $buyer = User::factory()->create();
 
         $marketOffer = MarketOffer::factory()->create([
@@ -154,8 +156,6 @@ class MarketTest extends TestCase
                 ],
             ],
         ]);
-
-        dd($res->json());
 
         $this->assertDatabaseHas('trade_offers', [
             'offerable_type' => MarketOffer::class,
