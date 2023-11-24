@@ -20,9 +20,6 @@ class CharacterTest extends TestCase
             'vocation' => 'knight',
         ]);
 
-        //TODO: Remove this, it's just for debugging
-        dd($response);
-
         $response->assertInertia(fn(AssertableInertia $page) => $page
             ->component('Character/Character')
             ->has('characters', 1)
