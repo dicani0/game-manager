@@ -14,7 +14,7 @@ return new class extends Migration {
         Schema::create('guild_character', function (Blueprint $table) {
             $table->id();
             $table->foreignId('guild_id')->constrained('guilds');
-            $table->foreignId('character_id')->constrained('characters');
+            $table->foreignId('character_id')->constrained('characters')->cascadeOnDelete();
             $table->enum('role', GuildRoleEnum::getValues())->default(GuildRoleEnum::MEMBER->value);
             $table->timestamps();
         });
