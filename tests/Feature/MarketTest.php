@@ -138,7 +138,7 @@ class MarketTest extends TestCase
             'user_id' => $this->user->getKey(),
         ]);
 
-        $res = $this->actingAs($buyer)->post('market/' . $marketOffer->getKey() . '/buy', [
+        $this->actingAs($buyer)->post('market/' . $marketOffer->getKey() . '/buy', [
             'lat_price' => 0,
             'at_price' => 0,
             'items' => [

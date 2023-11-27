@@ -10,7 +10,8 @@
           <span class="font-medium text-gray-900">{{ invitation.character.name }}</span>
           <span class="ml-4 text-sm text-gray-300">{{ invitation.character.vocation }}</span>
         </div>
-        <button class="bg-red-700 hover:bg-red-900 text-white font-bold py-1 px-2 rounded transition duration-200"
+        <button v-if="canCancel"
+                class="bg-red-700 hover:bg-red-900 text-white font-bold py-1 px-2 rounded transition duration-200"
                 @click="cancelInvitation(invitation.id)">Cancel
         </button>
       </li>
@@ -23,7 +24,10 @@ import {defineProps} from 'vue';
 import {Invitation} from "@/types/Guild";
 import {router} from "@inertiajs/vue3";
 
-const props = defineProps<{ invitations: Invitation[] }>();
+const props = defineProps<{
+  invitations: Invitation[],
+  canCancel: boolean
+}>();
 
 const cancelInvitation = (invitationId: number) => {
   router.post(`/guilds/invites/${invitationId}/cancel`)
