@@ -30,6 +30,7 @@ class GuildTest extends TestCase
     {
         $guild = Guild::factory()->create();
 
+
         GuildCharacter::create([
             'guild_id' => $guild->getKey(),
             'character_id' => $this->character->getKey(),

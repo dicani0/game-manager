@@ -40,9 +40,9 @@ class GuildController extends Controller
             'guild' => GuildResource::make($guild->load('characters'))->withInvitations(),
             'characters' => Inertia::lazy(fn() => (new PossibleGuildMembersQuery())->handle($guild)->paginate(20)),
             'can' => [
-                'edit' => $guild->isLeader($user),
-                'invite' => $guild->isLeader($user) || $guild->isViceLeader($user),
-                'cancel-invitation' => $guild->isLeader($user) || $guild->isViceLeader($user),
+                'edit' => $user->can('update', $guild),
+                'invite' => $user->can('invite', $guild),
+                'cancel-invitation' => $user->can('invite', $guild),
             ],
         ]);
     }
