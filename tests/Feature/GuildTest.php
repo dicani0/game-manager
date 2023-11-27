@@ -7,7 +7,7 @@ use App\Models\Character\Character;
 use App\Models\Guild\Guild;
 use App\Models\Guild\GuildCharacter;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
 class GuildTest extends TestCase
@@ -26,12 +26,55 @@ class GuildTest extends TestCase
         ]);
     }
 
+    public function test_show_user_has_all_permissions(): void
+    {
+        $guild = Guild::factory()->create();
+
+
+        GuildCharacter::create([
+            'guild_id' => $guild->getKey(),
+            'character_id' => $this->character->getKey(),
+            'role' => GuildRoleEnum::LEADER->value,
+        ]);
+
+        $this->actingAs($this->user)->get('/guilds/' . $guild->name)
+            ->assertInertia(fn(AssertableInertia $assert) => $assert
+                ->component('Guild/GuildShow')
+                ->has('can', fn(AssertableInertia $page) => $page
+                    ->where('edit', true)
+                    ->where('invite', true)
+                    ->where('cancel-invitation', true)
+                )
+            );
+    }
+
+    public function test_show_user_has_no_permissions(): void
+    {
+        $guild = Guild::factory()->create();
+
+        GuildCharacter::create([
+            'guild_id' => $guild->getKey(),
+            'character_id' => $this->character->getKey(),
+            'role' => GuildRoleEnum::MEMBER->value,
+        ]);
+
+        $this->actingAs($this->user)->get('/guilds/' . $guild->name)
+            ->assertInertia(fn(AssertableInertia $assert) => $assert
+                ->component('Guild/GuildShow')
+                ->has('can', fn(AssertableInertia $page) => $page
+                    ->where('edit', false)
+                    ->where('invite', false)
+                    ->where('cancel-invitation', false)
+                )
+            );
+    }
+
     /**
      * A basic feature test example.
      */
     public function test_create_guild(): void
     {
-        $res = $this->actingAs($this->user)->post('/guilds', [
+        $this->actingAs($this->user)->post('/guilds', [
             'name' => 'test guild',
             'recruiting' => false,
             'leader_id' => $this->character->getKey(),
@@ -65,7 +108,7 @@ class GuildTest extends TestCase
 
         $secondCharacter = Character::factory()->create([
             'user_id' => $this->user->getKey(),
-            'name' => 'new_leader'
+            'name' => 'new_leader',
         ]);
 
         $newLeader = GuildCharacter::create([

@@ -1,13 +1,13 @@
 <template>
   <div class="container mx-auto px-4 py-8 bg-gray-800 rounded-xl text-white">
-    <GuildHeader :guild="guild" @edit="openEditModal = true" @invite="openInviteModal = true"/>
+    <GuildHeader :can="can" :guild="guild" @edit="openEditModal = true" @invite="openInviteModal = true"/>
     <RecruitmentStatus :recruiting="props.guild.recruiting"/>
     <GuildMembers :members="guild.characters" :permissions="permissions" @kick="kickMember"/>
     <EditGuildModal :guild="guild" :open.sync="openEditModal" @closeEditModal="openEditModal = false"
                     @update="updateGuild"/>
     <InviteToGuildModal :characters="props.characters" :guild="guild" :open.sync="openInviteModal"
                         @closeInviteModal="openInviteModal = false" @invited="reload"/>
-    <InvitedCharacters :invitations="props.guild.invitations"/>
+    <InvitedCharacters :canCancel="can['cancel-invitation']" :invitations="props.guild.invitations"/>
   </div>
 </template>
 
@@ -26,6 +26,7 @@ const props = defineProps<{
   guild: Guild;
   characters: CharactersPagination;
   invitations: any;
+  can: string[];
 }>();
 
 const permissions = {

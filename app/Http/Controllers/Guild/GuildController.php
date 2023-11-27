@@ -9,6 +9,7 @@ use App\Http\Resources\Guild\GuildResource;
 use App\Models\Guild\Guild;
 use App\Models\Guild\GuildCharacter;
 use App\Processes\Guild\CreateGuildProcess;
+use App\Processes\Guild\DeleteGuildProcess;
 use App\Processes\Guild\EditGuildProcess;
 use App\Processes\Guild\KickFromGuildProcess;
 use App\Queries\Guild\GuildIndexQuery;
@@ -33,9 +34,16 @@ class GuildController extends Controller
 
     public function show(Guild $guild): Response
     {
+        $user = Auth::user();
+
         return Inertia::render('Guild/GuildShow', [
             'guild' => GuildResource::make($guild->load('characters'))->withInvitations(),
             'characters' => Inertia::lazy(fn() => (new PossibleGuildMembersQuery())->handle($guild)->paginate(20)),
+            'can' => [
+                'edit' => $user->can('update', $guild),
+                'invite' => $user->can('invite', $guild),
+                'cancel-invitation' => $user->can('invite', $guild),
+            ],
         ]);
     }
 
@@ -80,8 +88,16 @@ class GuildController extends Controller
         return redirect('/guilds/' . $guild->name)->with('success', 'Member kicked!');
     }
 
-    public function delete()
+    /**
+     * @throws AuthorizationException
+     * @throws Throwable
+     */
+    public function delete(Guild $guild, DeleteGuildProcess $process): RedirectResponse
     {
+        $this->authorize('delete', $guild);
 
+        $process->run($guild);
+
+        return redirect('/guilds')->with('success', 'Guild deleted!');
     }
 }
