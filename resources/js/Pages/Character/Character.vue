@@ -11,7 +11,8 @@
       <div class="p-6 bg-gray-700 rounded-lg shadow flex flex-col items-center" v-for="character in characters"
            :key="character.id">
         <h2 class="text-2xl font-semibold text-white">{{ character.name }}</h2>
-        <p class="text-lg text-gray-300">{{ character.vocation }}</p>
+        <p class="text-lg text-gray-300">
+          {{ character.vocation.charAt(0).toUpperCase() + character.vocation.slice(1) }}</p>
         <p v-if="character.guild">{{ character.guild }}</p>
         <p v-else>No guild</p>
         <div class="flex gap-2">

@@ -37,6 +37,8 @@ class HandleInertiaRequests extends Middleware
                 'success' => fn() => $request->session()->get('success'),
                 'data' => fn() => $request->session()->get('data'),
             ],
+            'notifications' => fn() => $request->user()?->unreadNotifications()->limit(10)->get(),
+            'notifications_count' => fn() => $request->user()?->unreadNotifications()->count(),
             'auth' => [
                 'user' => Auth::user()?->only('id', 'name', 'email', 'available_promotes'),
             ],

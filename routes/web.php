@@ -17,6 +17,7 @@ use App\Http\Controllers\Items\UserItemController;
 use App\Http\Controllers\Market\MarketController;
 use App\Http\Controllers\Market\MarketOfferRequestController;
 use App\Http\Controllers\Market\TradeOfferController;
+use App\Http\Controllers\Notifications\NotificationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -114,4 +115,10 @@ Route::prefix('auth')->group(function () {
         Route::get('settings', [SettingsController::class, 'get']);
         Route::patch('settings', [SettingsController::class, 'patch']);
     });
+});
+
+Route::prefix('notifications')->middleware('auth')->group(function () {
+    Route::get('/all', [NotificationController::class, 'notifications']);
+    Route::post('/{notification}/read/{notification}', [NotificationController::class, 'readNotification']);
+    Route::post('/{notification}/read/{notification}', [NotificationController::class, 'readNotification']);
 });
