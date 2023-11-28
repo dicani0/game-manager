@@ -119,6 +119,5 @@ Route::prefix('auth')->group(function () {
 
 Route::prefix('notifications')->middleware('auth')->group(function () {
     Route::get('/all', [NotificationController::class, 'notifications']);
-    Route::post('/{notification}/read/{notification}', [NotificationController::class, 'readNotification']);
-    Route::post('/{notification}/read/{notification}', [NotificationController::class, 'readNotification']);
+    Route::get('/{notification}/read', [NotificationController::class, 'readNotification']);
 });

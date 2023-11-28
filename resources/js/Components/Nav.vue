@@ -113,7 +113,7 @@
               My Items
             </Link>
           </li>
-          <li>
+          <li v-if="user">
             <Link :class="{ 'text-teal-300 bg-gray-900 rounded': $page.component === 'Items/AllItems' }"
                   class="flex items-center text-lg font-semibold hover:text-orange-300 cursor-pointer transition-all duration-200 px-2 py-1"
                   href="/items">
@@ -172,11 +172,13 @@
               </li>
             </ul>
           </li>
-          <li class="relative">
+          <li v-if="user" class="relative">
             <button @click="toggleNotificationsDropdown"
                     class="flex items-center text-lg font-semibold text-white hover:text-orange-300 cursor-pointer transition-all duration-200 px-2">
               <vue-feather class="mr-2" type="bell"></vue-feather>
-              Notifications {{ notificationsCount > 0 ? '(' + notificationsCount + ')' : '' }}
+              Notifications <span class="text-cyan-400">{{
+                notificationsCount > 0 ? '(' + notificationsCount + ')' : ''
+              }}</span>
             </button>
 
             <ul v-if="showNotificationsDropdown && notifications.length"
@@ -184,10 +186,9 @@
                 class="absolute left-0 mt-2 w-96 bg-gray-800 text-white rounded-lg shadow-lg transition-transform duration-200 transform origin-top z-40">
               <li v-for="notification in notifications" :key="notification.id"
                   class="block px-4 py-2 hover:bg-gray-200 hover:text-black border-b-2 border-cyan-800">
-                {{ notification.data.message }}
-                <Link v-if="notification.data.link" :href="notification.data.link"
+                <Link :href="`/notifications/${notification.id}/read`"
                       class="font-bold text-cyan-700 cursor-pointer">
-                  Check here!
+                  {{ notification.data.message }}
                 </Link>
               </li>
               <div class="text-center flex flex-col">

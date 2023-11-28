@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Notifications;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\NotificationResource;
 use Auth;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Notifications\DatabaseNotification;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -16,23 +18,19 @@ class NotificationController extends Controller
     public function notifications(): Response
     {
         return Inertia::render('Notifications/Notifications', [
-            'notifications' => Auth::user()->notifications()->paginate(3),
+            'all_notifications' => NotificationResource::collection(Auth::user()->notifications()->paginate(50)),
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function readNotification()
+    public function readNotification(DatabaseNotification $notification): RedirectResponse
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+        $this->authorize('read', $notification);
+        
+        $notification->markAsRead();
+        return array_key_exists('link', $notification->data) ?
+            redirect($notification->data['link']) : redirect()->back();
     }
 }
