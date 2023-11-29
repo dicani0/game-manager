@@ -8,7 +8,9 @@ use App\Models\Guild\GuildInvitation;
 use App\Policies\CharacterPolicy;
 use App\Policies\GuildInvitationPolicy;
 use App\Policies\GuildPolicy;
+use App\Policies\NotificationPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Notifications\DatabaseNotification;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -21,6 +23,7 @@ class AuthServiceProvider extends ServiceProvider
         Character::class => CharacterPolicy::class,
         Guild::class => GuildPolicy::class,
         GuildInvitation::class => GuildInvitationPolicy::class,
+        DatabaseNotification::class => NotificationPolicy::class,
     ];
 
     /**

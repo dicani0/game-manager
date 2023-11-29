@@ -11,12 +11,12 @@ class InviteToGuild
 {
     public function handle(InviteToGuildDto $dto): void
     {
-        GuildInvitation::create([
+        $invitation = GuildInvitation::create([
             'guild_id' => $dto->guild->id,
             'character_id' => $dto->character->getKey(),
             'role' => GuildRoleEnum::MEMBER,
         ]);
 
-        event(new InvitedToGuild($dto->character->user));
+        event(new InvitedToGuild($dto->character->user, $invitation));
     }
 }

@@ -113,7 +113,7 @@
               My Items
             </Link>
           </li>
-          <li>
+          <li v-if="user">
             <Link :class="{ 'text-teal-300 bg-gray-900 rounded': $page.component === 'Items/AllItems' }"
                   class="flex items-center text-lg font-semibold hover:text-orange-300 cursor-pointer transition-all duration-200 px-2 py-1"
                   href="/items">
@@ -172,6 +172,35 @@
               </li>
             </ul>
           </li>
+          <li v-if="user" class="relative">
+            <button @click="toggleNotificationsDropdown"
+                    class="flex items-center text-lg font-semibold text-white hover:text-orange-300 cursor-pointer transition-all duration-200 px-2">
+              <vue-feather class="mr-2" type="bell"></vue-feather>
+              Notifications <span class="text-cyan-400">{{
+                notificationsCount > 0 ? '(' + notificationsCount + ')' : ''
+              }}</span>
+            </button>
+
+            <ul v-if="showNotificationsDropdown && notifications.length"
+                ref="dropdownMenu"
+                class="absolute left-0 mt-2 w-96 bg-gray-800 text-white rounded-lg shadow-lg transition-transform duration-200 transform origin-top z-40">
+              <li v-for="notification in notifications" :key="notification.id"
+                  class="block px-4 py-2 hover:bg-gray-200 hover:text-black border-b-2 border-cyan-800">
+                <Link :href="`/notifications/${notification.id}/read`"
+                      class="font-bold text-cyan-700 cursor-pointer">
+                  {{ notification.data.message }}
+                </Link>
+              </li>
+              <div class="text-center flex flex-col">
+                <Link class="bg-gray-900 hover:bg-gray-700 py-2" href="/notifications/all">
+                  See all
+                </Link>
+                <Link class="bg-gray-900 hover:bg-gray-700 py-2" href="/notifications/read-all">
+                  Read all
+                </Link>
+              </div>
+            </ul>
+          </li>
 
         </ul>
       </div>
@@ -184,14 +213,49 @@
 import {Link} from "@inertiajs/vue3";
 
 export default {
+  data() {
+    return {
+      showNotificationsDropdown: false,
+      notifications: {
+        type: Array,
+        default: () => []
+      }
+    }
+  },
   components: {
     Link
   },
   computed: {
     user() {
       return this.$page.props.auth?.user?.name;
+    },
+    notifications() {
+      return this.$page.props.notifications;
+    },
+    notificationsCount() {
+      return this.$page.props.notifications_count;
     }
   },
+  methods: {
+    toggleNotificationsDropdown() {
+      this.showNotificationsDropdown = !this.showNotificationsDropdown;
+      if (this.showNotificationsDropdown) {
+        document.addEventListener('click', this.closeNotificationsDropdown, true);
+      } else {
+        document.removeEventListener('click', this.closeNotificationsDropdown, true);
+      }
+    },
+    closeNotificationsDropdown(event) {
+      const dropdownElement = this.$refs.dropdownMenu;
+      if (dropdownElement && !dropdownElement.contains(event.target)) {
+        this.showNotificationsDropdown = false;
+        document.removeEventListener('click', this.closeNotificationsDropdown, true);
+      }
+    },
+  },
+  unmounted() {
+    document.removeEventListener('click', this.closeNotificationsDropdown, true);
+  }
 };
 </script>
 

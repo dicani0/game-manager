@@ -151,8 +151,21 @@
 <script setup>
 import {router, usePage} from "@inertiajs/vue3";
 import moment from "moment";
-import {computed, ref} from "vue";
+import {computed, onMounted, onUnmounted, ref} from "vue";
 import Modal from "@/Components/Modal.vue";
+import {useToast} from "vue-toastification";
+
+onMounted(() => {
+  Echo.channel('market')
+      .listen('.NewMarketOffer', () => {
+        useToast().success('There is a new offer on the market!');
+        router.reload();
+      })
+});
+
+onUnmounted(() => {
+  Echo.leaveChannel('market');
+});
 
 let page = ref(1);
 let filters = ref({seller: '', at_price: '', lat_price: '', item: ''});

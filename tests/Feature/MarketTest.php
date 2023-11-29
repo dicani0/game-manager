@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Enums\MarketOfferRequestStatusEnum;
 use App\Enums\MarketOfferStatusEnum;
 use App\Enums\OfferTypeEnum;
+use App\Events\Market\NewMarketOffer;
 use App\Events\Market\TradeOfferCreated;
 use App\Jobs\Market\SetMarketOfferStatusAsExpired;
 use App\Mail\MarketOfferExpired;
@@ -63,6 +64,8 @@ class MarketTest extends TestCase
      */
     public function test_create_market_offer(): void
     {
+        Event::fake();
+
         $this->actingAs($this->user)->post('/market', [
             'items' => [
                 [
@@ -126,12 +129,15 @@ class MarketTest extends TestCase
             'sold_amount' => 0,
             'reserved_amount' => 1,
         ]);
+
+        Event::assertDispatched(NewMarketOffer::class);
     }
 
     public function test_create_buy_offer(): void
     {
         Event::fake();
         Notification::fake();
+
         $buyer = User::factory()->create();
 
         $marketOffer = MarketOffer::factory()->create([
