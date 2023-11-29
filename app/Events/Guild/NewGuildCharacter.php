@@ -17,7 +17,7 @@ class NewGuildCharacter implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct(private GuildCharacter $guildCharacter)
+    public function __construct(public GuildCharacter $guildCharacter)
     {
     }
 

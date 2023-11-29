@@ -22,13 +22,19 @@ class NotificationController extends Controller
         ]);
     }
 
+    public function readAll(): RedirectResponse
+    {
+        Auth::user()->unreadNotifications->markAsRead();
+        return redirect()->back();
+    }
+
     /**
      * Show the form for creating a new resource.
      */
     public function readNotification(DatabaseNotification $notification): RedirectResponse
     {
         $this->authorize('read', $notification);
-        
+
         $notification->markAsRead();
         return array_key_exists('link', $notification->data) ?
             redirect($notification->data['link']) : redirect()->back();

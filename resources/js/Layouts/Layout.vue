@@ -50,9 +50,7 @@ export default {
       Echo.private(`trade-offer.${this.$page.props.auth.user?.id}`)
           .listen('.TradeOfferCreated', (e) => {
             useToast().success('You have received a new trade offer!')
-            if (this.$page.component === 'Market/MyOffers') {
-              this.$inertia.reload();
-            }
+            router.reload();
           })
           .error((error) => {
             console.error('Subscription Error:', error);

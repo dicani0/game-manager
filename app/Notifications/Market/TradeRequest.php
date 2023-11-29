@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\Market;
 
 use App\Models\Market\MarketOffer;
 use App\Models\Market\TradeOffer;
@@ -28,7 +28,7 @@ class TradeRequest extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -51,7 +51,8 @@ class TradeRequest extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'message' => 'You have received a new trade request from ' . $this->offerRequest->creator->name,
+            'link' => '/market/requests',
         ];
     }
 }
