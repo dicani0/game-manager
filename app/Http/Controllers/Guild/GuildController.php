@@ -17,7 +17,6 @@ use App\Queries\Guild\PossibleGuildMembersQuery;
 use Auth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -25,7 +24,7 @@ use Throwable;
 
 class GuildController extends Controller
 {
-    public function index(Request $request, GuildIndexQuery $query): Response
+    public function index(GuildIndexQuery $query): Response
     {
         return Inertia::render('Guild/Guild', [
             'guilds' => GuildResource::collection($query->handle()->paginate()),

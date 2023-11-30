@@ -4,6 +4,7 @@ namespace App\Models\Guild;
 
 use App\Enums\GuildRoleEnum;
 use App\Models\Character\Character;
+use App\Models\Poll\Poll;
 use App\Models\User;
 use Database\Factories\Guild\GuildFactory;
 use Eloquent;
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Carbon;
 
 /**
@@ -106,5 +108,10 @@ class Guild extends Model
         return $this->vice_leaders->contains(
             fn(GuildCharacter $character) => $user->characters->pluck('id')->contains($character->character_id)
         );
+    }
+
+    public function polls(): MorphMany
+    {
+        return $this->morphMany(Poll::class, 'pollable');
     }
 }
