@@ -16,8 +16,8 @@ abstract class Process
     public function run(object $payload): mixed
     {
         return DB::transaction(function () use ($payload) {
-            return Pipeline::send(passable: $payload)
-                ->through(pipes: $this->tasks)
+            return Pipeline::send($payload)
+                ->through($this->tasks)
                 ->thenReturn();
         });
     }

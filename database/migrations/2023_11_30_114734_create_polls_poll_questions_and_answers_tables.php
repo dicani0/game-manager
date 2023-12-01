@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\PollQuestionTypeEnum;
+use App\Enums\PollStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,6 +20,7 @@ return new class extends Migration {
             $table->date('end_date')->default(now()->addDays(3));
             $table->unsignedBigInteger('pollable_id')->nullable();
             $table->string('pollable_type')->nullable();
+            $table->enum('status', PollStatusEnum::getValues())->default(PollStatusEnum::DRAFT);
             $table->timestamps();
         });
 

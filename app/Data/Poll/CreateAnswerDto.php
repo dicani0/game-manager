@@ -12,6 +12,5 @@ class CreateAnswerDto extends Data
         public string $content
     )
     {
-
     }
 }

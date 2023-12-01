@@ -4,6 +4,7 @@ namespace App\Models\Guild;
 
 use App\Enums\GuildRoleEnum;
 use App\Models\Character\Character;
+use App\Models\Interfaces\Pollable;
 use App\Models\Poll\Poll;
 use App\Models\User;
 use Database\Factories\Guild\GuildFactory;
@@ -52,7 +53,7 @@ use Illuminate\Support\Carbon;
  * @property-read Collection                       $vice_leaders
  * @mixin Eloquent
  */
-class Guild extends Model
+class Guild extends Model implements Pollable
 {
     use HasFactory, Prunable;
 

@@ -13,7 +13,7 @@ class PollQuestion extends Model
 
     protected $fillable = [
         'poll_id',
-        'title',
+        'question',
         'description',
         'type',
         'required',

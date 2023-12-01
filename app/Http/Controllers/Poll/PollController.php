@@ -4,34 +4,32 @@ namespace App\Http\Controllers\Poll;
 
 use App\Data\Poll\CreatePollDto;
 use App\Http\Controllers\Controller;
+use App\Processes\Poll\CreatePollProcess;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
+use Throwable;
 
 class PollController extends Controller
 {
     public function index(): Response
     {
-        return Inertia::render('Guild/Poll/Index', [
-            'polls' => auth()->user()->guild->polls()->with('questions.answers')->get(),
+        return Inertia::render('Poll/GlobalPolls', [
         ]);
     }
 
     public function create(): Response
     {
-        return Inertia::render('Guild/Poll/Create');
+        return Inertia::render('Poll/CreatePollForm');
     }
 
-    public function store(CreatePollDto $dto): RedirectResponse
+    /**
+     * @throws Throwable
+     */
+    public function store(CreatePollDto $dto, CreatePollProcess $process): RedirectResponse
     {
-        dd($dto->toArray());
-        auth()->user()->guild->polls()->create(request()->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date',
-        ]));
+        $process->run($dto);
 
-        return redirect()->back();
+        return redirect()->to('/polls');
     }
 }
