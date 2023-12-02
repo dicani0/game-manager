@@ -3,22 +3,6 @@
     <div class="container mx-auto px-4">
       <div class="flex items-center justify-center">
         <ul class="flex items-center space-x-4 gap-4">
-          <li>
-            <Link :class="{ 'text-teal-300 bg-gray-900 rounded': $page.component === 'Home' }"
-                  class="flex items-center text-lg font-semibold hover:text-orange-300 cursor-pointer transition-all duration-200 px-2 py-1"
-                  href="/">
-              <vue-feather class="mr-2" type="home"></vue-feather>
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link :class="{ 'text-teal-300 bg-gray-900 rounded': $page.component === 'About' }"
-                  class="flex items-center text-lg font-semibold hover:text-orange-300 cursor-pointer transition-all duration-200 px-2 py-1"
-                  href="/about">
-              <vue-feather class="mr-2" type="info"></vue-feather>
-              About
-            </Link>
-          </li>
           <li class="relative group">
             <Link
                 :class="{ 'text-teal-300 bg-gray-900 rounded': $page.component.startsWith('Market/') }"
@@ -119,6 +103,14 @@
                   href="/items">
               <vue-feather class="mr-2" type="list"></vue-feather>
               Items List
+            </Link>
+          </li>
+          <li v-if="user">
+            <Link :class="{ 'text-teal-300 bg-gray-900 rounded': $page.component === 'Items/AllItems' }"
+                  class="flex items-center text-lg font-semibold hover:text-orange-300 cursor-pointer transition-all duration-200 px-2 py-1"
+                  href="/polls">
+              <vue-feather class="mr-2" type="edit"></vue-feather>
+              Polls
             </Link>
           </li>
           <li v-if="!user">

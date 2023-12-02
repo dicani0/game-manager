@@ -2,6 +2,7 @@
 
 namespace App\Data\Poll;
 
+use App\Casts\CarbonCast;
 use App\Enums\PollStatusEnum;
 use App\Models\Poll\Poll;
 use App\Rules\Poll\CorrectPollableClass;
@@ -20,7 +21,6 @@ use Spatie\LaravelData\Attributes\Validation\RequiredWith;
 use Spatie\LaravelData\Attributes\Validation\Rule;
 use Spatie\LaravelData\Attributes\Validation\StringType;
 use Spatie\LaravelData\Attributes\WithCast;
-use Spatie\LaravelData\Casts\DateTimeInterfaceCast;
 use Spatie\LaravelData\Casts\EnumCast;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\DataCollection;
@@ -35,9 +35,9 @@ class CreatePollDto extends Data
         #[Nullable, StringType, Max(1000)]
         public string|Optional      $description,
         #[Required, Date, Before('end_date')]
-        #[WithCast(DateTimeInterfaceCast::class)]
+        #[WithCast(CarbonCast::class)]
         public DateTime             $start_date,
-        #[WithCast(DateTimeInterfaceCast::class)]
+        #[WithCast(CarbonCast::class)]
         #[Required, Date, After('start_date')]
         public DateTime             $end_date,
         #[Rule(new CorrectPollableClass()), RequiredWith('pollable_id')]

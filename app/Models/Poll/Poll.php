@@ -16,6 +16,7 @@ class Poll extends Model
         'description',
         'start_date',
         'end_date',
+        'status',
     ];
 
     protected $casts = [

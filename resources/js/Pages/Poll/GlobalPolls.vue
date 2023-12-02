@@ -5,5 +5,9 @@
 </template>
 
 <script setup lang="ts">
+import {PollPagination} from "@/types/Poll";
 
+defineProps<{
+  polls: PollPagination;
+}>();
 </script>

@@ -39,7 +39,7 @@ createInertiaApp({
                 transition: "Vue-Toastification__slideBlurred",
                 maxToasts: 20,
                 newestOnTop: true,
-                timeout: 2500,
+                timeout: 10000,
                 icon: true,
             })
             .component(VueFeather.name, VueFeather)
