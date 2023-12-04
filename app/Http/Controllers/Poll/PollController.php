@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Poll;
 
 use App\Data\Poll\CreatePollDto;
+use App\Data\Poll\UpdatePollDto;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Poll\PollResource;
 use App\Models\Poll\Poll;
@@ -42,5 +43,11 @@ class PollController extends Controller
         return Inertia::render('Poll/EditPollForm', [
             'poll' => PollResource::make($poll)->withQuestions(),
         ]);
+    }
+
+    public function update(Poll $poll, UpdatePollDto $dto): RedirectResponse
+    {
+        dd($dto);
+        return redirect()->to('/polls')->with('success', 'Poll updated successfully.');
     }
 }

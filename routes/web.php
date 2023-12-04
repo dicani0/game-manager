@@ -129,4 +129,5 @@ Route::prefix('polls')->middleware('auth')->group(function () {
     Route::get('/create', [PollController::class, 'create']);
     Route::post('/', [PollController::class, 'store']);
     Route::get('/{poll}/edit', [PollController::class, 'edit']);
+    Route::put('/{poll}', [PollController::class, 'update']);
 });

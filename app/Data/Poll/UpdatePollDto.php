@@ -4,10 +4,7 @@ namespace App\Data\Poll;
 
 use App\Casts\CarbonCast;
 use App\Enums\PollStatusEnum;
-use App\Models\Poll\Poll;
 use App\Rules\Poll\CorrectPollableClass;
-use App\Rules\Poll\PollableModelExists;
-use Auth;
 use DateTime;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\Validation\After;
@@ -26,9 +23,8 @@ use Spatie\LaravelData\Casts\EnumCast;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Optional;
-use Spatie\LaravelData\Support\Validation\ValidationContext;
 
-class CreatePollDto extends Data
+class UpdatePollDto extends Data
 {
     public function __construct(
         #[Required, StringType, Max(255)]
@@ -51,22 +47,7 @@ class CreatePollDto extends Data
         #[WithCast(EnumCast::class)]
         #[In([PollStatusEnum::DRAFT->value, PollStatusEnum::PUBLISHED->value])]
         public PollStatusEnum       $status = PollStatusEnum::DRAFT,
-        public ?Poll                $poll = null,
     )
     {
-        dd(1);
-    }
-
-    public static function rules(ValidationContext $context): array
-    {
-        return [
-            'pollable_id' => ['sometimes', new PollableModelExists(array_key_exists('pollable_type', $context->payload) ?
-                $context->payload['pollable_type'] : null)],
-        ];
-    }
-
-    public static function authorize(): bool
-    {
-        return Auth::user()?->can('create', Poll::class);
     }
 }

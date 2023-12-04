@@ -1,8 +1,8 @@
 <template>
   <div class="p-6 max-w-7xl min-w-[33%] mx-auto bg-gray-800 text-white rounded-xl shadow-md">
-    <div class="text-xl font-medium text-white mb-4">Create Poll</div>
+    <div class="text-xl font-medium text-white mb-4">Update {{ props.poll.title }}</div>
 
-    <form @submit.prevent="createPoll">
+    <form @submit.prevent="updatePoll">
       <div class="mb-4">
         <label class="block text-gray-500 text-sm font-bold mb-2" for="poll-title">Poll Title</label>
         <input v-model="form.title"
@@ -99,7 +99,7 @@
         <button
             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit">
-          Create Poll
+          Update Poll
         </button>
       </div>
     </form>
@@ -190,15 +190,15 @@ onMounted(() => {
 })
 
 const updatePoll = () => {
-  form.transform((data) => {
-    return {
-      ...data,
-      start_date: new Date(data.start_date).toISOString(),
-      end_date: new Date(data.end_date).toISOString()
-    }
-  })
-      .put(`/polls/${props.poll.id}`)
-
+  console.log(form);
+  // form.transform((data) => {
+  //   return {
+  //     ...data,
+  //     start_date: new Date(data.start_date).toISOString(),
+  //     end_date: new Date(data.end_date).toISOString()
+  //   }
+  // })
+  //     .put(`/polls/${props.poll.id}`)
 };
 </script>
 
