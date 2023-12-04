@@ -7,6 +7,7 @@ use App\Enums\PollStatusEnum;
 use App\Models\Poll\Poll;
 use App\Rules\Poll\CorrectPollableClass;
 use App\Rules\Poll\PollableModelExists;
+use Auth;
 use DateTime;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\Validation\After;
@@ -61,5 +62,10 @@ class CreatePollDto extends Data
             'pollable_id' => ['sometimes', new PollableModelExists(array_key_exists('pollable_type', $context->payload) ?
                 $context->payload['pollable_type'] : null)],
         ];
+    }
+
+    public static function authorize(): bool
+    {
+        return Auth::user()?->can('create', Poll::class);
     }
 }

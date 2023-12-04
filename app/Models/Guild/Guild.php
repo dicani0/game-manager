@@ -51,6 +51,8 @@ use Illuminate\Support\Carbon;
  * @property-read int|null                         $invitations_count
  * @method static GuildFactory factory($count = null, $state = [])
  * @property-read Collection                       $vice_leaders
+ * @property-read Collection<int, Poll> $polls
+ * @property-read int|null $polls_count
  * @mixin Eloquent
  */
 class Guild extends Model implements Pollable

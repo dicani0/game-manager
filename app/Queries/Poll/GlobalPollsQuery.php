@@ -10,6 +10,7 @@ class GlobalPollsQuery
     public function handle(): QueryBuilder
     {
         return QueryBuilder::for(Poll::class)
+            ->allowedIncludes(['questions', 'questions.answers'])
             ->allowedFilters([]);
     }
 }

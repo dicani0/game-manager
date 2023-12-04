@@ -15,9 +15,9 @@ return new class extends Migration {
         Schema::create('polls', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('description')->nullable();
-            $table->date('start_date')->default(now());
-            $table->date('end_date')->default(now()->addDays(3));
+            $table->text('description')->nullable();
+            $table->dateTime('start_date')->default(now());
+            $table->dateTime('end_date')->default(now()->addDays(3));
             $table->unsignedBigInteger('pollable_id')->nullable();
             $table->string('pollable_type')->nullable();
             $table->enum('status', PollStatusEnum::getValues())->default(PollStatusEnum::DRAFT);

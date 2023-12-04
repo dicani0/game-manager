@@ -77,6 +77,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static Builder|User wherePrivate($value)
  * @property-read Collection<int, TradeOffer>                               $offers
  * @property-read int|null                                                  $offers_count
+ * @property-read Collection $guilds
  * @mixin Eloquent
  */
 class User extends Authenticatable implements MustVerifyEmail, OfferableInterface

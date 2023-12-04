@@ -107,23 +107,29 @@
 </template>
 
 <script setup lang="ts">
-import {computed, reactive, ref} from 'vue';
-import {router} from "@inertiajs/vue3";
+import {computed, onMounted, ref} from 'vue';
+import {useForm} from "@inertiajs/vue3";
+import {Poll} from "@/types/Poll";
 
 const MAX_QUESTIONS = 15;
 const MIN_QUESTIONS = 1;
 const MAX_ANSWERS = 10;
 const MIN_ANSWERS = 2;
 
+const props = defineProps<{
+  poll: Poll
+}>()
+
 const description = ref('');
 
-const form = reactive({
-  title: '',
-  description: description.value,
-  start_date: '',
-  end_date: '',
-  questions: [createQuestion()],
+const form = useForm({
+  title: props.poll.title,
+  description: props.poll.description,
+  start_date: props.poll.start_date,
+  end_date: props.poll.end_date,
+  questions: props.poll.questions,
 });
+
 
 function createQuestion() {
   return {
@@ -144,41 +150,55 @@ const addQuestion = () => {
   }
 };
 
-const addAnswer = (questionIndex) => {
+const addAnswer = (questionIndex: number) => {
   if (form.questions[questionIndex].answers.length < MAX_ANSWERS) {
     form.questions[questionIndex].answers.push(createAnswer());
   }
 };
 
 const canDeleteQuestion = computed(() => form.questions.length > MIN_QUESTIONS);
-const canDeleteQuestionAnswer = (questionIndex) => form.questions[questionIndex].answers.length > MIN_ANSWERS;
+const canDeleteQuestionAnswer = (questionIndex: number) => form.questions[questionIndex].answers.length > MIN_ANSWERS;
 
 
-const removeAnswer = (questionIndex, answerIndex) => {
+const removeAnswer = (questionIndex: number, answerIndex: number) => {
   const answers = form.questions[questionIndex].answers;
   if (answers.length > MIN_ANSWERS) {
     answers.splice(answerIndex, 1);
   }
 };
 
-const removeQuestion = (questionIndex) => {
+const removeQuestion = (questionIndex: number) => {
   if (form.questions.length > MIN_QUESTIONS) {
     form.questions.splice(questionIndex, 1);
   }
 };
 
-const isMaxAnswersReached = (questionIndex) => {
+const isMaxAnswersReached = (questionIndex: number) => {
   return form.questions[questionIndex].answers.length >= MAX_ANSWERS;
 };
 
-const createPoll = () => {
-  const pollData = {
-    ...form,
-    start_date: new Date(form.start_date).toISOString(),
-    end_date: new Date(form.end_date).toISOString()
-  }
+function convertIsoToLocalDateTime(isoString: string) {
+  const date = new Date(isoString);
+  const offset = date.getTimezoneOffset() * 60000;
+  const localISOTime = new Date(date.getTime() - offset).toISOString();
+  return localISOTime.slice(0, 16); // Strips off the 'Z' and fractional seconds
+}
 
-  router.post('/polls', pollData);
+onMounted(() => {
+  form.start_date = convertIsoToLocalDateTime(props.poll.start_date);
+  form.end_date = convertIsoToLocalDateTime(props.poll.end_date);
+})
+
+const updatePoll = () => {
+  form.transform((data) => {
+    return {
+      ...data,
+      start_date: new Date(data.start_date).toISOString(),
+      end_date: new Date(data.end_date).toISOString()
+    }
+  })
+      .put(`/polls/${props.poll.id}`)
+
 };
 </script>
 
