@@ -1,6 +1,7 @@
 <template>
   <div class="container mx-auto px-4 py-8">
     <h1 class="text-2xl font-bold mb-4">Global Polls</h1>
+    <Link href="/polls/create">create a new poll</Link>
     <div class="rounded-lg">
       <ul>
         <li v-for="poll in polls.data" :key="poll.id" class="p-2 rounded-lg">

@@ -181,7 +181,7 @@ function convertIsoToLocalDateTime(isoString: string) {
   const date = new Date(isoString);
   const offset = date.getTimezoneOffset() * 60000;
   const localISOTime = new Date(date.getTime() - offset).toISOString();
-  return localISOTime.slice(0, 16); // Strips off the 'Z' and fractional seconds
+  return localISOTime.slice(0, 16);
 }
 
 onMounted(() => {
@@ -190,15 +190,14 @@ onMounted(() => {
 })
 
 const updatePoll = () => {
-  console.log(form);
-  // form.transform((data) => {
-  //   return {
-  //     ...data,
-  //     start_date: new Date(data.start_date).toISOString(),
-  //     end_date: new Date(data.end_date).toISOString()
-  //   }
-  // })
-  //     .put(`/polls/${props.poll.id}`)
+  form.transform((data) => {
+    return {
+      ...data,
+      start_date: new Date(data.start_date).toISOString(),
+      end_date: new Date(data.end_date).toISOString()
+    }
+  })
+      .put(`/polls/${props.poll.id}`)
 };
 </script>
 

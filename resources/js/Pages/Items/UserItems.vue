@@ -220,13 +220,7 @@ const importItems = () => {
   importForm.post('/items/import', {
     onSuccess: (message) => {
       openImportModal.value = false;
-      useToast().success(message.props.flash.success);
     },
-    onError: (errors) => {
-      Object.values(errors).forEach((error) => {
-        useToast().error(error)
-      });
-    }
   });
 };
 
@@ -234,13 +228,7 @@ const updateAmount = () => {
   updateItemForm.put(`/items/${selectedItem.id}`, {
     onSuccess: (message) => {
       openEditModal.value = false;
-      useToast().success(message.props.flash.success);
     },
-    onError: (errors) => {
-      Object.values(errors).forEach((error) => {
-        useToast().error(error)
-      });
-    }
   });
 };
 

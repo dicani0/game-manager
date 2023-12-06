@@ -12,6 +12,18 @@ export interface Poll {
     questions: PollQuestion[] | null,
 }
 
+export type PollType = {
+    id: number,
+    title: string,
+    description: string | null,
+    start_date: string | null,
+    end_date: string | null,
+    status: PollStatus,
+    pollable_id: number | null,
+    pollable_type: string | null,
+    questions: PollQuestion[] | null,
+}
+
 export interface PollQuestion {
     id?: number,
     poll_id?: number,

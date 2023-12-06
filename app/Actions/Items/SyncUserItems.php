@@ -12,15 +12,20 @@ class SyncUserItems
     {
         $dto->items->each(function ($item) {
             $cosmetic = Item::query()->firstOrCreate(['name' => $item['item_name']]);
-            UserItem::query()->updateOrCreate(
+
+            $userItem = UserItem::query()->firstOrNew(
                 [
                     'user_id' => $item['user_id'],
                     'item_id' => $cosmetic->getKey(),
-                ],
-                [
-                    'amount' => $item['amount'],
                 ]
             );
+
+            if ($userItem->exists) {
+                $userItem->increment('amount', $item['amount']);
+            } else {
+                $userItem->amount = $item['amount'];
+                $userItem->save();
+            }
         });
     }
 }

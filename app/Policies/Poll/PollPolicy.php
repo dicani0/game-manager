@@ -18,4 +18,9 @@ class PollPolicy
     {
         return $user->hasRole(RoleEnum::ADMIN->value);
     }
+
+    public function update(User $user, Poll $poll): bool
+    {
+        return $user->hasRole(RoleEnum::ADMIN->value);
+    }
 }

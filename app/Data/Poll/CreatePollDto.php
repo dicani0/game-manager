@@ -6,7 +6,6 @@ use App\Casts\CarbonCast;
 use App\Enums\PollStatusEnum;
 use App\Models\Poll\Poll;
 use App\Rules\Poll\CorrectPollableClass;
-use App\Rules\Poll\PollableModelExists;
 use Auth;
 use DateTime;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
@@ -23,46 +22,52 @@ use Spatie\LaravelData\Attributes\Validation\Rule;
 use Spatie\LaravelData\Attributes\Validation\StringType;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Casts\EnumCast;
-use Spatie\LaravelData\Data;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Optional;
-use Spatie\LaravelData\Support\Validation\ValidationContext;
 
-class CreatePollDto extends Data
+final class CreatePollDto extends BasePollDto
 {
     public function __construct(
         #[Required, StringType, Max(255)]
         public string               $title,
+
         #[Nullable, StringType, Max(1000)]
-        public string|Optional      $description,
-        #[Required, Date, Before('end_date')]
+        public string|Optional|null $description,
+
         #[WithCast(CarbonCast::class)]
+        #[Required, Date, Before('end_date'), After('now')]
         public DateTime             $start_date,
+
         #[WithCast(CarbonCast::class)]
         #[Required, Date, After('start_date')]
         public DateTime             $end_date,
+
         #[Rule(new CorrectPollableClass()), RequiredWith('pollable_id')]
         public string|Optional|null $pollable_type,
+
         #[RequiredWith('pollable_type')]
         public int|Optional|null    $pollable_id,
+
         #[DataCollectionOf(CreateQuestionDto::class)]
         #[Min(1), Required]
         public DataCollection       $questions,
+
         #[WithCast(EnumCast::class)]
         #[In([PollStatusEnum::DRAFT->value, PollStatusEnum::PUBLISHED->value])]
         public PollStatusEnum       $status = PollStatusEnum::DRAFT,
+
         public ?Poll                $poll = null,
     )
     {
-        dd(1);
-    }
-
-    public static function rules(ValidationContext $context): array
-    {
-        return [
-            'pollable_id' => ['sometimes', new PollableModelExists(array_key_exists('pollable_type', $context->payload) ?
-                $context->payload['pollable_type'] : null)],
-        ];
+        parent::__construct(
+            $this->title,
+            $this->description,
+            $this->start_date,
+            $this->end_date,
+            $this->pollable_type,
+            $this->pollable_id,
+            $this->questions,
+        );
     }
 
     public static function authorize(): bool

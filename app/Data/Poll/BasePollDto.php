@@ -4,15 +4,14 @@ namespace App\Data\Poll;
 
 use App\Casts\CarbonCast;
 use App\Enums\PollStatusEnum;
-use App\Models\Poll\Poll;
 use App\Rules\Poll\CorrectPollableClass;
+use App\Rules\Poll\PollableModelExists;
 use DateTime;
-use Illuminate\Support\Facades\Auth;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
-use Spatie\LaravelData\Attributes\FromRouteParameter;
 use Spatie\LaravelData\Attributes\Validation\After;
 use Spatie\LaravelData\Attributes\Validation\Before;
 use Spatie\LaravelData\Attributes\Validation\Date;
+use Spatie\LaravelData\Attributes\Validation\In;
 use Spatie\LaravelData\Attributes\Validation\Max;
 use Spatie\LaravelData\Attributes\Validation\Min;
 use Spatie\LaravelData\Attributes\Validation\Nullable;
@@ -21,10 +20,13 @@ use Spatie\LaravelData\Attributes\Validation\RequiredWith;
 use Spatie\LaravelData\Attributes\Validation\Rule;
 use Spatie\LaravelData\Attributes\Validation\StringType;
 use Spatie\LaravelData\Attributes\WithCast;
+use Spatie\LaravelData\Casts\EnumCast;
+use Spatie\LaravelData\Data;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Optional;
+use Spatie\LaravelData\Support\Validation\ValidationContext;
 
-final class UpdatePollDto extends BasePollDto
+abstract class BasePollDto extends Data
 {
     public function __construct(
         #[Required, StringType, Max(255)]
@@ -47,30 +49,23 @@ final class UpdatePollDto extends BasePollDto
         #[RequiredWith('pollable_type')]
         public int|Optional|null    $pollable_id,
 
-        #[DataCollectionOf(UpdateQuestionDto::class)]
+        #[DataCollectionOf(CreateQuestionDto::class)]
         #[Min(1), Required]
         public DataCollection       $questions,
 
-        #[FromRouteParameter('poll'), Required]
-        public Poll                 $poll,
-
+        #[WithCast(EnumCast::class)]
+        #[In([PollStatusEnum::DRAFT->value, PollStatusEnum::PUBLISHED->value])]
         public PollStatusEnum       $status = PollStatusEnum::DRAFT,
-
     )
     {
-        parent::__construct(
-            $this->title,
-            $this->description,
-            $this->start_date,
-            $this->end_date,
-            $this->pollable_type,
-            $this->pollable_id,
-            $this->questions,
-        );
     }
 
-    public static function authorize(): bool
+    public static function rules(ValidationContext $context): array
     {
-        return Auth::user()?->can('update', request()->route('poll'));
+        return [
+            'pollable_id' => ['sometimes', new PollableModelExists(array_key_exists('pollable_type', $context->payload) ?
+                $context->payload['pollable_type'] : null)],
+        ];
     }
+
 }

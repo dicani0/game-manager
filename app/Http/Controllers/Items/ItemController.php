@@ -13,7 +13,7 @@ class ItemController extends Controller
     public function index(Request $request)
     {
         return Inertia::render('Items/AllItems', [
-            'items' => ItemResource::collection(Item::all())
+            'items' => ItemResource::collection(Item::query()->orderBy('name')->get()),
         ]);
     }
 }

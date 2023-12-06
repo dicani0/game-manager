@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Poll\PollResource;
 use App\Models\Poll\Poll;
 use App\Processes\Poll\CreatePollProcess;
+use App\Processes\Poll\UpdatePollProcess;
 use App\Queries\Poll\GlobalPollsQuery;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -45,9 +46,12 @@ class PollController extends Controller
         ]);
     }
 
-    public function update(Poll $poll, UpdatePollDto $dto): RedirectResponse
+    /**
+     * @throws Throwable
+     */
+    public function update(Poll $poll, UpdatePollDto $dto, UpdatePollProcess $process): RedirectResponse
     {
-        dd($dto);
+        $process->run($dto);
         return redirect()->to('/polls')->with('success', 'Poll updated successfully.');
     }
 }
