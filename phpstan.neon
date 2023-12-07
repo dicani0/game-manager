@@ -1,0 +1,22 @@
+includes:
+    - ./vendor/larastan/larastan/extension.neon
+
+parameters:
+    ignoreErrors:
+        -
+            message: '#Access to an undefined property [a-zA-Z0-9\\_]+::\$pivot#'
+        -
+            message: '#Call to an undefined method [a-zA-Z0-9\\_\\>\\<]+::allowedFilters()#'
+    paths:
+        - app/
+
+    # Level 9 is the highest level
+    level: 2
+
+#    ignoreErrors:
+#        - '#PHPDoc tag @var#'
+#
+#    excludePaths:
+#        - ./*/*/FileToBeExcluded.php
+#
+#    checkMissingIterableValueType: false

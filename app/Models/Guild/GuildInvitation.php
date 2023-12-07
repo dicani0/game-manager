@@ -31,6 +31,8 @@ use Illuminate\Support\Carbon;
  * @method static Builder|GuildInvitation whereId($value)
  * @method static Builder|GuildInvitation whereRole($value)
  * @method static Builder|GuildInvitation whereUpdatedAt($value)
+ * @property GuildInvitationStatus $status
+ * @method static Builder|GuildInvitation whereStatus($value)
  * @mixin Eloquent
  */
 class GuildInvitation extends Model

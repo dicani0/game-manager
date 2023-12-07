@@ -53,6 +53,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|MarketOffer whereType($value)
  * @method static Builder|MarketOffer whereUpdatedAt($value)
  * @method static Builder|MarketOffer whereUserId($value)
+ * @property-read User $creator
  * @mixin Eloquent
  */
 class MarketOffer extends Model implements OfferableInterface
@@ -89,5 +90,10 @@ class MarketOffer extends Model implements OfferableInterface
     public function scopeMaxAtPrice(Builder $query, int $value)
     {
         return $query->where('at_price', '<=', $value);
+    }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

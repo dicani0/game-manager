@@ -24,6 +24,7 @@ class NotificationController extends Controller
 
     public function readAll(): RedirectResponse
     {
+        /* @phpstan-ignore-next-line */
         Auth::user()->unreadNotifications->markAsRead();
         return redirect()->back();
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Market;
 
 use App\Models\Market\MarketOffer;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateMarketOfferRequestRequest extends FormRequest
@@ -19,7 +20,7 @@ class CreateMarketOfferRequestRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
+     * @return array<string, ValidationRule|array|string>
      */
     public function rules(): array
     {
@@ -33,8 +34,12 @@ class CreateMarketOfferRequestRequest extends FormRequest
         ];
     }
 
+
     public function getMarketOffer(): MarketOffer
     {
-        return $this->route('offer');
+        /** @var MarketOffer $marketOffer */
+        $marketOffer = $this->route('marketOffer');
+
+        return $marketOffer;
     }
 }
