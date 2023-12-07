@@ -12,6 +12,7 @@ class SyncQuestionsInPollTask
         protected SyncQuestionsInPoll $action
     )
     {
+
     }
 
     public function handle(UpdatePollDto $dto, Closure $next): UpdatePollDto

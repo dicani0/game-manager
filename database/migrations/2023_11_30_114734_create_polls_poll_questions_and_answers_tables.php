@@ -21,6 +21,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('pollable_id')->nullable();
             $table->string('pollable_type')->nullable();
             $table->enum('status', PollStatusEnum::getValues())->default(PollStatusEnum::DRAFT);
+            $table->foreignId('creator_id')->constrained('users');
             $table->timestamps();
         });
 

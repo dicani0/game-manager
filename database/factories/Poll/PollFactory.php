@@ -2,10 +2,11 @@
 
 namespace Database\Factories\Poll;
 
+use App\Models\Poll\Poll;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Poll\Poll>
+ * @extends Factory<Poll>
  */
 class PollFactory extends Factory
 {
@@ -17,7 +18,11 @@ class PollFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'title' => $this->faker->sentence,
+            'description' => $this->faker->paragraph,
+            'start_date' => $this->faker->dateTime,
+            'end_date' => $this->faker->dateTime,
+            'status' => $this->faker->randomElement(['draft', 'published']),
         ];
     }
 }

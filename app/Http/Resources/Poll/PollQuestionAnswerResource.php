@@ -2,11 +2,17 @@
 
 namespace App\Http\Resources\Poll;
 
+use App\Models\Poll\PollQuestionAnswer;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PollQuestionAnswerResource extends JsonResource
 {
+    /**
+     * @var PollQuestionAnswer
+     */
+    public $resource;
+
     /**
      * Transform the resource into an array.
      *
@@ -14,6 +20,9 @@ class PollQuestionAnswerResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->resource->getKey(),
+            'content' => $this->resource->content,
+        ];
     }
 }

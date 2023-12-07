@@ -13,10 +13,9 @@ class SyncQuestionsInPoll
     public function handle(Poll $poll, DataCollection $questions): void
     {
         $questionsIds = collect();
-
         $questions->each(function (UpdateQuestionDto $questionDto) use ($poll, $questionsIds) {
             if ($questionDto->id instanceof Optional) {
-                $question = $this->createNewQuestion($poll, $questionDto)->getKey();
+                $question = $this->createNewQuestion($poll, $questionDto);
                 $questionsIds->push($question->getKey());
             } else {
                 $question = $this->updateExistingQuestion($poll, $questionDto);

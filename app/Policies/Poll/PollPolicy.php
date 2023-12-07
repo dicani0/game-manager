@@ -21,6 +21,6 @@ class PollPolicy
 
     public function update(User $user, Poll $poll): bool
     {
-        return $user->hasRole(RoleEnum::ADMIN->value);
+        return $user->hasRole(RoleEnum::ADMIN->value) && $poll->creator_id === $user->getKey();
     }
 }

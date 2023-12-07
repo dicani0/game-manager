@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\FromRouteParameter;
 use Spatie\LaravelData\Attributes\Validation\After;
+use Spatie\LaravelData\Attributes\Validation\AfterOrEqual;
 use Spatie\LaravelData\Attributes\Validation\Before;
 use Spatie\LaravelData\Attributes\Validation\Date;
 use Spatie\LaravelData\Attributes\Validation\Max;
@@ -34,7 +35,7 @@ final class UpdatePollDto extends BasePollDto
         public string|Optional|null $description,
 
         #[WithCast(CarbonCast::class)]
-        #[Required, Date, Before('end_date'), After('now')]
+        #[Required, Date, Before('end_date'), AfterOrEqual('now')]
         public DateTime             $start_date,
 
         #[WithCast(CarbonCast::class)]

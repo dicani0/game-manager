@@ -32,7 +32,7 @@
       </div>
 
       <!-- Questions -->
-      <div v-for="(question, qIndex) in form.questions" :key="qIndex" class="mb-6">
+      <div v-for="(question, qIndex) in form.questions" :key="qIndex" class="mb-6 transition duration-300">
         <div class="mb-4">
           <label class="block text-gray-500 text-sm font-bold mb-2" :for="'question-' + qIndex">Question {{
               qIndex + 1
@@ -61,7 +61,7 @@
         </div>
 
         <!-- Answers -->
-        <div v-for="(answer, aIndex) in question.answers" :key="aIndex" class="mb-4 mx-16">
+        <div v-for="(answer, aIndex) in question.answers" :key="aIndex" class="mb-4 mx-16 transition duration-300">
           <div class="flex-grow p-0 m-0">
             <label class="block text-gray-500 text-sm font-bold mb-2" :for="'answer-' + qIndex + '-' + aIndex">Answer
               {{ aIndex + 1 }}</label>

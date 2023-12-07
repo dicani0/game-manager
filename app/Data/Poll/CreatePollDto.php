@@ -10,6 +10,7 @@ use Auth;
 use DateTime;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\Validation\After;
+use Spatie\LaravelData\Attributes\Validation\AfterOrEqual;
 use Spatie\LaravelData\Attributes\Validation\Before;
 use Spatie\LaravelData\Attributes\Validation\Date;
 use Spatie\LaravelData\Attributes\Validation\In;
@@ -35,7 +36,7 @@ final class CreatePollDto extends BasePollDto
         public string|Optional|null $description,
 
         #[WithCast(CarbonCast::class)]
-        #[Required, Date, Before('end_date'), After('now')]
+        #[Required, Date, Before('end_date'), AfterOrEqual('now')]
         public DateTime             $start_date,
 
         #[WithCast(CarbonCast::class)]

@@ -25,7 +25,7 @@ class UpdateQuestionDto extends Data
         public string               $question,
         #[WithCast(EnumCast::class)]
         public PollQuestionTypeEnum $type,
-        #[DataCollectionOf(CreateAnswerDto::class)]
+        #[DataCollectionOf(UpdateAnswerDto::class)]
         #[Required, Min(2)]
         public DataCollection       $answers,
         #[BooleanType]

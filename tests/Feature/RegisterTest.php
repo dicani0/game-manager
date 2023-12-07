@@ -5,10 +5,7 @@ use App\Data\Auth\RegisterUserDto;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
 use App\Processes\Auth\RegisterProcess;
-use Database\Seeders\RoleSeeder;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
@@ -20,14 +17,6 @@ class RegisterTest extends TestCase
     /**
      * A basic test example.
      */
-
-    public User $user;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->seed(RoleSeeder::class);
-    }
 
     public function test_register(): void
     {
