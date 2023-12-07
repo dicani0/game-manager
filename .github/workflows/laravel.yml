@@ -7,6 +7,25 @@ on:
     branches: [ "master" ]
 
 jobs:
+  larastan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
+        with:
+          php-version: '8.2'
+
+      - name: Update composer
+        run: composer update
+
+      - name: Install PHP Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      - name: Larastan
+        run: ./vendor/bin/phpstan analyse --memory-limit=2G
+
   laravel-tests:
 
     runs-on: ubuntu-latest

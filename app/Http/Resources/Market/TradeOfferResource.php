@@ -50,7 +50,6 @@ class TradeOfferResource extends JsonResource
 
     private function getUser(): User
     {
-
         return $this->getResource()->offerable instanceof User
             ? $this->getResource()->offerable
             : $this->getResource()->offerable->user;

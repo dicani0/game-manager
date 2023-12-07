@@ -77,7 +77,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static Builder|User wherePrivate($value)
  * @property-read Collection<int, TradeOffer>                               $offers
  * @property-read int|null                                                  $offers_count
- * @property-read Collection $guilds
+ * @property-read Collection                                                $guilds
  * @mixin Eloquent
  */
 class User extends Authenticatable implements MustVerifyEmail, OfferableInterface
@@ -121,6 +121,9 @@ class User extends Authenticatable implements MustVerifyEmail, OfferableInterfac
         return $this->hasMany(Character::class);
     }
 
+    /**
+     * @return BelongsToMany<Item>
+     */
     public function items(): BelongsToMany
     {
         return $this

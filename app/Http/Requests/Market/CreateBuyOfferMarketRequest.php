@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Market;
 
+use App\Models\Market\MarketOffer;
+
 class CreateBuyOfferMarketRequest extends CreateBuyOfferRequest
 {
     /**
@@ -9,6 +11,7 @@ class CreateBuyOfferMarketRequest extends CreateBuyOfferRequest
      */
     public function authorize(): bool
     {
+        /** @var MarketOffer $offer */
         $offer = $this->route('offer');
 
         return !$offer->user->is($this->user());
