@@ -26,6 +26,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|PollQuestionAnswer whereId($value)
  * @method static Builder|PollQuestionAnswer wherePollQuestionId($value)
  * @method static Builder|PollQuestionAnswer whereUpdatedAt($value)
+ * @method static \Database\Factories\Poll\PollQuestionAnswerFactory factory($count = null, $state = [])
  * @mixin Eloquent
  */
 class PollQuestionAnswer extends Model

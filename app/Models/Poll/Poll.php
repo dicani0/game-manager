@@ -45,6 +45,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Poll whereStatus($value)
  * @method static Builder|Poll whereTitle($value)
  * @method static Builder|Poll whereUpdatedAt($value)
+ * @property-read User|null $creator
  * @mixin Eloquent
  */
 class Poll extends Model

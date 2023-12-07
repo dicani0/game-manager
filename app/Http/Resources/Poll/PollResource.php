@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Poll;
 
+use App\Models\Poll\Poll;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,14 +18,14 @@ class PollResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
-            'title' => $this->title,
-            'description' => $this->description,
-            'start_date' => $this->start_date,
-            'end_date' => $this->end_date,
-            'status' => $this->status,
+            'id' => $this->getResource()->getKey(),
+            'title' => $this->getResource()->title,
+            'description' => $this->getResource()->description,
+            'start_date' => $this->getResource()->start_date,
+            'end_date' => $this->getResource()->end_date,
+            'status' => $this->getResource()->status,
             $this->mergeWhen($this->withQuestions, [
-                'questions' => PollQuestionResource::collection($this->questions),
+                'questions' => PollQuestionResource::collection($this->getResource()->questions),
             ]),
         ];
     }
@@ -34,5 +35,10 @@ class PollResource extends JsonResource
         $this->withQuestions = true;
 
         return $this;
+    }
+
+    public function getResource(): Poll
+    {
+        return $this->resource;
     }
 }
