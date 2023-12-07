@@ -5,6 +5,7 @@ namespace App\Rules\Guild;
 use App\Models\Guild\Guild;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Translation\PotentiallyTranslatedString;
 
 class CharacterIsInGuild implements ValidationRule
 {
@@ -15,7 +16,7 @@ class CharacterIsInGuild implements ValidationRule
     /**
      * Run the validation rule.
      *
-     * @param \Closure(string): \Illuminate\Translation\PotentiallyTranslatedString $fail
+     * @param Closure(string): PotentiallyTranslatedString $fail
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {

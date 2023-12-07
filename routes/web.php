@@ -18,6 +18,7 @@ use App\Http\Controllers\Market\MarketController;
 use App\Http\Controllers\Market\MarketOfferRequestController;
 use App\Http\Controllers\Market\TradeOfferController;
 use App\Http\Controllers\Notifications\NotificationController;
+use App\Http\Controllers\Poll\PollController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -121,4 +122,12 @@ Route::prefix('notifications')->middleware('auth')->group(function () {
     Route::get('/all', [NotificationController::class, 'notifications']);
     Route::get('/read-all', [NotificationController::class, 'readAll']);
     Route::get('/{notification}/read', [NotificationController::class, 'readNotification']);
+});
+
+Route::prefix('polls')->middleware('auth')->group(function () {
+    Route::get('/', [PollController::class, 'index']);
+    Route::get('/create', [PollController::class, 'create']);
+    Route::post('/', [PollController::class, 'store']);
+    Route::get('/{poll}/edit', [PollController::class, 'edit']);
+    Route::put('/{poll}', [PollController::class, 'update']);
 });

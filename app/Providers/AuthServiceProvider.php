@@ -5,10 +5,12 @@ namespace App\Providers;
 use App\Models\Character\Character;
 use App\Models\Guild\Guild;
 use App\Models\Guild\GuildInvitation;
+use App\Models\Poll\Poll;
 use App\Policies\CharacterPolicy;
 use App\Policies\GuildInvitationPolicy;
 use App\Policies\GuildPolicy;
 use App\Policies\NotificationPolicy;
+use App\Policies\Poll\PollPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Notifications\DatabaseNotification;
 
@@ -24,6 +26,7 @@ class AuthServiceProvider extends ServiceProvider
         Guild::class => GuildPolicy::class,
         GuildInvitation::class => GuildInvitationPolicy::class,
         DatabaseNotification::class => NotificationPolicy::class,
+        Poll::class => PollPolicy::class,
     ];
 
     /**

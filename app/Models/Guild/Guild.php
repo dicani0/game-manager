@@ -4,6 +4,8 @@ namespace App\Models\Guild;
 
 use App\Enums\GuildRoleEnum;
 use App\Models\Character\Character;
+use App\Models\Interfaces\Pollable;
+use App\Models\Poll\Poll;
 use App\Models\User;
 use Database\Factories\Guild\GuildFactory;
 use Eloquent;
@@ -13,6 +15,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Carbon;
 
 /**
@@ -48,9 +51,11 @@ use Illuminate\Support\Carbon;
  * @property-read int|null                         $invitations_count
  * @method static GuildFactory factory($count = null, $state = [])
  * @property-read Collection                       $vice_leaders
+ * @property-read Collection<int, Poll> $polls
+ * @property-read int|null $polls_count
  * @mixin Eloquent
  */
-class Guild extends Model
+class Guild extends Model implements Pollable
 {
     use HasFactory, Prunable;
 
@@ -106,5 +111,10 @@ class Guild extends Model
         return $this->vice_leaders->contains(
             fn(GuildCharacter $character) => $user->characters->pluck('id')->contains($character->character_id)
         );
+    }
+
+    public function polls(): MorphMany
+    {
+        return $this->morphMany(Poll::class, 'pollable');
     }
 }

@@ -12,17 +12,11 @@ import "vue-toastification/dist/index.css";
 import {resolvePageComponent} from "laravel-vite-plugin/inertia-helpers";
 import Layout from "@/Layouts/Layout.vue";
 
-const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
+const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Game Manager';
 
 
 createInertiaApp({
     title: (title) => !!title ? `${appName} | ` + title : appName,
-    // resolve: (name) => {
-    //     const pages = import.meta.glob('./Pages/**/*.vue', { eager: true})
-    //     let page = pages[`./Pages/${name}.vue`]
-    //     page.default.layout = page.default.layout || Layout
-    //     return page
-    // },
     resolve: async (name) => {
         const page = await resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue'));
         if (page.default.layout === undefined) {
@@ -39,7 +33,7 @@ createInertiaApp({
                 transition: "Vue-Toastification__slideBlurred",
                 maxToasts: 20,
                 newestOnTop: true,
-                timeout: 2500,
+                timeout: 10000,
                 icon: true,
             })
             .component(VueFeather.name, VueFeather)
