@@ -7,6 +7,11 @@ on:
     branches: [ "master" ]
 
 jobs:
+  larastan:
+    steps:
+      - name: Larastan
+        run: ./vendor/bin/phpstan analyse --memory-limit=2G
+
   laravel-tests:
 
     runs-on: ubuntu-latest

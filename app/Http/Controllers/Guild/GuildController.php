@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Guild\GuildResource;
 use App\Models\Guild\Guild;
 use App\Models\Guild\GuildCharacter;
+use App\Models\User;
 use App\Processes\Guild\CreateGuildProcess;
 use App\Processes\Guild\DeleteGuildProcess;
 use App\Processes\Guild\EditGuildProcess;
@@ -51,8 +52,11 @@ class GuildController extends Controller
     {
         Gate::allows('store', Guild::class);
 
+        /** @var User $user */
+        $user = Auth::user();
+
         return Inertia::render('Guild/Create', [
-            'characters' => Auth::user()->characters->map->only(['id', 'name']),
+            'characters' => $user->characters->map->only(['id', 'name']),
         ]);
     }
 
