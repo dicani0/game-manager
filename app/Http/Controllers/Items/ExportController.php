@@ -18,7 +18,7 @@ class ExportController extends Controller
     public function exportItems(Request $request): BinaryFileResponse
     {
         return Excel::download(
-            new ItemsExport(request('type', ItemsExport::SELLABLE)),
+            new ItemsExport($request->get('type', ItemsExport::SELLABLE)),
             'items.xlsx'
         );
     }
