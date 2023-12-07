@@ -137,6 +137,15 @@ class User extends Authenticatable implements MustVerifyEmail, OfferableInterfac
             ->withPivot(['id', 'amount', 'used_amount', 'sold_amount', 'reserved_amount', 'bought_amount']);
     }
 
+    public function sellableItems(): BelongsToMany
+    {
+        return $this
+            ->belongsToMany(Item::class, 'user_item')
+            ->using(UserItem::class)
+            ->withPivot(['id', 'amount', 'used_amount', 'sold_amount', 'reserved_amount', 'bought_amount'])
+            ->wherePivot('amount', '>', 1);
+    }
+
     public function getGuildsAttribute(): Collection
     {
         return $this->characters->pluck('guildCharacter')->filter()->pluck('guild')->unique('id');

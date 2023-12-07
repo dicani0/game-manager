@@ -98,6 +98,14 @@
             </Link>
           </li>
           <li v-if="user">
+            <a :class="{ 'text-teal-300 bg-gray-900 rounded': $page.component === 'Items/UserItems' }"
+               class="flex items-center text-lg font-semibold hover:text-orange-300 cursor-pointer transition-all duration-200 px-2 py-1"
+               href="/items/export">
+              <vue-feather class="mr-2" type="box"></vue-feather>
+              Export Items
+            </a>
+          </li>
+          <li v-if="user">
             <Link :class="{ 'text-teal-300 bg-gray-900 rounded': $page.component === 'Items/AllItems' }"
                   class="flex items-center text-lg font-semibold hover:text-orange-300 cursor-pointer transition-all duration-200 px-2 py-1"
                   href="/items">

@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Character\CharacterController;
 use App\Http\Controllers\Guild\GuildController;
 use App\Http\Controllers\Guild\GuildInvitationController;
+use App\Http\Controllers\Items\ExportController;
 use App\Http\Controllers\Items\ItemController;
 use App\Http\Controllers\Items\UserItemController;
 use App\Http\Controllers\Market\MarketController;
@@ -66,6 +67,7 @@ Route::prefix('items')->middleware('auth')->group(function () {
     Route::post('/import', [UserItemController::class, 'sync']);
     Route::put('/{item}', [UserItemController::class, 'update']);
     Route::delete('/{item}', [UserItemController::class, 'delete']);
+    Route::get('/export', [ExportController::class, 'exportItems']);
 
     Route::get('/', [ItemController::class, 'index']);
 });

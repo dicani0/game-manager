@@ -127,4 +127,19 @@ class UserItemTest extends TestCase
 
         $this->actingAs($testUser)->delete('/items/'.$item->getKey());
     }
+
+    public function test_export_user_items(): void
+    {
+        $items = Item::factory()->count(10)->create();
+        $items->each(function (Item $item) {
+            UserItem::factory()->create([
+                'user_id' => $this->user->getKey(),
+                'item_id' => $item->getKey(),
+                'amount' => 10,
+            ]);
+        });
+
+        $response = $this->actingAs($this->user)->get('/items/export');
+        $response->assertDownload();
+    }
 }
