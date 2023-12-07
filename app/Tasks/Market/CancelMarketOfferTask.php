@@ -9,13 +9,13 @@ class CancelMarketOfferTask
 {
     public function __construct(
         protected CancelMarketOffer $action
-    )
-    {
+    ) {
     }
 
     public function handle(CancelMarketOfferDto $dto, \Closure $next): CancelMarketOfferDto
     {
         $this->action->handle($dto);
+
         return $next($dto);
     }
 }

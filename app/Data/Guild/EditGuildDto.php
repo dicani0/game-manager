@@ -25,19 +25,18 @@ class EditGuildDto extends Data
 {
     public function __construct(
         #[Unique('guilds', 'name', ignore: new RouteParameterReference('guild', 'id')), StringType, Min(3), Max(25)]
-        public string                $name,
+        public string $name,
         #[File, Sometimes]
         public Optional|UploadedFile $logo,
         #[StringType, Max(255), Sometimes, Nullable]
-        public Optional|string|null  $description,
+        public Optional|string|null $description,
         #[FromRouteParameter('guild')]
-        public Guild                 $guild,
+        public Guild $guild,
         #[Required, IntegerType, CharacterIsInGuild]
         public int $leader_id,
         #[BooleanType]
-        public bool                  $recruiting = false,
-    )
-    {
+        public bool $recruiting = false,
+    ) {
     }
 
     public static function authorize(): bool

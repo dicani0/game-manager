@@ -42,14 +42,14 @@ class UserItemTest extends TestCase
             'sold_amount' => 0,
         ]);
 
-        $response = $this->actingAs($this->user)->put('/items/' . $item->getKey(), [
+        $response = $this->actingAs($this->user)->put('/items/'.$item->getKey(), [
             'amount' => 15,
         ]);
 
         $response->assertSessionHasErrors('sold_amount');
         $response->assertSessionHasErrors('used_amount');
 
-        $response = $this->actingAs($this->user)->put('/items/' . $item->getKey(), [
+        $response = $this->actingAs($this->user)->put('/items/'.$item->getKey(), [
             'amount' => 15,
             'sold_amount' => 10,
             'used_amount' => 10,
@@ -57,7 +57,7 @@ class UserItemTest extends TestCase
 
         $response->assertSessionHasErrors('amount');
 
-        $response = $this->actingAs($this->user)->put('/items/' . $item->getKey(), [
+        $response = $this->actingAs($this->user)->put('/items/'.$item->getKey(), [
             'amount' => 15,
             'sold_amount' => 5,
             'used_amount' => 5,
@@ -89,7 +89,7 @@ class UserItemTest extends TestCase
             'sold_amount' => 0,
         ]);
 
-        $this->actingAs($testUser)->put('/items/' . $item->getKey(), [
+        $this->actingAs($testUser)->put('/items/'.$item->getKey(), [
             'amount' => 15,
             'sold_amount' => 5,
             'used_amount' => 5,
@@ -104,7 +104,7 @@ class UserItemTest extends TestCase
             'item_id' => $item->getKey(),
         ]);
 
-        $response = $this->actingAs($this->user)->delete('/items/' . $item->getKey());
+        $response = $this->actingAs($this->user)->delete('/items/'.$item->getKey());
         $response->assertRedirect();
 
         $this->assertDatabaseMissing('user_item', [
@@ -125,6 +125,6 @@ class UserItemTest extends TestCase
             'user_id' => $this->user->getKey(),
         ]);
 
-        $this->actingAs($testUser)->delete('/items/' . $item->getKey());
+        $this->actingAs($testUser)->delete('/items/'.$item->getKey());
     }
 }

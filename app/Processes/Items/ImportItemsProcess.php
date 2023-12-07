@@ -10,6 +10,6 @@ class ImportItemsProcess extends Process
 {
     protected array $tasks = [
         ParseItemsTask::class,
-        SyncUserItemsTask::class
+        SyncUserItemsTask::class,
     ];
 }

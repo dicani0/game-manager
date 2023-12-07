@@ -25,6 +25,7 @@ use Illuminate\Support\Carbon;
  * @property-read Collection<int, PollQuestionAnswer> $answers
  * @property-read int|null                                                          $answers_count
  * @property-read Poll                                                              $poll
+ *
  * @method static PollQuestionFactory factory($count = null, $state = [])
  * @method static Builder|PollQuestion newModelQuery()
  * @method static Builder|PollQuestion newQuery()
@@ -36,6 +37,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|PollQuestion whereRequired($value)
  * @method static Builder|PollQuestion whereType($value)
  * @method static Builder|PollQuestion whereUpdatedAt($value)
+ *
  * @mixin Eloquent
  */
 class PollQuestion extends Model

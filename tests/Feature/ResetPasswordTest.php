@@ -62,7 +62,7 @@ class ResetPasswordTest extends TestCase
 
         $newPassword = 'password';
 
-        $response = $this->post("auth/reset-password", [
+        $response = $this->post('auth/reset-password', [
             'email' => $user->email,
             'token' => $token,
             'password' => $newPassword,
@@ -85,7 +85,7 @@ class ResetPasswordTest extends TestCase
 
         $newPassword = 'password';
 
-        $response = $this->post("auth/reset-password", [
+        $response = $this->post('auth/reset-password', [
             'email' => $user->email,
             'token' => 'aaaaaaaaaaaaaaaaaaaaaaaaaaa',
             'password' => $newPassword,
@@ -96,6 +96,6 @@ class ResetPasswordTest extends TestCase
 
         $user->refresh();
 
-        $this->assertTrue(!Hash::check($newPassword, $user->password));
+        $this->assertTrue(! Hash::check($newPassword, $user->password));
     }
 }

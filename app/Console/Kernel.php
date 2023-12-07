@@ -25,7 +25,6 @@ class Kernel extends ConsoleKernel
             __DIR__.'/Commands',
         ]);
 
-
         require base_path('routes/console.php');
     }
 }

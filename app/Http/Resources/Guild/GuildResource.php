@@ -10,6 +10,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class GuildResource extends JsonResource
 {
     private bool $includeInvitations = false;
+
     private bool $includeCharacters = true;
 
     /**

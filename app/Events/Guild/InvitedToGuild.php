@@ -11,7 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class InvitedToGuild implements ShouldQueue, ShouldBroadcast
+class InvitedToGuild implements ShouldBroadcast, ShouldQueue
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -22,7 +22,7 @@ class InvitedToGuild implements ShouldQueue, ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('guild-invite.' . $this->user->getKey()),
+            new PrivateChannel('guild-invite.'.$this->user->getKey()),
         ];
     }
 

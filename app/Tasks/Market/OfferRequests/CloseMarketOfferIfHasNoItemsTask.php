@@ -11,6 +11,7 @@ readonly class CloseMarketOfferIfHasNoItemsTask
         private CloseMarketOfferIfHasNoItems $action,
     ) {
     }
+
     public function handle(TradeOffer $request, \Closure $next): TradeOffer
     {
         $this->action->handle($request->offerable);

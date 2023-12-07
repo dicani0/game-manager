@@ -18,6 +18,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read PollQuestion|null          $question
+ *
  * @method static Builder|PollQuestionAnswer newModelQuery()
  * @method static Builder|PollQuestionAnswer newQuery()
  * @method static Builder|PollQuestionAnswer query()
@@ -27,6 +28,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|PollQuestionAnswer wherePollQuestionId($value)
  * @method static Builder|PollQuestionAnswer whereUpdatedAt($value)
  * @method static \Database\Factories\Poll\PollQuestionAnswerFactory factory($count = null, $state = [])
+ *
  * @mixin Eloquent
  */
 class PollQuestionAnswer extends Model

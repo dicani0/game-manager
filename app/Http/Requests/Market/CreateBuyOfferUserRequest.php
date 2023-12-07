@@ -24,7 +24,7 @@ class CreateBuyOfferUserRequest extends CreateBuyOfferRequest
             'items.*.amount' => ['required', 'numeric', 'min:1', function ($attribute, $value, $fail) {
                 /** @var User $user */
                 $user = $this->route('user');
-                
+
                 $item = $user->items()->where('item_id', $this->input('items.*.id'))->first();
 
                 if (is_null($item) || $item->pivot->available_amount < $value) {

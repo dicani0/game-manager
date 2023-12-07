@@ -27,9 +27,13 @@ use Tests\TestCase;
 class MarketTest extends TestCase
 {
     private User $user;
+
     private Item $item1;
+
     private Item $item2;
+
     private Item $item3;
+
     private Collection $items;
 
     protected function setUp(): void
@@ -144,7 +148,7 @@ class MarketTest extends TestCase
             'user_id' => $this->user->getKey(),
         ]);
 
-        $this->actingAs($buyer)->post('market/' . $marketOffer->getKey() . '/buy', [
+        $this->actingAs($buyer)->post('market/'.$marketOffer->getKey().'/buy', [
             'lat_price' => 0,
             'at_price' => 0,
             'items' => [
@@ -192,7 +196,7 @@ class MarketTest extends TestCase
             ];
         }));
 
-        $this->actingAs($this->user)->delete('/market/' . $offer->getKey());
+        $this->actingAs($this->user)->delete('/market/'.$offer->getKey());
 
         $this->assertDatabaseHas('market_offers', [
             'id' => $offer->getKey(),
@@ -224,12 +228,12 @@ class MarketTest extends TestCase
 
         $this->actingAs($this->user)->get('/market/my')
             ->assertInertia(
-                fn(AssertableInertia $page) => $page
+                fn (AssertableInertia $page) => $page
                     ->component('Market/MyOffers')
                     ->has(
                         'offers.data',
                         1,
-                        fn(AssertableInertia $page) => $page
+                        fn (AssertableInertia $page) => $page
                             ->where('id', $offer->getKey())
                             ->etc()
                     )
@@ -237,12 +241,12 @@ class MarketTest extends TestCase
 
         $this->actingAs($this->user)->get('/market')
             ->assertInertia(
-                fn(AssertableInertia $page) => $page
+                fn (AssertableInertia $page) => $page
                     ->component('Market/Market')
                     ->has(
                         'offers.data',
                         1,
-                        fn(AssertableInertia $page) => $page
+                        fn (AssertableInertia $page) => $page
                             ->where('id', $offer2->getKey())
                             ->etc()
                     )
@@ -617,7 +621,6 @@ class MarketTest extends TestCase
             ->post("/market/{$tradeOffer->getKey()}/{$offer->getKey()}/reject")
             ->assertRedirect();
 
-
         $this->assertEquals(session('errors')->getBag('default')->first(), 'This action is unauthorized.');
 
         $this->assertDatabaseHas('trade_offers', [
@@ -723,12 +726,12 @@ class MarketTest extends TestCase
 
         $this->actingAs($this->user)->get('/market/history')
             ->assertInertia(
-                fn(AssertableInertia $page) => $page
+                fn (AssertableInertia $page) => $page
                     ->component('Market/MyOffers')
                     ->has(
                         'offers.data',
                         3,
-                        fn(AssertableInertia $page) => $page
+                        fn (AssertableInertia $page) => $page
                             ->where('id', $offer->getKey())
                             ->etc()
                     )
@@ -775,7 +778,7 @@ class MarketTest extends TestCase
 
         $this->assertEquals($offer->status, MarketOfferStatusEnum::ACTIVE);
 
-        Queue::assertPushed(SetMarketOfferStatusAsExpired::class, function ($job) use ($offer) {
+        Queue::assertPushed(SetMarketOfferStatusAsExpired::class, function ($job) {
             return $job->delay === 3600;
         });
     }

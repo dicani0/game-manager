@@ -21,7 +21,7 @@ class TradeOfferCreated implements ShouldBroadcast
 
     public function broadcastOn(): Channel
     {
-        return new PrivateChannel('trade-offer.' . $this->target->offerable->user->getKey());
+        return new PrivateChannel('trade-offer.'.$this->target->offerable->user->getKey());
     }
 
     public function broadcastAs(): string

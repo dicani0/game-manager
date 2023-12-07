@@ -17,7 +17,7 @@ class ItemAmountRule implements ValidationRule
         }
 
         if ($item->pivot->available_amount < $value['amount']) {
-            $fail('You do not have enough of this item:' . $item->name);
+            $fail('You do not have enough of this item:'.$item->name);
         }
     }
 }

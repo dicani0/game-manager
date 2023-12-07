@@ -9,12 +9,13 @@ class HandleOfferPromotionTask
 {
     public function __construct(
         protected HandleOfferPromotion $action
-    )
-    {
+    ) {
     }
+
     public function handle(CreateMarketOfferDto $dto, \Closure $next): CreateMarketOfferDto
     {
         $this->action->handle($dto);
+
         return $next($dto);
     }
 }

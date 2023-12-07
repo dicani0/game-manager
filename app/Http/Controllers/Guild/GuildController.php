@@ -38,7 +38,7 @@ class GuildController extends Controller
 
         return Inertia::render('Guild/GuildShow', [
             'guild' => GuildResource::make($guild->load('characters'))->withInvitations(),
-            'characters' => Inertia::lazy(fn() => (new PossibleGuildMembersQuery())->handle($guild)->paginate(20)),
+            'characters' => Inertia::lazy(fn () => (new PossibleGuildMembersQuery())->handle($guild)->paginate(20)),
             'can' => [
                 'edit' => $user->can('update', $guild),
                 'invite' => $user->can('invite', $guild),
@@ -66,7 +66,7 @@ class GuildController extends Controller
     {
         $guild = $process->run($dto)->guild;
 
-        return redirect('/guilds/' . $guild->name)->with('success', 'Guild created!');
+        return redirect('/guilds/'.$guild->name)->with('success', 'Guild created!');
     }
 
     /**
@@ -76,7 +76,7 @@ class GuildController extends Controller
     {
         $process->run($dto);
 
-        return redirect('/guilds/' . $guild->name)->with('success', 'Guild updated!');
+        return redirect('/guilds/'.$guild->name)->with('success', 'Guild updated!');
     }
 
     /**
@@ -88,7 +88,7 @@ class GuildController extends Controller
         $this->authorize('kick', [$guild, $member]);
         $process->run($member);
 
-        return redirect('/guilds/' . $guild->name)->with('success', 'Member kicked!');
+        return redirect('/guilds/'.$guild->name)->with('success', 'Member kicked!');
     }
 
     /**

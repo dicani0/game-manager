@@ -57,6 +57,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read int|null                                                  $roles_count
  * @property-read Collection<int, PersonalAccessToken>                      $tokens
  * @property-read int|null                                                  $tokens_count
+ *
  * @method static UserFactory factory($count = null, $state = [])
  * @method static Builder|User newModelQuery()
  * @method static Builder|User newQuery()
@@ -73,16 +74,20 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static Builder|User wherePassword($value)
  * @method static Builder|User whereRememberToken($value)
  * @method static Builder|User whereUpdatedAt($value)
+ *
  * @property int                                                            $private
+ *
  * @method static Builder|User wherePrivate($value)
+ *
  * @property-read Collection<int, TradeOffer>                               $offers
  * @property-read int|null                                                  $offers_count
  * @property-read Collection                                                $guilds
+ *
  * @mixin Eloquent
  */
 class User extends Authenticatable implements MustVerifyEmail, OfferableInterface
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles, Offerable;
+    use HasApiTokens, HasFactory, HasRoles, Notifiable, Offerable;
 
     /**
      * The attributes that are mass assignable.

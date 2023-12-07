@@ -10,6 +10,6 @@ class CancelMarketOfferProcess extends Process
 {
     protected array $tasks = [
         CancelMarketOfferTask::class,
-        CalculateReservedCosmeticAmountAfterOfferCancellationTask::class
+        CalculateReservedCosmeticAmountAfterOfferCancellationTask::class,
     ];
 }

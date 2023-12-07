@@ -1,6 +1,5 @@
 <?php
 
-
 use App\Enums\MarketOfferRequestStatusEnum;
 use App\Enums\OfferTypeEnum;
 use App\Models\Items\Item;
@@ -11,10 +10,13 @@ use Tests\TestCase;
 class TradeTest extends TestCase
 {
     private User $seller;
+
     private User $buyer;
 
     private Item $item1;
+
     private Item $item2;
+
     private Item $item3;
 
     protected function setUp(): void

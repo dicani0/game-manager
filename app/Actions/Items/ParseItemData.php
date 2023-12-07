@@ -18,6 +18,7 @@ class ParseItemData
             $parts = Str::of($line)->trim()->explode('x', 2);
             $amount = Str::of(Arr::get($parts, 0))->trim();
             $name = Str::of(Arr::get($parts, 1))->before("\t")->before('-')->before('(P')->trim()->replace('Token', '');
+
             return [
                 'amount' => $amount->toInteger(),
                 'item_name' => $name->toString(),

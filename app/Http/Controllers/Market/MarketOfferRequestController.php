@@ -18,6 +18,7 @@ class MarketOfferRequestController extends Controller
     public function accept(AcceptRejectTradeRequest $request, TradeOffer $offerRequest, AcceptTradeRequestProcess $process): RedirectResponse
     {
         $process->run($offerRequest);
+
         return redirect()->back()->with('success', 'Offer accepted!');
     }
 

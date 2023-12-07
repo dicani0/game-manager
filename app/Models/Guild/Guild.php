@@ -32,6 +32,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null                           $updated_at
  * @property-read Collection<int, User>            $users
  * @property-read int|null                         $users_count
+ *
  * @method static Builder|Guild newModelQuery()
  * @method static Builder|Guild newQuery()
  * @method static Builder|Guild query()
@@ -44,15 +45,19 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Guild whereOwnerId($value)
  * @method static Builder|Guild whereRecruiting($value)
  * @method static Builder|Guild whereUpdatedAt($value)
+ *
  * @property-read Collection<int, Character>       $characters
  * @property-read int|null                         $characters_count
  * @property-read GuildCharacter|null              $leader
  * @property-read Collection<int, GuildInvitation> $invitations
  * @property-read int|null                         $invitations_count
+ *
  * @method static GuildFactory factory($count = null, $state = [])
+ *
  * @property-read Collection                       $vice_leaders
  * @property-read Collection<int, Poll> $polls
  * @property-read int|null $polls_count
+ *
  * @mixin Eloquent
  */
 class Guild extends Model implements Pollable
@@ -60,6 +65,7 @@ class Guild extends Model implements Pollable
     use HasFactory, Prunable;
 
     const TABLE = 'guilds';
+
     protected $table = self::TABLE;
 
     protected $fillable = [
@@ -99,7 +105,7 @@ class Guild extends Model implements Pollable
     {
         $leader = $this->leader;
 
-        if (!$leader) {
+        if (! $leader) {
             return false;
         }
 
@@ -109,7 +115,7 @@ class Guild extends Model implements Pollable
     public function isViceLeader(User $user): bool
     {
         return $this->vice_leaders->contains(
-            fn(GuildCharacter $character) => $user->characters->pluck('id')->contains($character->character_id)
+            fn (GuildCharacter $character) => $user->characters->pluck('id')->contains($character->character_id)
         );
     }
 

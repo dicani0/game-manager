@@ -24,7 +24,7 @@ class NewGuildMemberNotification extends Notification
         return [
             'character_name' => $this->guildCharacter->character->name,
             'guild_name' => $this->guildCharacter->guild->name,
-            'message' => $this->guildCharacter->character->name . ' has joined the guild ' . $this->guildCharacter->guild->name,
+            'message' => $this->guildCharacter->character->name.' has joined the guild '.$this->guildCharacter->guild->name,
         ];
     }
 }

@@ -41,7 +41,7 @@ class Handler extends ExceptionHandler
                     ->withInput()
                     ->withErrors($e->errors());
             }
-            if ($e instanceof Exception && !$e instanceof AuthenticationException) {
+            if ($e instanceof Exception && ! $e instanceof AuthenticationException) {
                 return redirect()
                     ->back()
                     ->withErrors(['error' => $e->getMessage()])
@@ -55,6 +55,7 @@ class Handler extends ExceptionHandler
                 ->withInput()
                 ->withErrors($e->getMessage());
         }
+
         return parent::render($request, $e);
     }
 }

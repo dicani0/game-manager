@@ -16,11 +16,11 @@ class CharacterIsInGuild implements ValidationRule
     /**
      * Run the validation rule.
      *
-     * @param Closure(string): PotentiallyTranslatedString $fail
+     * @param  Closure(string): PotentiallyTranslatedString  $fail
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (!$this->guild->characters()->where('id', $value)->exists()) {
+        if (! $this->guild->characters()->where('id', $value)->exists()) {
             $fail("The selected character is not in the {$this->guild->name} guild.");
         }
     }

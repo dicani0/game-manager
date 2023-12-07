@@ -29,8 +29,9 @@ class CancelOffersWithUnavailableItems
                 ->get();
 
             $tradeOffers->each(function (TradeOffer $tradeOffer) use ($marketOffer) {
-                $shouldReject = !$tradeOffer->items->every(function (Item $item) use ($marketOffer) {
+                $shouldReject = ! $tradeOffer->items->every(function (Item $item) use ($marketOffer) {
                     $offerItem = $marketOffer->items->where('item_id', $item->getKey())->first();
+
                     return $offerItem && $offerItem->amount >= $item->pivot->amount;
                 });
 

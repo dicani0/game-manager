@@ -10,13 +10,13 @@ class SetMarketOfferAsExpiredTask
 {
     public function __construct(
         protected SetMarketOfferAsExpired $action
-    )
-    {
+    ) {
     }
 
     public function handle(CreateMarketOfferDto $dto, Closure $next): CreateMarketOfferDto
     {
         $this->action->handle($dto->offer);
+
         return $next($dto);
     }
 }

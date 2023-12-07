@@ -52,6 +52,7 @@ class PollController extends Controller
     public function update(Poll $poll, UpdatePollDto $dto, UpdatePollProcess $process): RedirectResponse
     {
         $process->run($dto);
+
         return redirect()->to('/polls')->with('success', 'Poll updated successfully.');
     }
 }

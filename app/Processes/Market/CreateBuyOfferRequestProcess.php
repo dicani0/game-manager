@@ -12,6 +12,6 @@ class CreateBuyOfferRequestProcess extends Process
     protected array $tasks = [
         CreateMarketOfferRequestTask::class,
         AttachItemsToMarketOfferRequestTask::class,
-        NotifyUserAboutOfferRequestTask::class
+        NotifyUserAboutOfferRequestTask::class,
     ];
 }

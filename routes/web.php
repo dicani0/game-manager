@@ -80,7 +80,6 @@ Route::prefix('guilds')->middleware('auth')->group(function () {
         Route::post('/{guildInvitation}/cancel', [GuildInvitationController::class, 'cancel']);
     });
 
-
     Route::post('/{guild}/invite/{character}', [GuildInvitationController::class, 'invite']);
 
     Route::get('/', [GuildController::class, 'index']);
@@ -106,7 +105,6 @@ Route::prefix('auth')->group(function () {
         Route::post('/reset-password', [NewPasswordController::class, 'post'])->name('password.update');
 
         Route::inertia('resend-verification', 'Auth/ResendVerificationEmail')->name('verification.resend');
-
 
     });
 

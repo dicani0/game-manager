@@ -16,7 +16,7 @@ class PublicUserResource extends JsonResource
             'id' => $this->resource->getKey(),
             'name' => $this->resource->name,
             'discord_name' => $this->resource->discord_name,
-            $this->mergeWhen($this->withItems, fn() => ['items' => UserItemResource::collection($this->resource->items)]),
+            $this->mergeWhen($this->withItems, fn () => ['items' => UserItemResource::collection($this->resource->items)]),
         ];
     }
 

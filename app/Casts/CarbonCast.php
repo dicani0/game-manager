@@ -10,7 +10,6 @@ use Throwable;
 
 class CarbonCast implements Cast
 {
-
     public function cast(DataProperty $property, mixed $value, array $context): Carbon|Uncastable
     {
         try {

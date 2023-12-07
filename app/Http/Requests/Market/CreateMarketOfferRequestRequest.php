@@ -13,7 +13,7 @@ class CreateMarketOfferRequestRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return !$this->getMarketOffer()->creator->is($this->user())
+        return ! $this->getMarketOffer()->creator->is($this->user())
             && $this->getMarketOffer()->offers->where('user_id', $this->user()->getKey())->isEmpty();
     }
 
@@ -33,7 +33,6 @@ class CreateMarketOfferRequestRequest extends FormRequest
             'items.*.quantity' => ['required', 'integer', 'min:1'],
         ];
     }
-
 
     public function getMarketOffer(): MarketOffer
     {

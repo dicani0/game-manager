@@ -17,6 +17,7 @@ class CharacterUpdateDto extends Data
 {
     #[Required, Min(3), Max(20), StringType, Unique('characters', 'name', ignore: new RouteParameterReference('character', 'id'))]
     public string $name;
+
     #[Required, Enum(VocationEnum::class)]
     public string $vocation;
 

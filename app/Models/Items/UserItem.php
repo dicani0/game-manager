@@ -15,9 +15,11 @@ use Illuminate\Support\Carbon;
  * App\Models\Items\UserItem
  *
  * @property-read int    $available_amount
+ *
  * @method static Builder|UserItem newModelQuery()
  * @method static Builder|UserItem newQuery()
  * @method static Builder|UserItem query()
+ *
  * @property int         $id
  * @property int         $user_id
  * @property int         $item_id
@@ -28,6 +30,7 @@ use Illuminate\Support\Carbon;
  * @property int         $bought_amount
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static UserItemFactory factory($count = null, $state = [])
  * @method static Builder|UserItem whereAmount($value)
  * @method static Builder|UserItem whereBoughtAmount($value)
@@ -39,8 +42,10 @@ use Illuminate\Support\Carbon;
  * @method static Builder|UserItem whereUpdatedAt($value)
  * @method static Builder|UserItem whereUsedAmount($value)
  * @method static Builder|UserItem whereUserId($value)
+ *
  * @property-read Item   $item
  * @property-read User   $user
+ *
  * @mixin Eloquent
  */
 class UserItem extends Pivot

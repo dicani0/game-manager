@@ -23,9 +23,11 @@ use Illuminate\Support\Carbon;
  * @property-read Collection<int, Item>   $items
  * @property-read int|null                $items_count
  * @property-read User|MarketOffer        $offerable
+ *
  * @method static Builder|TradeOffer newModelQuery()
  * @method static Builder|TradeOffer newQuery()
  * @method static Builder|TradeOffer query()
+ *
  * @property int                          $id
  * @property string                       $offerable_type
  * @property int                          $offerable_id
@@ -37,6 +39,7 @@ use Illuminate\Support\Carbon;
  * @property string|null                  $message
  * @property Carbon|null                  $created_at
  * @property Carbon|null                  $updated_at
+ *
  * @method static Builder|TradeOffer whereAtPrice($value)
  * @method static Builder|TradeOffer whereCreatedAt($value)
  * @method static Builder|TradeOffer whereId($value)
@@ -48,6 +51,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|TradeOffer whereType($value)
  * @method static Builder|TradeOffer whereUpdatedAt($value)
  * @method static Builder|TradeOffer whereUserId($value)
+ *
  * @mixin Eloquent
  * @mixin \Eloquent
  */

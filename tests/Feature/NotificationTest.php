@@ -51,10 +51,10 @@ class NotificationTest extends TestCase
     {
         $this->actingAs($this->user)
             ->get('/notifications/all')
-            ->assertInertia(fn(AssertableInertia $page) => $page
+            ->assertInertia(fn (AssertableInertia $page) => $page
                 ->component('Notifications/Notifications')
                 ->has('all_notifications.data', 3)
-                ->has('all_notifications.data', fn(AssertableInertia $page) => $page
+                ->has('all_notifications.data', fn (AssertableInertia $page) => $page
                     ->where('0.id', $this->user->notifications->get(0)->id)
                     ->where('1.id', $this->user->notifications->get(1)->id)
                     ->where('2.id', $this->user->notifications->get(2)->id)
@@ -68,7 +68,7 @@ class NotificationTest extends TestCase
         Carbon::setTestNow();
 
         $this->actingAs($this->user)
-            ->get('/notifications/' . $this->user->notifications->get(0)->id . '/read')
+            ->get('/notifications/'.$this->user->notifications->get(0)->id.'/read')
             ->assertRedirect('/users');
 
         $this->assertDatabaseHas('notifications', [
@@ -82,7 +82,7 @@ class NotificationTest extends TestCase
     {
         $anotherUser = User::factory()->create();
 
-        $this->actingAs($anotherUser)->get('/notifications/' . $this->user->notifications->get(0)->id . '/read');
+        $this->actingAs($anotherUser)->get('/notifications/'.$this->user->notifications->get(0)->id.'/read');
 
         $this->assertEquals(session('errors')->getBag('default')->first(), 'This action is unauthorized.');
 

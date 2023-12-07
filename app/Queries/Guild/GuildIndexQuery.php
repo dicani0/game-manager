@@ -16,9 +16,9 @@ class GuildIndexQuery
                 'recruiting',
                 AllowedFilter::callback(
                     'my',
-                    fn(Builder $query,) => $query->whereHas('characters',
-                        fn(Builder $query) => $query->whereHas('character',
-                            fn(Builder $query) => $query->where('user_id', auth()->id())
+                    fn (Builder $query) => $query->whereHas('characters',
+                        fn (Builder $query) => $query->whereHas('character',
+                            fn (Builder $query) => $query->where('user_id', auth()->id())
                         )
                     )
                 ),

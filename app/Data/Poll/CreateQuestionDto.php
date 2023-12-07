@@ -18,16 +18,15 @@ class CreateQuestionDto extends Data
 {
     public function __construct(
         #[Required, StringType]
-        public string               $question,
+        public string $question,
         #[WithCast(EnumCast::class)]
         public PollQuestionTypeEnum $type,
         #[DataCollectionOf(CreateAnswerDto::class)]
         #[Required, Min(2)]
-        public DataCollection       $answers,
+        public DataCollection $answers,
         #[BooleanType]
-        public bool                 $required = true,
-        public ?PollQuestion        $pollQuestion = null,
-    )
-    {
+        public bool $required = true,
+        public ?PollQuestion $pollQuestion = null,
+    ) {
     }
 }

@@ -7,7 +7,6 @@ use App\Data\Auth\NewPasswordFormDto;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\NewPasswordFormRequest;
 use App\Http\Requests\Auth\NewPasswordRequest;
-use App\Processes\Auth\ResetPasswordProcess;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Password;
 use Inertia\Inertia;
@@ -15,7 +14,6 @@ use Inertia\Response;
 
 class NewPasswordController extends Controller
 {
-
     public function get(NewPasswordFormRequest $request, string $token): Response
     {
         $dto = NewPasswordFormDto::from([

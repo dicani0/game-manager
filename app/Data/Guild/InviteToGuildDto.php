@@ -12,11 +12,10 @@ class InviteToGuildDto extends Data
 {
     public function __construct(
         #[FromRouteParameter('guild')]
-        public Guild     $guild,
+        public Guild $guild,
         #[FromRouteParameter('character')]
         public Character $character,
-    )
-    {
+    ) {
     }
 
     public static function authorize(): bool

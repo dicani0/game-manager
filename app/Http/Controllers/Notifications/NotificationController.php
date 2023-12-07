@@ -26,6 +26,7 @@ class NotificationController extends Controller
     {
         /* @phpstan-ignore-next-line */
         Auth::user()->unreadNotifications->markAsRead();
+
         return redirect()->back();
     }
 
@@ -37,6 +38,7 @@ class NotificationController extends Controller
         $this->authorize('read', $notification);
 
         $notification->markAsRead();
+
         return array_key_exists('link', $notification->data) ?
             redirect($notification->data['link']) : redirect()->back();
     }

@@ -15,6 +15,7 @@ readonly class SetGuildLeaderTask
     public function handle(CreateGuildDto $dto, Closure $next): CreateGuildDto
     {
         $this->action->handle($dto->guild, $dto->leader_id);
+
         return $next($dto);
     }
 }

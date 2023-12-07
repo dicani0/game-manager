@@ -9,9 +9,8 @@ use Spatie\LaravelData\Data;
 class CancelMarketOfferDto extends Data
 {
     public function __construct(
-        public User        $user,
+        public User $user,
         public MarketOffer $offer,
-    )
-    {
+    ) {
     }
 }

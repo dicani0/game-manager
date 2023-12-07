@@ -12,6 +12,6 @@ class RegisterProcess extends Process
     protected array $tasks = [
         RegisterUser::class,
         AssignUserRole::class,
-        SendVerificationEmail::class
+        SendVerificationEmail::class,
     ];
 }

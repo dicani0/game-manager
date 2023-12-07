@@ -9,12 +9,13 @@ class CreateMarketOfferTask
 {
     public function __construct(
         protected CreateMarketOffer $action
-    )
-    {
+    ) {
     }
+
     public function handle(CreateMarketOfferDto $dto, \Closure $next): CreateMarketOfferDto
     {
         $dto->offer = $this->action->handle($dto);
+
         return $next($dto);
     }
 }

@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Actions\Auth\LoginUser;
 use App\Data\Auth\LoginUserDto;
 use App\Exceptions\Auth\InvalidCredentialsException;
-use App\Http\Middleware\VerifyCsrfToken;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -17,7 +16,6 @@ class LoginTest extends TestCase
     /**
      * A basic test example.
      */
-
     public User $user;
 
     protected function setUp(): void

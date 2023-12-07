@@ -45,12 +45,14 @@ class CharacterController extends Controller
     public function update(CharacterUpdateDto $dto, Character $character, UpdateCharacter $action): RedirectResponse
     {
         $action->handle($character, $dto);
+
         return redirect('/characters')->with('success', 'Character updated successfully!');
     }
 
     public function store(CharacterDto $dto, CreateCharacter $action)
     {
         $action->handle($dto, Auth::user());
+
         return Inertia::render('Character/Character', [
             'characters' => Auth::user()->refresh()->characters,
             'success' => 'Character created successfully!',
@@ -60,6 +62,7 @@ class CharacterController extends Controller
     public function delete(DeleteCharacterRequest $request, Character $character, DeleteCharacter $deleteCharacter): RedirectResponse
     {
         $deleteCharacter->handle($request->user(), $character);
+
         return redirect('/characters')->with('success', 'Character deleted successfully!');
     }
 }

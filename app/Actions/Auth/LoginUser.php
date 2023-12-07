@@ -18,7 +18,7 @@ final class LoginUser
     {
         $user = User::query()->whereEmail($dto->email)->first();
 
-        if (!$user) {
+        if (! $user) {
             throw new InvalidCredentialsException();
         }
 
@@ -32,7 +32,7 @@ final class LoginUser
      */
     private function ensureUserIsVerified(User $user): void
     {
-        if (!$user->hasVerifiedEmail()) {
+        if (! $user->hasVerifiedEmail()) {
             throw new EmailNotVerifiedException();
         }
     }
@@ -42,7 +42,7 @@ final class LoginUser
      */
     private function ensureCredentialsAreValid(User $user, string $password): void
     {
-        if (!Hash::check($password, $user->password)) {
+        if (! Hash::check($password, $user->password)) {
             throw new InvalidCredentialsException();
         }
     }
@@ -52,5 +52,4 @@ final class LoginUser
         auth()->login($user);
         request()->session()->regenerate();
     }
-
 }

@@ -20,17 +20,16 @@ class CreateGuildDto extends Data
 {
     public function __construct(
         #[Required, Unique('guilds', 'name'), StringType, Min(3), Max(25)]
-        public string                $name,
+        public string $name,
         #[Required, Exists('characters', 'id')]
-        public int                   $leader_id,
+        public int $leader_id,
         #[File, Sometimes]
         public Optional|UploadedFile $logo,
         #[StringType, Max(255), Sometimes]
-        public Optional|string       $description,
-        public bool                  $recruiting = false,
-        public ?Guild                $guild = null,
-    )
-    {
+        public Optional|string $description,
+        public bool $recruiting = false,
+        public ?Guild $guild = null,
+    ) {
     }
 
     public static function authorize(): bool
