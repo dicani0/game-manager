@@ -10,6 +10,12 @@ jobs:
   larastan:
     runs-on: ubuntu-latest
     steps:
+      - name: Update composer
+        run: composer update
+
+      - name: Install PHP Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
       - name: Larastan
         run: ./vendor/bin/phpstan analyse --memory-limit=2G
 
