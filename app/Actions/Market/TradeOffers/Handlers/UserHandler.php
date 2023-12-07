@@ -10,7 +10,6 @@ use Illuminate\Support\Collection;
 
 class UserHandler implements OfferableHandler
 {
-
     public function handle(TradeOffer $tradeOffer, Collection $itemsInRequest): void
     {
         /** @var User $user */

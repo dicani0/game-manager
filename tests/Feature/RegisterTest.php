@@ -1,6 +1,5 @@
 <?php
 
-
 use App\Data\Auth\RegisterUserDto;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
@@ -17,7 +16,6 @@ class RegisterTest extends TestCase
     /**
      * A basic test example.
      */
-
     public function test_register(): void
     {
         Notification::fake();

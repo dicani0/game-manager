@@ -13,15 +13,14 @@ class UpdateAnswersInQuestion
     {
         // Collect all the ids from dto
         $idsInDto = $answers->filter(function (UpdateAnswerDto $answerDto) {
-            return !$answerDto->id instanceof Optional;
+            return ! $answerDto->id instanceof Optional;
         })->toCollection()->pluck('id');
 
         // Delete answers not in dto
         $question->answers()->whereNotIn('id', $idsInDto)->delete();
 
-
         $answers->each(function (UpdateAnswerDto $answerDto) use ($question) {
-            if (!$answerDto->id instanceof Optional) {
+            if (! $answerDto->id instanceof Optional) {
                 $answer = $question->answers()->find($answerDto->id);
 
                 if ($answer === null) {

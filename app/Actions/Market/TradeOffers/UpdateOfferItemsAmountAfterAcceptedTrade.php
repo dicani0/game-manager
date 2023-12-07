@@ -13,7 +13,6 @@ use Exception;
 
 class UpdateOfferItemsAmountAfterAcceptedTrade
 {
-
     public function handle(TradeOffer $tradeOffer): void
     {
         $itemsInRequest = $tradeOffer->items->keyBy('id');

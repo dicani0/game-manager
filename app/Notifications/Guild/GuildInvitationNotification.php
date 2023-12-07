@@ -24,7 +24,7 @@ class GuildInvitationNotification extends Notification
         return [
             'guild_id' => $this->guildInvitation->guild_id,
             'character_id' => $this->guildInvitation->character_id,
-            'message' => 'Your character ' . $this->guildInvitation->character->name . ' has been invited to join the guild ' .
+            'message' => 'Your character '.$this->guildInvitation->character->name.' has been invited to join the guild '.
                 $this->guildInvitation->guild->name,
             'link' => url('/guilds/invites'),
         ];

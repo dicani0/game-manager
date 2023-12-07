@@ -16,12 +16,12 @@ readonly class PollableModelExists implements ValidationRule
     /**
      * Run the validation rule.
      *
-     * @param Closure(string): PotentiallyTranslatedString $fail
+     * @param  Closure(string): PotentiallyTranslatedString  $fail
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         assert(is_subclass_of($this->class, Model::class));
 
-        $this->class::query()->findOr($value, fn() => $fail("{$this->class} not found"));
+        $this->class::query()->findOr($value, fn () => $fail("{$this->class} not found"));
     }
 }

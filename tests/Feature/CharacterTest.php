@@ -1,6 +1,5 @@
 <?php
 
-
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -20,7 +19,7 @@ class CharacterTest extends TestCase
             'vocation' => 'knight',
         ]);
 
-        $response->assertInertia(fn(AssertableInertia $page) => $page
+        $response->assertInertia(fn (AssertableInertia $page) => $page
             ->component('Character/Character')
             ->has('characters', 1)
             ->where('characters.0.name', 'test')
@@ -44,8 +43,8 @@ class CharacterTest extends TestCase
             'vocation' => 'knight',
         ]);
 
-        $response = $this->actingAs($this->user)->get('/characters/edit/' . $character->id);
-        $response->assertInertia(fn(AssertableInertia $page) => $page
+        $response = $this->actingAs($this->user)->get('/characters/edit/'.$character->id);
+        $response->assertInertia(fn (AssertableInertia $page) => $page
             ->component('Character/Edit')
             ->where('character.name', 'test')
             ->where('character.vocation', 'knight')
@@ -61,7 +60,7 @@ class CharacterTest extends TestCase
 
         $user2 = User::factory()->create();
 
-        $response = $this->actingAs($user2)->get('/characters/edit/' . $character->getKey());
+        $response = $this->actingAs($user2)->get('/characters/edit/'.$character->getKey());
         $response->assertRedirect();
     }
 
@@ -72,7 +71,7 @@ class CharacterTest extends TestCase
             'vocation' => 'knight',
         ]);
 
-        $response = $this->actingAs($this->user)->put('/characters/' . $character->id, [
+        $response = $this->actingAs($this->user)->put('/characters/'.$character->id, [
             'name' => 'test2',
             'vocation' => 'druid',
         ]);
@@ -97,7 +96,7 @@ class CharacterTest extends TestCase
 
         $user2 = User::factory()->create();
 
-        $this->actingAs($user2)->put('/characters/' . $character->id, [
+        $this->actingAs($user2)->put('/characters/'.$character->id, [
             'name' => 'test2',
             'vocation' => 'druid',
         ]);
@@ -110,7 +109,7 @@ class CharacterTest extends TestCase
             'vocation' => 'knight',
         ]);
 
-        $response = $this->actingAs($this->user)->delete('/characters/' . $character->id);
+        $response = $this->actingAs($this->user)->delete('/characters/'.$character->id);
 
         $response->assertRedirect('/characters');
 

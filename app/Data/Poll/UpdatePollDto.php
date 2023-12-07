@@ -29,36 +29,35 @@ final class UpdatePollDto extends BasePollDto
 {
     public function __construct(
         #[Required, StringType, Max(255)]
-        public string               $title,
+        public string $title,
 
         #[Nullable, StringType, Max(1000)]
         public string|Optional|null $description,
 
         #[WithCast(CarbonCast::class)]
         #[Required, Date, Before('end_date'), AfterOrEqual('now')]
-        public DateTime             $start_date,
+        public DateTime $start_date,
 
         #[WithCast(CarbonCast::class)]
         #[Required, Date, After('start_date')]
-        public DateTime             $end_date,
+        public DateTime $end_date,
 
         #[Rule(new CorrectPollableClass()), RequiredWith('pollable_id')]
         public string|Optional|null $pollable_type,
 
         #[RequiredWith('pollable_type')]
-        public int|Optional|null    $pollable_id,
+        public int|Optional|null $pollable_id,
 
         #[DataCollectionOf(UpdateQuestionDto::class)]
         #[Min(1), Required]
-        public DataCollection       $questions,
+        public DataCollection $questions,
 
         #[FromRouteParameter('poll'), Required]
-        public Poll                 $poll,
+        public Poll $poll,
 
-        public PollStatusEnum       $status = PollStatusEnum::DRAFT,
+        public PollStatusEnum $status = PollStatusEnum::DRAFT,
 
-    )
-    {
+    ) {
         parent::__construct(
             $this->title,
             $this->description,

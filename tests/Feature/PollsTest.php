@@ -1,6 +1,5 @@
 <?php
 
-
 use App\Enums\PollQuestionTypeEnum;
 use App\Enums\PollStatusEnum;
 use App\Models\Poll\Poll;
@@ -14,6 +13,7 @@ use Tests\TestCase;
 class PollsTest extends TestCase
 {
     private User $user;
+
     private Poll $poll;
 
     protected function setUp(): void
@@ -207,7 +207,7 @@ class PollsTest extends TestCase
     public function test_update_poll(): void
     {
         $res = $this->actingAs($this->user)
-            ->put('/polls/' . $this->poll->getKey(), [
+            ->put('/polls/'.$this->poll->getKey(), [
                 'title' => 'Edited Poll',
                 'description' => 'Edited Description',
                 'start_date' => now()->toIso8601String(),
@@ -275,7 +275,7 @@ class PollsTest extends TestCase
     public function test_update_poll_add_question_and_answers(): void
     {
         $res = $this->actingAs($this->user)
-            ->put('/polls/' . $this->poll->getKey(), [
+            ->put('/polls/'.$this->poll->getKey(), [
                 'title' => 'Edited Poll',
                 'description' => 'Edited Description',
                 'start_date' => now()->toIso8601String(),
@@ -368,7 +368,7 @@ class PollsTest extends TestCase
     public function test_update_poll_unauthorized(): void
     {
         $this->actingAs(User::factory()->create())
-            ->put('/polls/' . $this->poll->getKey());
+            ->put('/polls/'.$this->poll->getKey());
 
         $this->assertEquals('This action is unauthorized.', session('errors')->getBag('default')->first());
     }
@@ -377,7 +377,7 @@ class PollsTest extends TestCase
     {
         $user = User::factory()->create()->assignRole(Role::firstWhere(['name' => 'admin']));
         $this->actingAs($user)
-            ->put('/polls/' . $this->poll->getKey());
+            ->put('/polls/'.$this->poll->getKey());
 
         $this->assertEquals('This action is unauthorized.', session('errors')->getBag('default')->first());
     }
@@ -397,7 +397,7 @@ class PollsTest extends TestCase
                     PollQuestionAnswer::factory()->count(2)->state(
                         function () use (&$i) {
                             return [
-                                'content' => 'Test Answer ' . ++$i,
+                                'content' => 'Test Answer '.++$i,
                             ];
                         },
                     ),

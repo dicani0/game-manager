@@ -14,6 +14,7 @@ class CalculateReservedCosmeticAmountAfterOfferCreationTask
     public function handle(CreateMarketOfferDto $dto, \Closure $next): CreateMarketOfferDto
     {
         $this->action->handle($dto);
+
         return $next($dto);
     }
 }

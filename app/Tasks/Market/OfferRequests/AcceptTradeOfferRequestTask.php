@@ -11,6 +11,7 @@ readonly class AcceptTradeOfferRequestTask
         private AcceptTradeOffer $action,
     ) {
     }
+
     public function handle(TradeOffer $request, \Closure $next): TradeOffer
     {
         $this->action->handle($request);

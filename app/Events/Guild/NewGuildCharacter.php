@@ -29,7 +29,7 @@ class NewGuildCharacter implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PresenceChannel('guild.' . $this->guildCharacter->guild->getKey()),
+            new PresenceChannel('guild.'.$this->guildCharacter->guild->getKey()),
         ];
     }
 

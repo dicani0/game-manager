@@ -12,9 +12,10 @@ class AddQuestionsToPoll
     {
         $questions->each(function (CreateQuestionDto $questionDto) use ($poll) {
             $questionDto->pollQuestion = $poll->questions()->create($questionDto->toArray() + [
-                    'poll_id' => $poll->id,
-                ]);
+                'poll_id' => $poll->id,
+            ]);
         });
+
         return $poll->refresh();
     }
 }

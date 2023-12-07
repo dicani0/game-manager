@@ -20,7 +20,7 @@ class CreateTradeOffer
             config('market.max_offers_enabled')
             && $dto->target->offers()->where('user_id', $dto->creator->getKey())->count() >= config('market.max_offers_per_user', 5)
         ) {
-            throw new Exception('You can only have ' . config('max_offers_per_user') . ' offers per market offer!');
+            throw new Exception('You can only have '.config('max_offers_per_user').' offers per market offer!');
         }
 
         /** @var TradeOffer $tradeOffer */

@@ -30,34 +30,33 @@ abstract class BasePollDto extends Data
 {
     public function __construct(
         #[Required, StringType, Max(255)]
-        public string               $title,
+        public string $title,
 
         #[Nullable, StringType, Max(1000)]
         public string|Optional|null $description,
 
         #[WithCast(CarbonCast::class)]
         #[Required, Date, Before('end_date'), After('now')]
-        public DateTime             $start_date,
+        public DateTime $start_date,
 
         #[WithCast(CarbonCast::class)]
         #[Required, Date, After('start_date')]
-        public DateTime             $end_date,
+        public DateTime $end_date,
 
         #[Rule(new CorrectPollableClass()), RequiredWith('pollable_id')]
         public string|Optional|null $pollable_type,
 
         #[RequiredWith('pollable_type')]
-        public int|Optional|null    $pollable_id,
+        public int|Optional|null $pollable_id,
 
         #[DataCollectionOf(CreateQuestionDto::class)]
         #[Min(1), Required]
-        public DataCollection       $questions,
+        public DataCollection $questions,
 
         #[WithCast(EnumCast::class)]
         #[In([PollStatusEnum::DRAFT->value, PollStatusEnum::PUBLISHED->value])]
-        public PollStatusEnum       $status = PollStatusEnum::DRAFT,
-    )
-    {
+        public PollStatusEnum $status = PollStatusEnum::DRAFT,
+    ) {
     }
 
     public static function rules(ValidationContext $context): array
@@ -67,5 +66,4 @@ abstract class BasePollDto extends Data
                 $context->payload['pollable_type'] : null)],
         ];
     }
-
 }

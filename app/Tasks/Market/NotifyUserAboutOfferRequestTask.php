@@ -9,8 +9,7 @@ class NotifyUserAboutOfferRequestTask
 {
     public function __construct(
         protected NotifyUserAboutTradeOffer $action
-    )
-    {
+    ) {
     }
 
     /**
@@ -19,6 +18,7 @@ class NotifyUserAboutOfferRequestTask
     public function handle(CreateTradeOfferDto $dto, \Closure $next): CreateTradeOfferDto
     {
         $this->action->handle($dto);
+
         return $next($dto);
     }
 }

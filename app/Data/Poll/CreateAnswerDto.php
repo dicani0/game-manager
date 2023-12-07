@@ -10,7 +10,6 @@ class CreateAnswerDto extends Data
     public function __construct(
         #[Required]
         public string $content
-    )
-    {
+    ) {
     }
 }

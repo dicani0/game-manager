@@ -12,15 +12,14 @@ use Spatie\LaravelData\DataCollection;
 class CreateTradeOfferDto extends Data
 {
     public function __construct(
-        public ?User            $creator,
+        public ?User $creator,
         public MarketOffer|User $target,
-        public ?TradeOffer      $tradeOffer,
-        public ?string          $message,
+        public ?TradeOffer $tradeOffer,
+        public ?string $message,
         #[DataCollectionOf(TradeOfferItemDto::class)]
-        public DataCollection   $items,
-        public ?int             $at_price,
-        public ?int             $lat_price,
-    )
-    {
+        public DataCollection $items,
+        public ?int $at_price,
+        public ?int $lat_price,
+    ) {
     }
 }

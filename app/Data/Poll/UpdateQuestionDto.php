@@ -20,18 +20,17 @@ class UpdateQuestionDto extends Data
 {
     public function __construct(
         #[Exists('poll_questions', 'id')]
-        public int|Optional         $id,
+        public int|Optional $id,
         #[Required, StringType]
-        public string               $question,
+        public string $question,
         #[WithCast(EnumCast::class)]
         public PollQuestionTypeEnum $type,
         #[DataCollectionOf(UpdateAnswerDto::class)]
         #[Required, Min(2)]
-        public DataCollection       $answers,
+        public DataCollection $answers,
         #[BooleanType]
-        public bool                 $required = true,
-        public ?PollQuestion        $pollQuestion = null,
-    )
-    {
+        public bool $required = true,
+        public ?PollQuestion $pollQuestion = null,
+    ) {
     }
 }

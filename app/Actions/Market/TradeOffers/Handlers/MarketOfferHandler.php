@@ -10,7 +10,6 @@ use Illuminate\Support\Collection;
 
 class MarketOfferHandler implements OfferableHandler
 {
-
     public function handle(TradeOffer $tradeOffer, Collection $itemsInRequest): void
     {
         assert($tradeOffer->offerable instanceof MarketOffer);

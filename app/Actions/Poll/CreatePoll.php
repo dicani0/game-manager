@@ -11,14 +11,14 @@ class CreatePoll
     public function handle(CreatePollDto $dto): Poll
     {
         return Poll::create($dto->only(
-                'title',
-                'description',
-                'start_date',
-                'end_date',
-                'pollable_id',
-                'pollable_type',
-                'status',
-            )->toArray() + [
+            'title',
+            'description',
+            'start_date',
+            'end_date',
+            'pollable_id',
+            'pollable_type',
+            'status',
+        )->toArray() + [
                 'creator_id' => Auth::id(),
             ]);
     }

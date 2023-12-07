@@ -21,5 +21,4 @@ abstract class Process
                 ->thenReturn();
         });
     }
-
 }

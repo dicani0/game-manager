@@ -21,6 +21,7 @@ class LoginController extends Controller
     public function login(LoginRequest $request, LoginUser $action): RedirectResponse
     {
         $action->handle(LoginUserDto::from($request->validated()));
+
         return redirect('/')->with('success', 'Logged in successfully.');
     }
 

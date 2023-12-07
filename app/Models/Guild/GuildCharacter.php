@@ -21,6 +21,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null    $updated_at
  * @property-read Character $character
  * @property-read Guild     $guild
+ *
  * @method static Builder|GuildCharacter newModelQuery()
  * @method static Builder|GuildCharacter newQuery()
  * @method static Builder|GuildCharacter query()
@@ -30,17 +31,21 @@ use Illuminate\Support\Carbon;
  * @method static Builder|GuildCharacter whereId($value)
  * @method static Builder|GuildCharacter whereRole($value)
  * @method static Builder|GuildCharacter whereUpdatedAt($value)
+ *
  * @mixin Eloquent
  */
 class GuildCharacter extends Model
 {
     public $timestamps = true;
+
     protected $table = 'guild_character';
+
     protected $fillable = [
         'guild_id',
         'character_id',
         'role',
     ];
+
     protected $casts = [
         'role' => GuildRoleEnum::class,
     ];

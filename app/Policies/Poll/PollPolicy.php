@@ -8,7 +8,6 @@ use App\Models\User;
 
 class PollPolicy
 {
-
     public function view(User $user, Poll $poll): bool
     {
         return true;

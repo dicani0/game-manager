@@ -2,7 +2,6 @@
 
 namespace App\Actions\Auth;
 
-use App\Enums\RoleEnum;
 use App\Models\User;
 use Closure;
 

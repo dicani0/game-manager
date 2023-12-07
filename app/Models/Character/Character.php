@@ -27,6 +27,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null                           $created_at
  * @property Carbon|null                           $updated_at
  * @property-read User                             $user
+ *
  * @method static Builder|Character newModelQuery()
  * @method static Builder|Character newQuery()
  * @method static Builder|Character query()
@@ -37,10 +38,13 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Character whereUpdatedAt($value)
  * @method static Builder|Character whereUserId($value)
  * @method static Builder|Character whereVocation($value)
+ *
  * @property-read GuildCharacter|null              $guildCharacter
  * @property-read Collection<int, GuildInvitation> $guildInvitation
  * @property-read int|null                         $guild_invitation_count
+ *
  * @method static CharacterFactory factory($count = null, $state = [])
+ *
  * @mixin Eloquent
  */
 class Character extends Model

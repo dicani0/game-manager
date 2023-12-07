@@ -1,6 +1,5 @@
 <?php
 
-
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Testing\AssertableInertia;
@@ -8,11 +7,9 @@ use Tests\TestCase;
 
 class SettingsTest extends TestCase
 {
-
     /**
      * A basic test example.
      */
-
     public User $user;
 
     public function test_render_settings_page_unauthenticated(): void
@@ -26,7 +23,7 @@ class SettingsTest extends TestCase
         $response = $this->actingAs($this->user)
             ->get('/auth/settings');
 
-        $response->assertInertia(fn(AssertableInertia $page) => $page->component('Auth/Settings')
+        $response->assertInertia(fn (AssertableInertia $page) => $page->component('Auth/Settings')
             ->has('user')
             ->where('user.discord_name', $this->user->discord_name)
             ->where('user.private', $this->user->private)

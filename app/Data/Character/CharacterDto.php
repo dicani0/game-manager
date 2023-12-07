@@ -15,6 +15,7 @@ class CharacterDto extends Data
 {
     #[Required, Min(3), Max(20), StringType, Unique('characters', 'name')]
     public string $name;
+
     #[Required, Enum(VocationEnum::class)]
     public string $vocation;
 }

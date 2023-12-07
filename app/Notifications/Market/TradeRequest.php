@@ -51,7 +51,7 @@ class TradeRequest extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'message' => 'You have received a new trade request from ' . $this->offerRequest->creator->name,
+            'message' => 'You have received a new trade request from '.$this->offerRequest->creator->name,
             'link' => '/market/requests',
         ];
     }

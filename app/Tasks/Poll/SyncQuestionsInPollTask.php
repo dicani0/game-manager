@@ -10,14 +10,14 @@ class SyncQuestionsInPollTask
 {
     public function __construct(
         protected SyncQuestionsInPoll $action
-    )
-    {
+    ) {
 
     }
 
     public function handle(UpdatePollDto $dto, Closure $next): UpdatePollDto
     {
         $this->action->handle($dto->poll, $dto->questions);
+
         return $next($dto);
     }
 }

@@ -10,9 +10,8 @@ class UpdateAnswerDto extends Data
 {
     public function __construct(
         #[Required]
-        public string       $content,
+        public string $content,
         public int|Optional $id,
-    )
-    {
+    ) {
     }
 }

@@ -11,6 +11,7 @@ readonly class SyncUserItemsTask
         private SyncUserItems $action,
     ) {
     }
+
     public function handle(ImportItemsDto $dto, \Closure $next): ImportItemsDto
     {
         $this->action->handle($dto);

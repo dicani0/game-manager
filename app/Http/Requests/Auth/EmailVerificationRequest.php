@@ -12,9 +12,10 @@ class EmailVerificationRequest extends BaseEmailVerificationRequest
     {
         $user = $this->findUser();
 
-        if (!hash_equals(sha1($user->getEmailForVerification()), (string)$this->route('hash'))) {
+        if (! hash_equals(sha1($user->getEmailForVerification()), (string) $this->route('hash'))) {
             return false;
         }
+
         return true;
     }
 
@@ -22,7 +23,7 @@ class EmailVerificationRequest extends BaseEmailVerificationRequest
     {
         $user = $this->findUser();
 
-        if (!$user->hasVerifiedEmail()) {
+        if (! $user->hasVerifiedEmail()) {
             $user->markEmailAsVerified();
 
             event(new Verified($user));

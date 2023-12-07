@@ -12,7 +12,7 @@ class CorrectPollableClass implements ValidationRule
     /**
      * Run the validation rule.
      *
-     * @param Closure(string): PotentiallyTranslatedString $fail
+     * @param  Closure(string): PotentiallyTranslatedString  $fail
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
@@ -20,12 +20,12 @@ class CorrectPollableClass implements ValidationRule
             return;
         }
 
-        if (!class_exists($value)) {
-            $fail("Wrong poll type");
+        if (! class_exists($value)) {
+            $fail('Wrong poll type');
         }
 
-        if (!is_subclass_of($value, Pollable::class)) {
-            $fail("Wrong poll type");
+        if (! is_subclass_of($value, Pollable::class)) {
+            $fail('Wrong poll type');
         }
     }
 }

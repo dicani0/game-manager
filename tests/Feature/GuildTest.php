@@ -13,6 +13,7 @@ use Tests\TestCase;
 class GuildTest extends TestCase
 {
     public User $user;
+
     public Character $character;
 
     protected function setUp(): void
@@ -30,17 +31,16 @@ class GuildTest extends TestCase
     {
         $guild = Guild::factory()->create();
 
-
         GuildCharacter::create([
             'guild_id' => $guild->getKey(),
             'character_id' => $this->character->getKey(),
             'role' => GuildRoleEnum::LEADER->value,
         ]);
 
-        $this->actingAs($this->user)->get('/guilds/' . $guild->name)
-            ->assertInertia(fn(AssertableInertia $assert) => $assert
+        $this->actingAs($this->user)->get('/guilds/'.$guild->name)
+            ->assertInertia(fn (AssertableInertia $assert) => $assert
                 ->component('Guild/GuildShow')
-                ->has('can', fn(AssertableInertia $page) => $page
+                ->has('can', fn (AssertableInertia $page) => $page
                     ->where('edit', true)
                     ->where('invite', true)
                     ->where('cancel-invitation', true)
@@ -58,10 +58,10 @@ class GuildTest extends TestCase
             'role' => GuildRoleEnum::MEMBER->value,
         ]);
 
-        $this->actingAs($this->user)->get('/guilds/' . $guild->name)
-            ->assertInertia(fn(AssertableInertia $assert) => $assert
+        $this->actingAs($this->user)->get('/guilds/'.$guild->name)
+            ->assertInertia(fn (AssertableInertia $assert) => $assert
                 ->component('Guild/GuildShow')
-                ->has('can', fn(AssertableInertia $page) => $page
+                ->has('can', fn (AssertableInertia $page) => $page
                     ->where('edit', false)
                     ->where('invite', false)
                     ->where('cancel-invitation', false)
@@ -118,7 +118,7 @@ class GuildTest extends TestCase
         ]);
 
         $this->actingAs($this->user)
-            ->patch('/guilds/' . $guild->getKey(), [
+            ->patch('/guilds/'.$guild->getKey(), [
                 'name' => 'test guild',
                 'description' => 'test description',
                 'recruiting' => false,
@@ -158,7 +158,7 @@ class GuildTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->user)
-            ->patch('/guilds/' . $guild->getKey(), [
+            ->patch('/guilds/'.$guild->getKey(), [
                 'name' => 'test guild',
                 'description' => 'test description',
                 'recruiting' => false,
@@ -199,7 +199,7 @@ class GuildTest extends TestCase
         ]);
 
         $this->actingAs($this->user)
-            ->delete('/guilds/' . $guild->getKey() . '/kick/' . $kickedCharacter->getKey());
+            ->delete('/guilds/'.$guild->getKey().'/kick/'.$kickedCharacter->getKey());
 
         $this->assertDatabaseMissing('guild_character', [
             'guild_id' => $guild->getKey(),
@@ -230,7 +230,7 @@ class GuildTest extends TestCase
         ]);
 
         $this->actingAs($this->user)
-            ->delete('/guilds/' . $guild->getKey() . '/kick/' . $kickedCharacter->getKey());
+            ->delete('/guilds/'.$guild->getKey().'/kick/'.$kickedCharacter->getKey());
 
         $this->assertDatabaseMissing('guild_character', [
             'guild_id' => $guild->getKey(),
@@ -261,7 +261,7 @@ class GuildTest extends TestCase
         ]);
 
         $res = $this->actingAs($this->user)
-            ->delete('/guilds/' . $guild->getKey() . '/kick/' . $kickedCharacter->getKey());
+            ->delete('/guilds/'.$guild->getKey().'/kick/'.$kickedCharacter->getKey());
 
         $this->assertEquals(session('errors')->getBag('default')->first(), 'This action is unauthorized.');
 
@@ -294,7 +294,7 @@ class GuildTest extends TestCase
         ]);
 
         $this->actingAs($this->user)
-            ->delete('/guilds/' . $guild->getKey() . '/kick/' . $kickedCharacter->getKey());
+            ->delete('/guilds/'.$guild->getKey().'/kick/'.$kickedCharacter->getKey());
 
         $this->assertEquals(session('errors')->getBag('default')->first(), 'This action is unauthorized.');
 

@@ -10,13 +10,13 @@ class AddQuestionsToPollTask
 {
     public function __construct(
         protected AddQuestionsToPoll $action
-    )
-    {
+    ) {
     }
 
     public function handle(CreatePollDto $dto, Closure $next): CreatePollDto
     {
         $this->action->handle($dto->poll, $dto->questions);
+
         return $next($dto);
     }
 }

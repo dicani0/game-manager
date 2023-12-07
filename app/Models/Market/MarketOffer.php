@@ -36,6 +36,7 @@ use Illuminate\Support\Carbon;
  * @property-read Collection<int, TradeOffer>      $offers
  * @property-read int|null                         $offers_count
  * @property-read User                             $user
+ *
  * @method static MarketOfferFactory factory($count = null, $state = [])
  * @method static Builder|MarketOffer maxAtPrice(int $value)
  * @method static Builder|MarketOffer maxLatPrice(int $value)
@@ -53,7 +54,9 @@ use Illuminate\Support\Carbon;
  * @method static Builder|MarketOffer whereType($value)
  * @method static Builder|MarketOffer whereUpdatedAt($value)
  * @method static Builder|MarketOffer whereUserId($value)
+ *
  * @property-read User $creator
+ *
  * @mixin Eloquent
  */
 class MarketOffer extends Model implements OfferableInterface

@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read Item $cosmetic
  * @property-read \App\Models\Market\MarketOffer|null $offer
+ *
  * @method static Builder|MarketOfferItem newModelQuery()
  * @method static Builder|MarketOfferItem newQuery()
  * @method static Builder|MarketOfferItem query()
@@ -28,9 +29,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|MarketOfferItem whereId($value)
  * @method static Builder|MarketOfferItem whereMarketOfferId($value)
  * @method static Builder|MarketOfferItem whereUpdatedAt($value)
+ *
  * @property int $item_id
  * @property-read Item $item
+ *
  * @method static Builder|MarketOfferItem whereItemId($value)
+ *
  * @mixin \Eloquent
  */
 class MarketOfferItem extends Model

@@ -15,6 +15,7 @@ readonly class CreateNewGuildTask
     public function handle(CreateGuildDto $dto, Closure $next): CreateGuildDto
     {
         $dto->guild = $this->action->handle($dto);
+
         return $next($dto);
     }
 }

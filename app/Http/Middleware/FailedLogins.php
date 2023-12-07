@@ -28,16 +28,15 @@ class FailedLogins extends ThrottleRequests
 
     public function shouldThrottle(): bool
     {
-        return !$this->isLoginSuccessful();
+        return ! $this->isLoginSuccessful();
     }
 
     protected function rateLimitRequest(
-        Request    $request,
-        Closure    $next,
+        Request $request,
+        Closure $next,
         int|string $maxAttempts,
-        int|float  $decayMinutes
-    ): Response
-    {
+        int|float $decayMinutes
+    ): Response {
         return parent::handle($request, $next, $maxAttempts, $decayMinutes);
     }
 }

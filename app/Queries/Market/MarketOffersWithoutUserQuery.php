@@ -21,7 +21,7 @@ class MarketOffersWithoutUserQuery
                 AllowedFilter::exact('seller', 'user_id'),
                 AllowedFilter::scope('lat_price', 'maxLatPrice'),
                 AllowedFilter::scope('at_price', 'maxAtPrice'),
-                AllowedFilter::callback('item', fn($query, $value) => $query->whereHas('items', fn($query) => $query->whereHas('cosmetic', fn($query) => $query->where('name', 'like', "%{$value}%")))),
+                AllowedFilter::callback('item', fn ($query, $value) => $query->whereHas('items', fn ($query) => $query->whereHas('cosmetic', fn ($query) => $query->where('name', 'like', "%{$value}%")))),
             ]);
     }
 }

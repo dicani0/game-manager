@@ -15,6 +15,7 @@ readonly class TransferLeadershipTask
     public function handle(EditGuildDto $dto, Closure $next): EditGuildDto
     {
         $this->action->handle($dto->guild, $dto->leader_id);
+
         return $next($dto);
     }
 }

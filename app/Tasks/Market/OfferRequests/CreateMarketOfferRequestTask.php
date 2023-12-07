@@ -9,8 +9,7 @@ readonly class CreateMarketOfferRequestTask
 {
     public function __construct(
         protected CreateTradeOffer $action
-    )
-    {
+    ) {
     }
 
     /**

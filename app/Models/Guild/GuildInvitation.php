@@ -22,6 +22,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null    $updated_at
  * @property-read Character $character
  * @property-read Guild     $guild
+ *
  * @method static Builder|GuildInvitation newModelQuery()
  * @method static Builder|GuildInvitation newQuery()
  * @method static Builder|GuildInvitation query()
@@ -31,8 +32,11 @@ use Illuminate\Support\Carbon;
  * @method static Builder|GuildInvitation whereId($value)
  * @method static Builder|GuildInvitation whereRole($value)
  * @method static Builder|GuildInvitation whereUpdatedAt($value)
+ *
  * @property GuildInvitationStatus $status
+ *
  * @method static Builder|GuildInvitation whereStatus($value)
+ *
  * @mixin Eloquent
  */
 class GuildInvitation extends Model

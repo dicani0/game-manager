@@ -25,8 +25,8 @@ class GuildInvitationController extends Controller
     public function invites(Request $request, GuildInvitationQuery $query): Response
     {
         return Inertia::render('Guild/GuildInvites', [
-                'invites' => GuildInvitationResource::collection($query->handle($request->user())->get()),
-            ]
+            'invites' => GuildInvitationResource::collection($query->handle($request->user())->get()),
+        ]
         );
     }
 
@@ -37,7 +37,7 @@ class GuildInvitationController extends Controller
     {
         $process->run($dto);
 
-        return redirect('/guilds/' . $guild->name)->with('success', 'Member invited!');
+        return redirect('/guilds/'.$guild->name)->with('success', 'Member invited!');
     }
 
     /**
@@ -50,7 +50,7 @@ class GuildInvitationController extends Controller
 
         $process->run($guildInvitation);
 
-        return redirect('/guilds/' . $guildInvitation->guild->name)->with('success', 'You have joined the guild');
+        return redirect('/guilds/'.$guildInvitation->guild->name)->with('success', 'You have joined the guild');
     }
 
     /**
@@ -63,7 +63,7 @@ class GuildInvitationController extends Controller
 
         $process->run($guildInvitation);
 
-        return redirect('/guilds/' . $guildInvitation->guild->name)->with('success', 'You have rejected the invitation');
+        return redirect('/guilds/'.$guildInvitation->guild->name)->with('success', 'You have rejected the invitation');
     }
 
     /**
@@ -76,6 +76,6 @@ class GuildInvitationController extends Controller
 
         $process->run($guildInvitation);
 
-        return redirect('/guilds/' . $guildInvitation->guild->name)->with('success', 'Invitation canceled!');
+        return redirect('/guilds/'.$guildInvitation->guild->name)->with('success', 'Invitation canceled!');
     }
 }

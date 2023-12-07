@@ -10,7 +10,7 @@ class CloseMarketOfferIfHasNoItems
 {
     public function handle(Offerable $marketOffer): void
     {
-        if (!$marketOffer instanceof MarketOffer) {
+        if (! $marketOffer instanceof MarketOffer) {
             return;
         }
 

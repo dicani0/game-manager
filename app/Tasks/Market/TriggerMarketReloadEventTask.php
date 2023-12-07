@@ -10,8 +10,7 @@ class TriggerMarketReloadEventTask
 {
     public function __construct(
         protected TriggerMarketReloadEvent $action
-    )
-    {
+    ) {
     }
 
     public function handle(CreateMarketOfferDto $dto, Closure $next): CreateMarketOfferDto

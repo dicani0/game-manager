@@ -10,8 +10,7 @@ readonly class ParseItemsTask
 {
     public function __construct(
         private ParseItemData $action,
-    )
-    {
+    ) {
     }
 
     public function handle(ImportItemsDto $dto, Closure $next): ImportItemsDto

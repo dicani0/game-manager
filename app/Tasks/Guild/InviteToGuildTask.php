@@ -15,6 +15,7 @@ readonly class InviteToGuildTask
     public function handle(InviteToGuildDto $dto, Closure $next): InviteToGuildDto
     {
         $this->action->handle($dto);
+
         return $next($dto);
     }
 }

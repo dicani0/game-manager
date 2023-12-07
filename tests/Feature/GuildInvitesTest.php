@@ -1,6 +1,5 @@
 <?php
 
-
 use App\Enums\GuildInvitationStatus;
 use App\Enums\GuildRoleEnum;
 use App\Events\Guild\NewGuildCharacter;
@@ -14,8 +13,11 @@ use Tests\TestCase;
 class GuildInvitesTest extends TestCase
 {
     public User $user;
+
     public Character $character;
+
     public Guild $guild;
+
     public GuildCharacter $guildCharacter;
 
     protected function setUp(): void
@@ -45,7 +47,7 @@ class GuildInvitesTest extends TestCase
             'user_id' => $anotherUser->getKey(),
         ]);
 
-        $this->actingAs($this->user)->post('/guilds/' . $this->guild->getKey() . '/invite/' . $character->getKey());
+        $this->actingAs($this->user)->post('/guilds/'.$this->guild->getKey().'/invite/'.$character->getKey());
 
         $this->assertDatabaseHas('guild_invitations', [
             'guild_id' => $this->guild->getKey(),
@@ -66,9 +68,9 @@ class GuildInvitesTest extends TestCase
             'role' => GuildRoleEnum::MEMBER,
         ]);
 
-        $this->actingAs($this->user)->post('/guilds/' . $this->guild->getKey() . '/invite/' . $character->getKey());
+        $this->actingAs($this->user)->post('/guilds/'.$this->guild->getKey().'/invite/'.$character->getKey());
 
-        $this->assertEquals(session('errors')->getBag('default')->first(), "This action is unauthorized.");
+        $this->assertEquals(session('errors')->getBag('default')->first(), 'This action is unauthorized.');
 
         $this->assertDatabaseMissing('guild_invitations', [
             'guild_id' => $this->guild->getKey(),
@@ -95,7 +97,7 @@ class GuildInvitesTest extends TestCase
 
         $this
             ->actingAs($anotherUser)
-            ->post('/guilds/invites/' . $guildInvitation->getKey() . '/accept');
+            ->post('/guilds/invites/'.$guildInvitation->getKey().'/accept');
 
         Event::assertDispatched(NewGuildCharacter::class);
 
@@ -130,7 +132,7 @@ class GuildInvitesTest extends TestCase
 
         $this
             ->actingAs($anotherUser)
-            ->post('/guilds/invites/' . $guildInvitation->getKey() . '/reject');
+            ->post('/guilds/invites/'.$guildInvitation->getKey().'/reject');
 
         $this->assertDatabaseHas('guild_invitations', [
             'guild_id' => $this->guild->getKey(),
@@ -157,9 +159,9 @@ class GuildInvitesTest extends TestCase
 
         $this
             ->actingAs($this->user)
-            ->post('/guilds/invites/' . $guildInvitation->getKey() . '/accept');
+            ->post('/guilds/invites/'.$guildInvitation->getKey().'/accept');
 
-        $this->assertEquals(session('errors')->getBag('default')->first(), "You do not own this character.");
+        $this->assertEquals(session('errors')->getBag('default')->first(), 'You do not own this character.');
 
         Event::assertNotDispatched(NewGuildCharacter::class);
 
@@ -194,9 +196,9 @@ class GuildInvitesTest extends TestCase
 
         $this
             ->actingAs($this->user)
-            ->post('/guilds/invites/' . $guildInvitation->getKey() . '/reject');
+            ->post('/guilds/invites/'.$guildInvitation->getKey().'/reject');
 
-        $this->assertEquals(session('errors')->getBag('default')->first(), "You do not own this character.");
+        $this->assertEquals(session('errors')->getBag('default')->first(), 'You do not own this character.');
 
         Event::assertNotDispatched(NewGuildCharacter::class);
 
@@ -232,9 +234,9 @@ class GuildInvitesTest extends TestCase
 
         $this
             ->actingAs($anotherUser)
-            ->post('/guilds/invites/' . $guildInvitation->getKey() . '/' . $action);
+            ->post('/guilds/invites/'.$guildInvitation->getKey().'/'.$action);
 
-        $this->assertEquals(session('errors')->getBag('default')->first(), "This invitation is no longer valid.");
+        $this->assertEquals(session('errors')->getBag('default')->first(), 'This invitation is no longer valid.');
 
         Event::assertNotDispatched(NewGuildCharacter::class);
 
@@ -277,9 +279,9 @@ class GuildInvitesTest extends TestCase
 
         $this
             ->actingAs($anotherUser)
-            ->post('/guilds/invites/' . $guildInvitation->getKey() . '/' . $action);
+            ->post('/guilds/invites/'.$guildInvitation->getKey().'/'.$action);
 
-        $this->assertEquals(session('errors')->getBag('default')->first(), "This character is already in a guild.");
+        $this->assertEquals(session('errors')->getBag('default')->first(), 'This character is already in a guild.');
 
         Event::assertNotDispatched(NewGuildCharacter::class);
 
@@ -307,5 +309,4 @@ class GuildInvitesTest extends TestCase
             ['reject', GuildInvitationStatus::CANCELED],
         ];
     }
-
 }

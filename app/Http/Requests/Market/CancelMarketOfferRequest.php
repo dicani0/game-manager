@@ -15,7 +15,7 @@ class CancelMarketOfferRequest extends FormRequest
     {
         /** @var MarketOffer $offer */
         $offer = $this->route('offer');
-        
+
         return $offer->user->is($this->user());
     }
 

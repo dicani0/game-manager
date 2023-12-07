@@ -20,7 +20,7 @@ class HandleInertiaRequests extends Middleware
     /**
      * Determine the current asset version.
      */
-    public function version(Request $request): string|null
+    public function version(Request $request): ?string
     {
         return parent::version($request);
     }
@@ -34,11 +34,11 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             'flash' => [
-                'success' => fn() => $request->session()->get('success'),
-                'data' => fn() => $request->session()->get('data'),
+                'success' => fn () => $request->session()->get('success'),
+                'data' => fn () => $request->session()->get('data'),
             ],
-            'notifications' => fn() => $request->user()?->unreadNotifications()->limit(10)->get(),
-            'notifications_count' => fn() => $request->user()?->unreadNotifications()->count(),
+            'notifications' => fn () => $request->user()?->unreadNotifications()->limit(10)->get(),
+            'notifications_count' => fn () => $request->user()?->unreadNotifications()->count(),
             'auth' => [
                 'user' => Auth::user()?->only('id', 'name', 'email', 'available_promotes'),
             ],

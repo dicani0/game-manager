@@ -14,7 +14,7 @@ class GuildInvitationPolicy
 
     public function accept(User $user, GuildInvitation $invitation): true|Response
     {
-        if (!empty($invitation->character->guildCharacter)) {
+        if (! empty($invitation->character->guildCharacter)) {
             return $this->deny('This character is already in a guild.');
         }
 
@@ -37,7 +37,7 @@ class GuildInvitationPolicy
     public function cancel(User $user, GuildInvitation $invitation): bool
     {
         return $invitation->status === GuildInvitationStatus::PENDING && (
-                $invitation->guild->isLeader($user) || $invitation->guild->isViceLeader($user)
-            );
+            $invitation->guild->isLeader($user) || $invitation->guild->isViceLeader($user)
+        );
     }
 }
