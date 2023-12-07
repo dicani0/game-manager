@@ -8,6 +8,7 @@ on:
 
 jobs:
   larastan:
+    runs-on: ubuntu-latest
     steps:
       - name: Larastan
         run: ./vendor/bin/phpstan analyse --memory-limit=2G
