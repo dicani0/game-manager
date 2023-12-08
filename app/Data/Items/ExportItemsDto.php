@@ -22,8 +22,7 @@ class ExportItemsDto extends Data
             Enum(ExportTypeEnum::class)
         ]
         public ExportTypeEnum $type = ExportTypeEnum::STANDARD,
-    )
-    {
-        $this->filename = $this->type->value . '_items.xlsx';
+    ) {
+        $this->filename = $this->type->value.'_items.xlsx';
     }
 }
