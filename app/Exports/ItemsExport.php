@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Enums\ExportTypeEnum;
 use App\Models\Items\Item;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -16,18 +17,14 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class ItemsExport implements FromCollection, ShouldAutoSize, WithEvents, WithHeadings, WithStyles
 {
-    const STANDARD = 1;
-
-    const SELLABLE = 2;
-
     private Collection $data;
 
-    public function __construct(private int $type = self::STANDARD)
+    public function __construct(private readonly ExportTypeEnum $type)
     {
         $query = Auth::user();
 
         $query = match (true) {
-            $this->type === self::SELLABLE => $query->sellableItems(),
+            $this->type === ExportTypeEnum::SELLABLE => $query->sellableItems(),
             default => $query->items(),
         };
 
@@ -95,11 +92,11 @@ class ItemsExport implements FromCollection, ShouldAutoSize, WithEvents, WithHea
                 $count = $this->data->count();
 
                 for ($row = 2; $row <= $count + 1; $row++) {
-                    $cell = $event->sheet->getCell('B'.$row);
+                    $cell = $event->sheet->getCell('B' . $row);
 
                     if ($cell->getValue() > 1) {
-                        $event->sheet->getStyle('A'.$row)->getFill()->setFillType('solid')->getStartColor()->setARGB('FF00FF00');
-                        $event->sheet->getStyle('B'.$row)->getFill()->setFillType('solid')->getStartColor()->setARGB('FF00FF00');
+                        $event->sheet->getStyle('A' . $row)->getFill()->setFillType('solid')->getStartColor()->setARGB('FF00FF00');
+                        $event->sheet->getStyle('B' . $row)->getFill()->setFillType('solid')->getStartColor()->setARGB('FF00FF00');
                     }
                 }
             },

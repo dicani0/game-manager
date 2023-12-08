@@ -2,10 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Exports\ItemsExport;
 use App\Models\Items\Item;
 use App\Models\Items\UserItem;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
+use Maatwebsite\Excel\Facades\Excel;
 use Tests\TestCase;
 
 class UserItemTest extends TestCase
@@ -42,14 +44,14 @@ class UserItemTest extends TestCase
             'sold_amount' => 0,
         ]);
 
-        $response = $this->actingAs($this->user)->put('/items/'.$item->getKey(), [
+        $response = $this->actingAs($this->user)->put('/items/' . $item->getKey(), [
             'amount' => 15,
         ]);
 
         $response->assertSessionHasErrors('sold_amount');
         $response->assertSessionHasErrors('used_amount');
 
-        $response = $this->actingAs($this->user)->put('/items/'.$item->getKey(), [
+        $response = $this->actingAs($this->user)->put('/items/' . $item->getKey(), [
             'amount' => 15,
             'sold_amount' => 10,
             'used_amount' => 10,
@@ -57,7 +59,7 @@ class UserItemTest extends TestCase
 
         $response->assertSessionHasErrors('amount');
 
-        $response = $this->actingAs($this->user)->put('/items/'.$item->getKey(), [
+        $response = $this->actingAs($this->user)->put('/items/' . $item->getKey(), [
             'amount' => 15,
             'sold_amount' => 5,
             'used_amount' => 5,
@@ -89,7 +91,7 @@ class UserItemTest extends TestCase
             'sold_amount' => 0,
         ]);
 
-        $this->actingAs($testUser)->put('/items/'.$item->getKey(), [
+        $this->actingAs($testUser)->put('/items/' . $item->getKey(), [
             'amount' => 15,
             'sold_amount' => 5,
             'used_amount' => 5,
@@ -104,7 +106,7 @@ class UserItemTest extends TestCase
             'item_id' => $item->getKey(),
         ]);
 
-        $response = $this->actingAs($this->user)->delete('/items/'.$item->getKey());
+        $response = $this->actingAs($this->user)->delete('/items/' . $item->getKey());
         $response->assertRedirect();
 
         $this->assertDatabaseMissing('user_item', [
@@ -125,12 +127,15 @@ class UserItemTest extends TestCase
             'user_id' => $this->user->getKey(),
         ]);
 
-        $this->actingAs($testUser)->delete('/items/'.$item->getKey());
+        $this->actingAs($testUser)->delete('/items/' . $item->getKey());
     }
 
     public function test_export_user_items(): void
     {
+        Excel::fake();
+
         $items = Item::factory()->count(10)->create();
+
         $items->each(function (Item $item) {
             UserItem::factory()->create([
                 'user_id' => $this->user->getKey(),
@@ -139,7 +144,25 @@ class UserItemTest extends TestCase
             ]);
         });
 
+        $items = Item::factory()->count(5)->create();
+
+        $items->each(function (Item $item) {
+            UserItem::factory()->create([
+                'user_id' => $this->user->getKey(),
+                'item_id' => $item->getKey(),
+                'amount' => 1,
+            ]);
+        });
+
         $response = $this->actingAs($this->user)->get('/items/export');
-        $response->assertDownload();
+
+        Excel::assertDownloaded('standard_items.xlsx', function (ItemsExport $excel) {
+            return $excel->collection()->count() === 15;
+        });
+
+        $response = $this->actingAs($this->user)->get('/items/export?type=sellable');
+        Excel::assertDownloaded('sellable_items.xlsx', function (ItemsExport $excel) {
+            return $excel->collection()->count() === 10;
+        });
     }
 }

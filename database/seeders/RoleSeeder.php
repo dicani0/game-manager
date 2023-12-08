@@ -12,9 +12,16 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        Role::insert([
+        $data = collect([
             ['name' => 'admin', 'guard_name' => 'web'],
             ['name' => 'user', 'guard_name' => 'web'],
         ]);
+
+        $data->each(function (array $role) {
+            Role::firstOrCreate([
+                'name' => $role['name'],
+                'guard_name' => $role['guard_name'],
+            ]);
+        });
     }
 }
