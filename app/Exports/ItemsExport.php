@@ -31,8 +31,6 @@ class ItemsExport implements FromCollection, ShouldAutoSize, WithEvents, WithHea
         $query->orderByPivot('amount', 'desc');
 
         $this->data = $query->get();
-
-        return $this->data;
     }
 
     public function prepareRows(array $rows): array
@@ -92,11 +90,11 @@ class ItemsExport implements FromCollection, ShouldAutoSize, WithEvents, WithHea
                 $count = $this->data->count();
 
                 for ($row = 2; $row <= $count + 1; $row++) {
-                    $cell = $event->sheet->getCell('B'.$row);
+                    $cell = $event->sheet->getCell('B' . $row);
 
                     if ($cell->getValue() > 1) {
-                        $event->sheet->getStyle('A'.$row)->getFill()->setFillType('solid')->getStartColor()->setARGB('FF00FF00');
-                        $event->sheet->getStyle('B'.$row)->getFill()->setFillType('solid')->getStartColor()->setARGB('FF00FF00');
+                        $event->sheet->getStyle('A' . $row)->getFill()->setFillType('solid')->getStartColor()->setARGB('FF00FF00');
+                        $event->sheet->getStyle('B' . $row)->getFill()->setFillType('solid')->getStartColor()->setARGB('FF00FF00');
                     }
                 }
             },

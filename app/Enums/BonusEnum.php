@@ -46,7 +46,6 @@ enum BonusEnum: string
             self::JEWELCRAFTING,
             self::ALCHEMY,
             self::COOKING => [2],
-            default => throw new Exception('Unexpected match value'),
         };
     }
 }
