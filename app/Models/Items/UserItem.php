@@ -85,4 +85,9 @@ class UserItem extends Pivot
     {
         return $this->belongsTo(Item::class);
     }
+
+    public function scopeSellable(Builder $query): Builder
+    {
+        return $query->where('amount', '>', 1);
+    }
 }

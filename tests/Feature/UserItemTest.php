@@ -2,10 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Exports\ItemsExport;
 use App\Models\Items\Item;
 use App\Models\Items\UserItem;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
+use Maatwebsite\Excel\Facades\Excel;
 use Tests\TestCase;
 
 class UserItemTest extends TestCase
@@ -126,5 +128,41 @@ class UserItemTest extends TestCase
         ]);
 
         $this->actingAs($testUser)->delete('/items/'.$item->getKey());
+    }
+
+    public function test_export_user_items(): void
+    {
+        Excel::fake();
+
+        $items = Item::factory()->count(10)->create();
+
+        $items->each(function (Item $item) {
+            UserItem::factory()->create([
+                'user_id' => $this->user->getKey(),
+                'item_id' => $item->getKey(),
+                'amount' => 10,
+            ]);
+        });
+
+        $items = Item::factory()->count(5)->create();
+
+        $items->each(function (Item $item) {
+            UserItem::factory()->create([
+                'user_id' => $this->user->getKey(),
+                'item_id' => $item->getKey(),
+                'amount' => 1,
+            ]);
+        });
+
+        $response = $this->actingAs($this->user)->get('/items/export');
+
+        Excel::assertDownloaded('standard_items.xlsx', function (ItemsExport $excel) {
+            return $excel->collection()->count() === 15;
+        });
+
+        $response = $this->actingAs($this->user)->get('/items/export?type=sellable');
+        Excel::assertDownloaded('sellable_items.xlsx', function (ItemsExport $excel) {
+            return $excel->collection()->count() === 10;
+        });
     }
 }

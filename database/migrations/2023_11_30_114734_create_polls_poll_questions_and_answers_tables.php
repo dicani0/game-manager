@@ -48,8 +48,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('polls');
-        Schema::dropIfExists('poll_questions');
         Schema::dropIfExists('poll_question_answers');
+        Schema::dropIfExists('poll_questions');
+        Schema::dropIfExists('polls');
     }
 };

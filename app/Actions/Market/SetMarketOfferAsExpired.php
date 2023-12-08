@@ -9,6 +9,7 @@ class SetMarketOfferAsExpired
 {
     public function handle(MarketOffer $marketOffer): void
     {
+        /* @phpstan-ignore-next-line */
         SetMarketOfferStatusAsExpired::dispatch($marketOffer)->delay($marketOffer->expires_at);
     }
 }

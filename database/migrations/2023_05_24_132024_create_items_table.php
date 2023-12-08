@@ -19,6 +19,18 @@ return new class extends Migration
             $table->json('attributes')->nullable();
             $table->integer('usable_amount')->default(1);
         });
+
+        Schema::create('user_item', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('item_id')->constrained();
+            $table->unsignedInteger('amount')->default(0);
+            $table->unsignedInteger('used_amount')->default(0);
+            $table->unsignedInteger('sold_amount')->default(0);
+            $table->unsignedInteger('reserved_amount')->default(0);
+            $table->unsignedInteger('bought_amount')->default(0);
+            $table->timestamps();
+        });
     }
 
     /**
@@ -26,6 +38,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('user_item');
         Schema::dropIfExists('items');
     }
 };

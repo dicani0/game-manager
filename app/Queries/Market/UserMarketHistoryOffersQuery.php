@@ -4,12 +4,13 @@ namespace App\Queries\Market;
 
 use App\Enums\MarketOfferStatusEnum;
 use App\Models\Market\MarketOffer;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class UserMarketHistoryOffersQuery
 {
-    public function handle(): QueryBuilder
+    public function handle(): QueryBuilder|Builder
     {
         return QueryBuilder::for(MarketOffer::class)
             ->orderBy('promoted', 'desc')

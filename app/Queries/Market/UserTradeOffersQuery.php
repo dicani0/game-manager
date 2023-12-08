@@ -10,7 +10,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class UserTradeOffersQuery
 {
-    public function handle(): QueryBuilder
+    public function handle(): QueryBuilder|Builder
     {
         return QueryBuilder::for(TradeOffer::class)
             ->whereHasMorph('offerable', [MarketOffer::class], function (Builder $query) {

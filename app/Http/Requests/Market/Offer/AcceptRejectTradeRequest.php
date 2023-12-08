@@ -19,7 +19,6 @@ class AcceptRejectTradeRequest extends MarketOfferRequest
         $condition = match (true) {
             $offerable instanceof MarketOffer => $offerable->user->getKey() === $this->user()->getKey(),
             $offerable instanceof User => $offerable->getKey() === $this->user()->getKey(),
-            default => false,
         };
 
         return $condition && $this->getOfferRequest()->status === MarketOfferRequestStatusEnum::PENDING;

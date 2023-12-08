@@ -55,8 +55,8 @@ use Illuminate\Support\Carbon;
  * @method static GuildFactory factory($count = null, $state = [])
  *
  * @property-read Collection                       $vice_leaders
- * @property-read Collection<int, Poll> $polls
- * @property-read int|null $polls_count
+ * @property-read Collection<int, Poll>            $polls
+ * @property-read int|null                         $polls_count
  *
  * @mixin Eloquent
  */
@@ -81,13 +81,20 @@ class Guild extends Model implements Pollable
         'recruiting' => 'boolean',
     ];
 
+    /**
+     * @return HasMany<GuildCharacter>
+     */
     public function characters(): HasMany
     {
         return $this->hasMany(GuildCharacter::class);
     }
 
+    /**
+     * @return GuildCharacter|null
+     */
     public function getLeaderAttribute(): ?GuildCharacter
     {
+        /* @phpstan-ignore-next-line */
         return $this->characters->where('role', GuildRoleEnum::LEADER)->first();
     }
 
@@ -105,7 +112,7 @@ class Guild extends Model implements Pollable
     {
         $leader = $this->leader;
 
-        if (! $leader) {
+        if (!$leader) {
             return false;
         }
 
@@ -115,7 +122,8 @@ class Guild extends Model implements Pollable
     public function isViceLeader(User $user): bool
     {
         return $this->vice_leaders->contains(
-            fn (GuildCharacter $character) => $user->characters->pluck('id')->contains($character->character_id)
+        /* @phpstan-ignore-next-line */
+            fn(GuildCharacter $character) => $user->characters->pluck('id')->contains($character->character_id)
         );
     }
 

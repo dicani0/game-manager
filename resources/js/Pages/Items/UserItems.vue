@@ -2,10 +2,28 @@
   <div class="px-4 sm:px-6 lg:px-8 py-12 flex box-border">
     <div class="w-5/6 mr-4">
       <h1 class="text-3xl flex-grow font-bold text-gray-200 text-center">Your items</h1>
-      <div class="flex justify-between items-center mb-6 text-center">
+      <div class="flex gap-2 items-center mb-6 text-center">
         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                 @click="openImportModal = true">Import
         </button>
+        <div class="relative">
+          <button @click="openExportDropdown = !openExportDropdown"
+                  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex">
+            <span>Export</span>
+            <vue-feather :type="openExportDropdown ? 'chevron-left' : 'chevron-right'"></vue-feather>
+          </button>
+          <Transition name="slide-fade">
+            <div v-if="openExportDropdown"
+                 class="absolute gap-1 flex top-0 ml-2 left-full rounded shadow-lg overflow-hidden z-10 ">
+              <a href="/items/export"
+                 @click="openExportDropdown = false"
+                 class="block px-4 py-2 text-sm text-white bg-orange-500 hover:bg-orange-700 w-40">Export all items</a>
+              <a href="/items/export?type=sellable"
+                 @click="openExportDropdown = false"
+                 class="block px-4 py-2 text-sm text-white bg-rose-500 hover:bg-rose-700 w-36">Export duplicates</a>
+            </div>
+          </Transition>
+        </div>
       </div>
       <ul class="w-full grid sm:grid-cols-4 lg:grid-cols-5 gap-8 text-xs">
         <li v-for="item in items" :key="item.name"
@@ -210,6 +228,7 @@ const updateItemForm = useForm({
 let selectedItem = null;
 let openImportModal = ref(false);
 let openEditModal = ref(false);
+let openExportDropdown = ref(false);
 let selectedItemsForSale = ref([]);
 let promote = ref(false);
 let latPrice = ref(0);
@@ -335,8 +354,6 @@ const toggleTooltip = (item, show) => {
 </script>
 
 <style scoped>
-
-
 .group:hover .item-detail {
   visibility: visible;
   opacity: 1;
@@ -369,5 +386,19 @@ button {
 .group:hover .attributes-tooltip {
   visibility: visible;
   opacity: 1;
+}
+
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(-12px);
+  opacity: 0;
 }
 </style>

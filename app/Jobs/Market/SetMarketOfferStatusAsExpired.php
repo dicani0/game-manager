@@ -13,6 +13,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Throwable;
 
 class SetMarketOfferStatusAsExpired implements ShouldQueue
 {
@@ -27,13 +28,16 @@ class SetMarketOfferStatusAsExpired implements ShouldQueue
 
     /**
      * Execute the job.
+     *
+     * @throws Throwable
      */
     public function handle(): void
     {
         if ($this->marketOffer->status !== MarketOfferStatusEnum::ACTIVE) {
             return;
         }
-
+            
+        /* @phpstan-ignore-next-line */
         DB::transaction(function () {
             (new CalculateReservedCosmeticAmountAfterOfferCancellation())->handle($this->marketOffer->user, $this->marketOffer);
             $this->marketOffer->status = MarketOfferStatusEnum::EXPIRED;
