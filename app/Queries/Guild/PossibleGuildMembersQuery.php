@@ -16,7 +16,7 @@ class PossibleGuildMembersQuery
             ->whereDoesntHave('guildCharacter')
             ->whereDoesntHave(
                 'guildInvitation',
-                fn(Builder $query) => $query
+                fn (Builder $query) => $query
                     ->where('guild_id', $guild->getKey())
                     ->where('status', GuildInvitationStatus::PENDING->value)
             );

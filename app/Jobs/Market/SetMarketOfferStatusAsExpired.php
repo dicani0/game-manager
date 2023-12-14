@@ -36,7 +36,7 @@ class SetMarketOfferStatusAsExpired implements ShouldQueue
         if ($this->marketOffer->status !== MarketOfferStatusEnum::ACTIVE) {
             return;
         }
-            
+
         /* @phpstan-ignore-next-line */
         DB::transaction(function () {
             (new CalculateReservedCosmeticAmountAfterOfferCancellation())->handle($this->marketOffer->user, $this->marketOffer);

@@ -9,7 +9,6 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class PublicUsersQuery
 {
-
     public function handle(): QueryBuilder|Builder
     {
         return QueryBuilder::for(User::class)
