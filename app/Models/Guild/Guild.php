@@ -89,9 +89,6 @@ class Guild extends Model implements Pollable
         return $this->hasMany(GuildCharacter::class);
     }
 
-    /**
-     * @return GuildCharacter|null
-     */
     public function getLeaderAttribute(): ?GuildCharacter
     {
         /* @phpstan-ignore-next-line */
@@ -112,7 +109,7 @@ class Guild extends Model implements Pollable
     {
         $leader = $this->leader;
 
-        if (!$leader) {
+        if (! $leader) {
             return false;
         }
 
@@ -122,8 +119,8 @@ class Guild extends Model implements Pollable
     public function isViceLeader(User $user): bool
     {
         return $this->vice_leaders->contains(
-        /* @phpstan-ignore-next-line */
-            fn(GuildCharacter $character) => $user->characters->pluck('id')->contains($character->character_id)
+            /* @phpstan-ignore-next-line */
+            fn (GuildCharacter $character) => $user->characters->pluck('id')->contains($character->character_id)
         );
     }
 

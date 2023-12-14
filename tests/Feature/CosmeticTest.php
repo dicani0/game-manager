@@ -13,7 +13,7 @@ class CosmeticTest extends TestCase
      */
     public function test_import(): void
     {
-        Artisan::call('app:import-cosmetics-list');
+        Artisan::call('import-items');
         $this->assertNotEmpty(Item::all());
     }
 }

@@ -3,28 +3,45 @@
 namespace App\Console\Commands\Cosmetics;
 
 use App\Models\Items\Item;
+use File;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Contracts\Console\Isolatable;
+use Illuminate\Support\Str;
+use Throwable;
 
-class ImportCosmeticsList extends Command
+class ImportCosmeticsList extends Command implements Isolatable
 {
-    protected $signature = 'app:import-cosmetics-list';
+    protected $signature = 'import-items';
 
-    public function handle()
+    protected $description = 'Import items from json file';
+
+    public function handle(): void
     {
-        $file = Storage::disk('public')->get('cosmetics.txt');
-        $lines = explode("\n", $file);
+        $path = resource_path().'/items.json';
 
-        foreach ($lines as $line) {
-            if (empty($line)) {
-                continue;
-            }
+        try {
+            $file = File::get($path);
+        } catch (Throwable $th) {
+            $this->error('File not found');
+
+            return;
+        }
+
+        $this->info("\n File found");
+
+        $items = collect(json_decode($file, true))->map(fn (string $item) => Str::title($item));
+
+        $this->withProgressBar($items, function (string $item) {
+            $this->info("\n Importing {$item}");
 
             Item::updateOrCreate([
-                'name' => str_replace('Token', '', trim($line)),
+                'name' => $item,
                 'attributes' => null,
                 'usable_amount' => 1,
             ]);
-        }
+
+            $this->info("\n Imported {$item}");
+        });
+        $this->info("\n Items imported");
     }
 }
