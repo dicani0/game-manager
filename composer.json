@@ -66,6 +66,9 @@
     ],
     "stan": [
       "./vendor/bin/phpstan analyse"
+    ],
+    "migrate": [
+      "@php artisan migrate:fresh --seed"
     ]
   },
   "extra": {
