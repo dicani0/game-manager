@@ -15,16 +15,16 @@ use Illuminate\Support\Carbon;
 /**
  * App\Models\Poll\PollQuestion
  *
- * @property int                                                                    $id
- * @property int                                                                    $poll_id
- * @property string                                                                 $question
- * @property string                                                                 $type
- * @property bool                                                                   $required
- * @property Carbon|null                                                            $created_at
- * @property Carbon|null                                                            $updated_at
+ * @property int                                      $id
+ * @property int                                      $poll_id
+ * @property string                                   $question
+ * @property string                                   $type
+ * @property bool                                     $required
+ * @property Carbon|null                              $created_at
+ * @property Carbon|null                              $updated_at
  * @property-read Collection<int, PollQuestionAnswer> $answers
- * @property-read int|null                                                          $answers_count
- * @property-read Poll                                                              $poll
+ * @property-read int|null                            $answers_count
+ * @property-read Poll                                $poll
  *
  * @method static PollQuestionFactory factory($count = null, $state = [])
  * @method static Builder|PollQuestion newModelQuery()
@@ -37,6 +37,9 @@ use Illuminate\Support\Carbon;
  * @method static Builder|PollQuestion whereRequired($value)
  * @method static Builder|PollQuestion whereType($value)
  * @method static Builder|PollQuestion whereUpdatedAt($value)
+ *
+ * @property-read Collection<int, Vote>               $votes
+ * @property-read int|null                            $votes_count
  *
  * @mixin Eloquent
  */
@@ -64,5 +67,17 @@ class PollQuestion extends Model
     public function answers(): HasMany
     {
         return $this->hasMany(PollQuestionAnswer::class);
+    }
+
+    public function votes(): HasMany
+    {
+        return $this->hasMany(Vote::class);
+    }
+
+    public function getVotesCountAttribute(): int
+    {
+        return $this->answers->reduce(function (int $carry, PollQuestionAnswer $answer) {
+            return $carry + $answer->votes->count();
+        }, 0);
     }
 }

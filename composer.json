@@ -69,6 +69,13 @@
     ],
     "migrate": [
       "@php artisan migrate:fresh --seed"
+    ],
+    "pre-commit": [
+      "composer update",
+      "npm update",
+      "./vendor/bin/pint",
+      "@stan",
+      "@test"
     ]
   },
   "extra": {

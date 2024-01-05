@@ -19,7 +19,7 @@ class CreatePoll
             'pollable_type',
             'status',
         )->toArray() + [
-                'creator_id' => Auth::id(),
-            ]);
+            'creator_id' => Auth::id(),
+        ]);
     }
 }

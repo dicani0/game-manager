@@ -10,6 +10,7 @@ use App\Models\Poll\Poll;
 use App\Processes\Poll\CreatePollProcess;
 use App\Processes\Poll\UpdatePollProcess;
 use App\Queries\Poll\GlobalPollsQuery;
+use Auth;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -21,6 +22,17 @@ class PollController extends Controller
     {
         return Inertia::render('Poll/GlobalPolls', [
             'polls' => PollResource::collection($query->handle()->paginate(10)),
+            'can' => [
+                'create' => Auth::user()?->hasRole('admin'),
+                'update' => Auth::user()?->hasRole('admin'),
+            ],
+        ]);
+    }
+
+    public function show(Poll $poll)
+    {
+        return Inertia::render('Poll/Poll', [
+            'poll' => PollResource::make($poll)->withQuestions(),
         ]);
     }
 
