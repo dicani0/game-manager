@@ -23,7 +23,6 @@ class CorrectPollableClass implements ValidationRule
         if (! class_exists($value)) {
             $fail('Wrong poll type');
         }
-
         if (! is_subclass_of($value, Pollable::class)) {
             $fail('Wrong poll type');
         }

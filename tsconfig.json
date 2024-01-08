@@ -10,8 +10,8 @@
     "esModuleInterop": true,
     "allowJs": true,
     "lib": [
-      "dom",
-      "esnext"
+      "esnext",
+      "dom"
     ],
     "types": [
       "@types/node",

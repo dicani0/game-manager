@@ -20,7 +20,7 @@ class PollController extends Controller
 {
     public function index(GlobalPollsQuery $query): Response
     {
-        return Inertia::render('Poll/GlobalPolls', [
+        return Inertia::render('Poll/Polls', [
             'polls' => PollResource::collection($query->handle()->paginate(10)),
             'can' => [
                 'create' => Auth::user()?->hasRole('admin'),

@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Character\CharacterController;
 use App\Http\Controllers\Guild\GuildController;
 use App\Http\Controllers\Guild\GuildInvitationController;
+use App\Http\Controllers\Guild\GuildPollController;
 use App\Http\Controllers\Items\ExportController;
 use App\Http\Controllers\Items\ItemController;
 use App\Http\Controllers\Items\UserItemController;
@@ -84,6 +85,9 @@ Route::prefix('guilds')->middleware('auth')->group(function () {
     });
 
     Route::post('/{guild}/invite/{character}', [GuildInvitationController::class, 'invite']);
+
+    Route::get('/{guild}/polls', [GuildPollController::class, 'index']);
+    Route::get('/{guild}/polls/create', [GuildPollController::class, 'create']);
 
     Route::get('/', [GuildController::class, 'index']);
     Route::get('/create', [GuildController::class, 'create']);

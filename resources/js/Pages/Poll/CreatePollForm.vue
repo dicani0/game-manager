@@ -110,6 +110,17 @@
 import {computed, reactive, ref} from 'vue';
 import {router} from "@inertiajs/vue3";
 
+const props = defineProps({
+  pollable_id: {
+    type: Number,
+    default: null,
+  },
+  pollable_type: {
+    type: String,
+    default: null,
+  },
+});
+
 const MAX_QUESTIONS = 15;
 const MIN_QUESTIONS = 1;
 const MAX_ANSWERS = 10;
@@ -144,38 +155,57 @@ const addQuestion = () => {
   }
 };
 
-const addAnswer = (questionIndex) => {
+const addAnswer = (questionIndex: number) => {
   if (form.questions[questionIndex].answers.length < MAX_ANSWERS) {
     form.questions[questionIndex].answers.push(createAnswer());
   }
 };
 
 const canDeleteQuestion = computed(() => form.questions.length > MIN_QUESTIONS);
-const canDeleteQuestionAnswer = (questionIndex) => form.questions[questionIndex].answers.length > MIN_ANSWERS;
+const canDeleteQuestionAnswer = (questionIndex: number) => form.questions[questionIndex].answers.length > MIN_ANSWERS;
 
 
-const removeAnswer = (questionIndex, answerIndex) => {
+const removeAnswer = (questionIndex: number, answerIndex: number) => {
   const answers = form.questions[questionIndex].answers;
   if (answers.length > MIN_ANSWERS) {
     answers.splice(answerIndex, 1);
   }
 };
 
-const removeQuestion = (questionIndex) => {
+const removeQuestion = (questionIndex: number) => {
   if (form.questions.length > MIN_QUESTIONS) {
     form.questions.splice(questionIndex, 1);
   }
 };
 
-const isMaxAnswersReached = (questionIndex) => {
+const isMaxAnswersReached = (questionIndex: number) => {
   return form.questions[questionIndex].answers.length >= MAX_ANSWERS;
 };
 
 const createPoll = () => {
-  const pollData = {
+  const pollData: {
+    title: string,
+    description: string,
+    start_date: string,
+    end_date: string,
+    questions: {
+      question: string,
+      type: string,
+      answers: {
+        content: string,
+      }[]
+    }[]
+    pollable_id?: number,
+    pollable_type?: string,
+  } = {
     ...form,
     start_date: new Date(form.start_date).toISOString(),
     end_date: new Date(form.end_date).toISOString()
+  }
+
+  if (props.pollable_id && props.pollable_type) {
+    pollData.pollable_id = props.pollable_id;
+    pollData.pollable_type = props.pollable_type;
   }
 
   router.post('/polls', pollData);
