@@ -25,7 +25,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon                             $end_date
  * @property int|null                           $pollable_id
  * @property string|null                        $pollable_type
- * @property string                             $status
+ * @property PollStatusEnum                     $status
  * @property Carbon|null                        $created_at
  * @property Carbon|null                        $updated_at
  * @property-read Model|Eloquent                $pollable
@@ -47,7 +47,11 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Poll whereTitle($value)
  * @method static Builder|Poll whereUpdatedAt($value)
  *
- * @property-read User|null $creator
+ * @property-read User|null                     $creator
+ * @property int                                $creator_id
+ * @property-read bool                          $is_active
+ *
+ * @method static Builder|Poll whereCreatorId($value)
  *
  * @mixin Eloquent
  */
@@ -85,5 +89,22 @@ class Poll extends Model
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'creator_id');
+    }
+
+    public function getIsActiveAttribute(): bool
+    {
+        return $this->status === PollStatusEnum::STARTED;
+    }
+
+    public function getUserVotes(User $user): mixed
+    {
+        return $this->questions->map(function (PollQuestion $question) use ($user) {
+            return $question->votes()->where('user_id', $user->getKey())->get();
+        })->flatten();
+    }
+
+    public function hasUserVoted(User $user): bool
+    {
+        return $this->getUserVotes($user)->isNotEmpty();
     }
 }

@@ -82,6 +82,8 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read Collection<int, TradeOffer>                               $offers
  * @property-read int|null                                                  $offers_count
  * @property-read Collection                                                $guilds
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Item> $sellableItems
+ * @property-read int|null $sellable_items_count
  *
  * @mixin Eloquent
  */

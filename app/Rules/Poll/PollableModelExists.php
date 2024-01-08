@@ -20,7 +20,9 @@ readonly class PollableModelExists implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        assert(is_subclass_of($this->class, Model::class));
+        if (! is_subclass_of($this->class, Model::class)) {
+            $fail('Wrong pollable type');
+        }
 
         $this->class::query()->findOr($value, fn () => $fail("{$this->class} not found"));
     }

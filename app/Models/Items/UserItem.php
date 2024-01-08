@@ -46,6 +46,8 @@ use Illuminate\Support\Carbon;
  * @property-read Item   $item
  * @property-read User   $user
  *
+ * @method static Builder|UserItem sellable()
+ *
  * @mixin Eloquent
  */
 class UserItem extends Pivot

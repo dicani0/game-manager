@@ -20,6 +20,7 @@ class PollQuestionResource extends JsonResource
             'question' => $this->getResource()->question,
             'type' => $this->getResource()->type,
             'answers' => PollQuestionAnswerResource::collection($this->getResource()->answers),
+            'votes_count' => $this->getResource()->votes_count,
         ];
     }
 

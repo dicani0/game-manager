@@ -33,6 +33,7 @@
     "mockery/mockery": "^1.4.4",
     "nunomaduro/collision": "^7.0",
     "phpunit/phpunit": "^10.1",
+    "qossmic/deptrac-shim": "^1.0",
     "spatie/laravel-ignition": "^2.0"
   },
   "autoload": {
@@ -66,6 +67,16 @@
     ],
     "stan": [
       "./vendor/bin/phpstan analyse"
+    ],
+    "migrate": [
+      "@php artisan migrate:fresh --seed"
+    ],
+    "pre-commit": [
+      "composer update",
+      "npm update",
+      "./vendor/bin/pint",
+      "@stan",
+      "@test"
     ]
   },
   "extra": {

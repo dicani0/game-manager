@@ -13,6 +13,8 @@ class PollQuestionAnswerResource extends JsonResource
      */
     public $resource;
 
+    public bool $withVotes = false;
+
     /**
      * Transform the resource into an array.
      *
@@ -23,6 +25,7 @@ class PollQuestionAnswerResource extends JsonResource
         return [
             'id' => $this->resource->getKey(),
             'content' => $this->resource->content,
+            'votes_count' => $this->resource->votes->count(),
         ];
     }
 }

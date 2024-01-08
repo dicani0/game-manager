@@ -38,6 +38,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property-read Collection<int, User> $users
  * @property-read int|null              $users_count
  *
+ * @method static Builder|Item userItems()
+ * @method static Builder|Item userMissingItems()
+ *
  * @mixin Eloquent
  */
 class Item extends Model

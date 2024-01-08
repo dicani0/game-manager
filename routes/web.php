@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Character\CharacterController;
 use App\Http\Controllers\Guild\GuildController;
 use App\Http\Controllers\Guild\GuildInvitationController;
+use App\Http\Controllers\Guild\GuildPollController;
 use App\Http\Controllers\Items\ExportController;
 use App\Http\Controllers\Items\ItemController;
 use App\Http\Controllers\Items\UserItemController;
@@ -20,6 +21,7 @@ use App\Http\Controllers\Market\MarketOfferRequestController;
 use App\Http\Controllers\Market\TradeOfferController;
 use App\Http\Controllers\Notifications\NotificationController;
 use App\Http\Controllers\Poll\PollController;
+use App\Http\Controllers\Poll\PollVotingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -84,6 +86,9 @@ Route::prefix('guilds')->middleware('auth')->group(function () {
 
     Route::post('/{guild}/invite/{character}', [GuildInvitationController::class, 'invite']);
 
+    Route::get('/{guild}/polls', [GuildPollController::class, 'index']);
+    Route::get('/{guild}/polls/create', [GuildPollController::class, 'create']);
+
     Route::get('/', [GuildController::class, 'index']);
     Route::get('/create', [GuildController::class, 'create']);
     Route::delete('/{guild}/kick/{member}', [GuildController::class, 'kick']);
@@ -127,7 +132,10 @@ Route::prefix('notifications')->middleware('auth')->group(function () {
 Route::prefix('polls')->middleware('auth')->group(function () {
     Route::get('/', [PollController::class, 'index']);
     Route::get('/create', [PollController::class, 'create']);
+    Route::get('/{poll}', [PollController::class, 'show']);
     Route::post('/', [PollController::class, 'store']);
     Route::get('/{poll}/edit', [PollController::class, 'edit']);
     Route::put('/{poll}', [PollController::class, 'update']);
+    Route::post('/{poll}/vote', [PollVotingController::class, 'vote']);
+    Route::get('/{poll}/results', [PollVotingController::class, 'results']);
 });
